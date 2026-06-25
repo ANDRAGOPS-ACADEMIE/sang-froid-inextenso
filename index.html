@@ -75,7 +75,7 @@ footer{text-align:center;color:#777;font-size:11px;margin-top:14px}
 <div id="fin" class="card verdict hide"></div>
 
 <div id="choix" class="card hide">
-<h2>🎓 Quelles formations veux-tu suivre ?</h2>
+<h2><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:7px"><path d="M12 4 2.5 9 12 14l9.5-5z"/><path d="M6 11.2V16c0 1.1 2.7 2.5 6 2.5s6-1.4 6-2.5v-4.8"/><path d="M21.5 9.5v4.5"/></svg>Quelles formations veux-tu suivre ?</h2>
 <p style="color:#bbb">Coche ce qui t'intéresse — c'est transmis directement au service RH (Hugo). Les cases conseillées par ton diagnostic sont déjà pré-cochées, à toi d'ajuster.</p>
 <label class="ck" id="ck_sst"><input type="checkbox" id="w_sst"><span><b>SST</b> — Sauveteur Secouriste du Travail (14h)</span></label>
 <label class="ck" id="ck_mac"><input type="checkbox" id="w_mac"><span><b>MAC SST</b> — recyclage SST (7h, si déjà formé)</span></label>
@@ -178,7 +178,7 @@ function showChoix(){$('fin').classList.add('hide');$('choix').classList.remove(
 function submitChoices(){
   var btn=$('btnSend');btn.disabled=true;var fb=$('sendfb');fb.classList.remove('hide');fb.className='fb';fb.style.background='#222';fb.style.color='#ddd';fb.textContent='Envoi en cours…';
   var payload={prenom:PR,nom:NOM,service:SV,sst:SSTU,score:LSCORE,temps_total:T0,temps_restant:Math.max(t,0),erreurs:erreurs,bonnes:bonnes,total:S.length,err_secours:et.secours,err_incendie:et.incendie,err_tms:et.tms,badge:LBADGE,want_sst:$('w_sst').checked,want_mac:$('w_mac').checked,want_gp:$('w_gp').checked,want_incendie:$('w_inc').checked,observation:($('obs').value||'').trim()};
-  function done(ok){$('choix').innerHTML="<h2 style='color:var(--v)'>✅ Merci "+be(PR)+" !</h2><p>"+(ok?"Tes choix de formation ont été transmis au service RH (Hugo). On se retrouve bientôt en formation ! 💪":"Tes choix ont été enregistrés (connexion limitée — ils seront remontés au RH).")+"</p><div class='cta'>« Le jeu ouvre les yeux ; la formation, sur le terrain comme en salle, sauve des vies. »</div><div class='row2' style='margin-top:14px'><button class='big' onclick='location.reload()'>↻ Joueur suivant</button><button class='big ghost' onclick='showBoard()'>🏆 Classement</button></div>";}
+  function done(ok){$('choix').innerHTML="<h2 style='color:var(--v)'>✅ Merci "+be(PR)+" !</h2><p>"+(ok?"Tes choix de formation ont été transmis au service RH (Hugo). On se retrouve bientôt en formation ! 💪":"Tes choix ont été enregistrés (connexion limitée — ils seront remontés au RH).")+"</p><div class='cta'>« Le jeu ouvre les yeux ; la formation, sur le terrain comme en salle, sauve des vies. »</div><div style='margin-top:14px'><button class='big ghost' onclick='showBoard()'>🏆 Voir le classement</button></div>";}
   fetch(API,{method:'POST',body:JSON.stringify(payload)}).then(function(r){return r.json()}).then(function(){done(true)}).catch(function(){done(false)});
 }
 function showBoard(){var ov=$('board');ov.classList.remove('hide');var L=$('boardList');L.innerHTML='Chargement…';

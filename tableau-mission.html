@@ -132,28 +132,28 @@ footer{color:var(--mut);font-size:12px;margin-top:22px;text-align:center}
 </div>
 
 <div class="toolbar">
-  <button class="btn" onclick="charger()">↻ Actualiser</button>
-  <button class="btn b" onclick="genWord()">📄 Synthèse Word</button>
-  <button class="btn gr" onclick="genExcel()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="vertical-align:-3px;margin-right:6px"><rect x="3.5" y="3.5" width="17" height="17" rx="2.2" stroke="#fff" stroke-width="1.7"/><path d="M3.5 9.5h17M3.5 14.5h17M9 9.5v11M15 9.5v11" stroke="#fff" stroke-width="1.3"/></svg>Export Excel (participants + demandes)</button>
-  <button class="btn ghost" style="margin-left:auto" onclick="resetGame()">🗑️ Réinitialiser</button>
+  <button class="btn" onclick="charger()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:6px"><path d="M3.5 12a8.5 8.5 0 0 1 14.5-6"/><path d="M18 3v3.5h-3.5"/><path d="M20.5 12a8.5 8.5 0 0 1-14.5 6"/><path d="M6 21v-3.5h3.5"/></svg>Actualiser</button>
+  <button class="btn b" onclick="genWord()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:6px"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>Synthèse Word</button>
+  <button class="btn gr" onclick="genExcel()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" style="vertical-align:-3px;margin-right:6px"><rect x="3.5" y="3.5" width="17" height="17" rx="2.2"/><path d="M3.5 9.5h17M3.5 14.5h17M9 9.5v11M15 9.5v11" stroke-width="1.3"/></svg>Export Excel (participants + demandes)</button>
+  <button class="btn ghost" style="margin-left:auto" onclick="resetGame()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:6px"><path d="M4 7h16"/><path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/><path d="M6 7l1 13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-13"/><path d="M10 11v6M14 11v6"/></svg>Réinitialiser</button>
 </div>
 
 <div class="tabbar">
-  <button class="tab active" id="tabBtnS" onclick="showTab('S')">📊 Synthèse & demandes</button>
-  <button class="tab green" id="tabBtnR" onclick="showTab('R')">🕸️ Radar des lacunes</button>
+  <button class="tab active" id="tabBtnS" onclick="showTab('S')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:6px"><rect x="6" y="4.5" width="12" height="16" rx="2"/><path d="M9 4.5h6V7a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1z"/><path d="M9 12h6M9 16h4"/></svg>Synthèse &amp; demandes</button>
+  <button class="tab green" id="tabBtnR" onclick="showTab('R')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="vertical-align:-3px;margin-right:6px"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.8"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/></svg>Radar des lacunes</button>
 </div>
 <div class="panewrap">
   <div id="paneS" class="pane show">
     <div id="kpis" class="kpis"></div>
-    <h2>🎓 Demandes de formation (volontariat des salariés)</h2>
+    <h2><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:7px"><path d="M12 4 2.5 9 12 14l9.5-5z"/><path d="M6 11.2V16c0 1.1 2.7 2.5 6 2.5s6-1.4 6-2.5v-4.8"/><path d="M21.5 9.5v4.5"/></svg>Demandes de formation (volontariat des salariés)</h2>
     <div id="fdem" class="fdem"></div>
-    <h2>👥 Participants & choix</h2>
+    <h2><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:7px"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0"/><path d="M15.5 5.2a3.2 3.2 0 0 1 0 5.9"/><path d="M20.5 19a5.5 5.5 0 0 0-3-4.9"/></svg>Participants &amp; choix</h2>
     <table><thead><tr><th>#</th><th>Prénom</th><th>Nom</th><th>Service</th><th>SST</th><th>Score</th><th>Badge</th><th>Formations demandées</th><th>Observation</th><th>Date</th></tr></thead><tbody id="rows"><tr><td colspan="10" style="padding:16px">Chargement…</td></tr></tbody></table>
-    <h2><svg width="17" height="17" viewBox="0 0 24 24" fill="none" style="vertical-align:-3px;margin-right:6px"><circle cx="10.5" cy="10.5" r="6.5" stroke="#0f172a" stroke-width="1.9"/><path d="M15.3 15.3l4.7 4.7" stroke="#0f172a" stroke-width="1.9" stroke-linecap="round"/></svg>Analyse des lacunes (diagnostic)</h2>
+    <h2><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" style="vertical-align:-3px;margin-right:7px"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.3 15.3l4.7 4.7"/></svg>Analyse des lacunes (diagnostic)</h2>
     <div id="reco"></div>
   </div>
   <div id="paneR" class="pane">
-    <h2 style="color:#1f8a4c">🕸️ Radar des lacunes (cumul)</h2>
+    <h2 style="color:#1f8a4c"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="vertical-align:-3px;margin-right:7px"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.8"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/></svg>Radar des lacunes (cumul)</h2>
     <canvas id="radL" width="420" height="420"></canvas>
     <div id="radLegend"></div>
     <p style="color:#6b7280;font-size:12px">Plus l'aire s'étire sur un axe, plus les erreurs y sont nombreuses : c'est là que le besoin de formation est le plus fort.</p>
@@ -204,7 +204,7 @@ function genWord(){
  var recoList=ks.filter(function(k){return tot[k]>0}).map(function(k){return "<li><b>"+DOM[k][0]+"</b> ("+tot[k]+" erreur(s)) → <b>"+DOM[k][1]+"</b></li>"}).join("")||"<li>Aucune faiblesse marquée — recyclages d'entretien conseillés.</li>";
  var h="<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word'><head><meta charset='utf-8'><style>body{font-family:Calibri,Arial;color:#222}h1{color:#1F4E79}h2{color:#1F4E79;border-bottom:2px solid #1F4E79;padding-bottom:3px}table{border-collapse:collapse;width:100%}td,th{border:1px solid #999;padding:6px;font-size:10.5pt}th{background:#1F4E79;color:#fff}.big{font-size:22pt;font-weight:bold;color:#1F4E79}</style></head><body>";
  h+="<h1>Synthèse — Opération Sang-Froid · In Extenso</h1>";
- h+="<p><b>Date d'édition :</b> "+d+"<br><b>Réalisé par :</b> ANDRAGOPS Académie — 07 59 73 82 72 — damien.lemort@gmail.com</p>";
+ h+="<p><b>Date d'édition :</b> "+d+"<br><b>Réalisé par :</b> ANDRAGOPS Académie — Organisme de formation Sécurité &amp; Secours<br>Strasbourg / Alsace · Tél. 07 59 73 82 72 · info@andragops-academie.fr · www.andragops-academie.fr</p>";
  h+="<h2>1. Participation</h2><p>Parties jouées : <b>"+n+"</b> · Score moyen : <b>"+moy+"</b> · Déjà SST : <b>"+sstOui+"</b> · Non SST : <b>"+(n-sstOui)+"</b></p>";
  h+="<h2>2. Demandes de formation (volontariat)</h2><table><tr><th>Formation</th><th>Nombre de volontaires</th></tr><tr><td>SST — Sauveteur Secouriste du Travail</td><td>"+dem.sst+"</td></tr><tr><td>MAC SST (recyclage)</td><td>"+dem.mac+"</td></tr><tr><td>Gestes & Postures (écran / TMS)</td><td>"+dem.gp+"</td></tr><tr><td>Incendie / évacuation</td><td>"+dem.inc+"</td></tr></table>";
  h+="<h2>3. Détail des participants</h2><table><tr><th>#</th><th>Prénom</th><th>Nom</th><th>Service</th><th>SST</th><th>Score</th><th>Badge</th><th>Formations demandées</th><th>Observation</th></tr>"+rowsTable+"</table>";
@@ -215,12 +215,21 @@ function genWord(){
 }
 function genExcel(){
  if(!DATA.length){alert("Aucune donnée. Clique d'abord sur Actualiser.");return}
- var head=["Prénom","Nom","Service","Déjà SST","Score","Badge","Err. secours","Err. incendie","Err. TMS","Veut SST","Veut MAC SST","Veut Gestes & Postures","Veut Incendie","Observation","Date"];
- var t="<table border='1'><tr>"+head.map(function(x){return "<th>"+esc(x)+"</th>"}).join("")+"</tr>";
- DATA.forEach(function(r){var c=[r.prenom,r.nom,r.service,(r.sst==='oui'?'Oui':'Non'),r.score,r.badge,r.err_secours,r.err_incendie,r.err_tms,(r.want_sst?'Oui':''),(r.want_mac?'Oui':''),(r.want_gp?'Oui':''),(r.want_incendie?'Oui':''),r.observation,(r.created_at?new Date(r.created_at).toLocaleString('fr-FR'):'')];t+="<tr>"+c.map(function(v){return "<td>"+esc(v==null?'':v)+"</td>"}).join("")+"</tr>"});
- var dm=demCounts();
- t+="<tr><td colspan='9'><b>TOTAL volontaires</b></td><td><b>"+dm.sst+"</b></td><td><b>"+dm.mac+"</b></td><td><b>"+dm.gp+"</b></td><td><b>"+dm.inc+"</b></td><td></td><td></td></tr></table>";
- var h="<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:x='urn:schemas-microsoft-com:office:excel'><head><meta charset='utf-8'></head><body><h3>Opération Sang-Froid — In Extenso · participants & demandes de formation</h3>"+t+"</body></html>";
+ var d=new Date().toLocaleDateString('fr-FR');var dm=demCounts();
+ var head=["#","Prénom","Nom","Service","Déjà SST","Score","Badge","Err. secours","Err. incendie","Err. TMS","Veut SST","Veut MAC SST","Veut G&P","Veut Incendie","Observation","Date"];
+ var w=[32,92,92,120,70,54,68,76,76,66,64,64,62,66,240,128];
+ var cg="";w.forEach(function(px){cg+="<col style='width:"+px+"px'>"});
+ var thead="<tr class='hd'>"+head.map(function(x){return "<td>"+esc(x)+"</td>"}).join("")+"</tr>";
+ var body="";
+ DATA.forEach(function(r,i){
+  var cells=[[(i+1),'num'],[r.prenom,'b'],[r.nom||'',''],[r.service||'',''],[(r.sst==='oui'?'Oui':'Non'),(r.sst==='oui'?'ok':'mut')],[(r.score||0),'num b'],[r.badge||'','num'],[(r.err_secours||0),'num'],[(r.err_incendie||0),'num'],[(r.err_tms||0),'num'],[(r.want_sst?'Oui':''),'ok'],[(r.want_mac?'Oui':''),'ok'],[(r.want_gp?'Oui':''),'ok'],[(r.want_incendie?'Oui':''),'ok'],[r.observation||'',''],[(r.created_at?new Date(r.created_at).toLocaleString('fr-FR'):''),'mut']];
+  body+="<tr"+(i%2?" class='z'":"")+">"+cells.map(function(o){return "<td class='"+o[1]+"'>"+esc(o[0]==null?'':o[0])+"</td>"}).join("")+"</tr>";
+ });
+ var tot="<tr class='tot'><td colspan='10'>TOTAL volontaires</td><td>"+dm.sst+"</td><td>"+dm.mac+"</td><td>"+dm.gp+"</td><td>"+dm.inc+"</td><td></td><td></td></tr>";
+ var styles="<style>table{border-collapse:collapse}td{font-family:Calibri,Arial,sans-serif;font-size:10.5pt;border:.5pt solid #C7CFDA;padding:4px 8px;vertical-align:middle}.ttl td{font-size:15pt;font-weight:bold;color:#1F4E79;border:none}.sub td{font-size:9.5pt;color:#6B7280;border:none}.sp td{height:6px;border:none}.hd td{background:#1F4E79;color:#fff;font-weight:bold;text-align:center;border:.5pt solid #16395C}.num{text-align:center}.b{font-weight:bold}.mut{color:#6B7280}.ok{text-align:center;color:#1F8A4C;font-weight:bold;background:#EAF7EF}.z td{background:#F4F7FB}.tot td{background:#FFF3D6;font-weight:bold;color:#7A5B00;text-align:center;border:.5pt solid #E5C76B}.tot td:first-child{text-align:right;color:#1F4E79}</style>";
+ var xo="<!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>Participants</x:Name><x:WorksheetOptions><x:DoNotDisplayGridlines/><x:FreezePanes/><x:FrozenNoSplit/><x:SplitHorizontal>4</x:SplitHorizontal><x:TopRowBottomPane>4</x:TopRowBottomPane><x:ActivePane>2</x:ActivePane></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->";
+ var sheet="<table>"+cg+"<tr class='ttl'><td colspan='16'>OPÉRATION SANG-FROID — In Extenso</td></tr><tr class='sub'><td colspan='16'>Participants &amp; demandes de formation · édité le "+d+" · ANDRAGOPS Académie · info@andragops-academie.fr</td></tr><tr class='sp'><td colspan='16'></td></tr>"+thead+body+tot+"</table>";
+ var h="<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:x='urn:schemas-microsoft-com:office:excel'><head><meta charset='utf-8'>"+xo+styles+"</head><body>"+sheet+"</body></html>";
  var b=new Blob(['﻿'+h],{type:'application/vnd.ms-excel'});var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download="Participants_Sang-Froid_In-Extenso.xls";document.body.appendChild(a);a.click();document.body.removeChild(a);
 }
 var LK=['err_secours','err_incendie','err_tms'];var LL={err_secours:'Secours',err_incendie:'Incendie',err_tms:'Postures'};
