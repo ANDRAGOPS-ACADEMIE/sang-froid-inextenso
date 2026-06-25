@@ -55,7 +55,10 @@ footer{text-align:center;color:#777;font-size:11px;margin-top:14px}
 <h1>8h00 — l'audit prévention, et le responsable a disparu…</h1>
 <p class="pitch">Ce matin, l'auditeur sécurité devait passer au cabinet. Introuvable. Et les incidents s'enchaînent : un collègue fait un malaise, un départ de feu près de l'imprimante, des cartons d'archives à déplacer, l'alarme évacuation qui se déclenche… À toi de garder ton <b>SANG-FROID</b> et de sécuriser les bureaux avant la fin du chrono. 😎</p>
 <p><b>Règle :</b> des situations à gérer et des énigmes à résoudre. Les bons réflexes rapportent des points ; une erreur coûte du temps. À la fin : ton badge, un mini-diagnostic, et tu choisis les formations qui t'intéressent.</p>
-<input id="prenom" placeholder="Ton prénom (pour ton résultat)">
+<div class="row2">
+<div><label>Ton prénom</label><input id="prenom" placeholder="Prénom"></div>
+<div><label>Ton nom</label><input id="nom" placeholder="Nom"></div>
+</div>
 <div class="row2">
 <div><label>Service / équipe (facultatif)</label><input id="service" placeholder="Ex : Compta, Social, Accueil…"></div>
 <div><label>Es-tu déjà SST (sauveteur secouriste du travail) ?</label><select id="sst"><option value="non">Non, pas encore</option><option value="oui">Oui, déjà formé(e)</option></select></div>
@@ -115,7 +118,7 @@ var S=[
 var KO=["Aïe, ce n'était pas LE réflexe. −50 s ⏱️","Raté ! Le danger en profite. −50 s","Mauvaise pioche. −50 s","Oups, on apprend mais on perd 50 s 😅"];
 var OKL=["Bien joué ! 🎯","Sang-froid validé ✅","Réflexe de pro 👏","Impeccable."];
 
-var t=480,T0=480,idx=0,faits=0,pts=0,erreurs=0,bonnes=0,et={secours:0,incendie:0,tms:0},timer=null,PR="",SV="",SSTU="non",started=false;
+var t=480,T0=480,idx=0,faits=0,pts=0,erreurs=0,bonnes=0,et={secours:0,incendie:0,tms:0},timer=null,PR="",NOM="",SV="",SSTU="non",started=false;
 var LSCORE=0,LBADGE="",LFINI=false,recSST=false,recMAC=false,recGP=false,recINC=false,GAMEOPEN=true;
 function $(i){return document.getElementById(i)}
 function fmt(s){if(s<0)s=0;var m=Math.floor(s/60),x=s%60;return (m<10?'0':'')+m+':'+(x<10?'0':'')+x}
@@ -125,8 +128,8 @@ function hideSplash(){var s=$('splash');if(s){s.classList.add('out');setTimeout(
 setTimeout(hideSplash,4200);
 function launch(){
   if(GAMEOPEN===false){alert("Le jeu est fermé pour le moment. Reviens quand le service RH l'aura ouvert. 🔒");return;}
-  PR=($('prenom').value||'').trim();
-  if(!PR){alert("Entre ton prénom pour démarrer (il figure sur ton résultat).");$('prenom').focus();return;}
+  PR=($('prenom').value||'').trim();NOM=($('nom').value||'').trim();
+  if(!PR||!NOM){alert("Entre ton prénom ET ton nom pour démarrer.");$(PR?'nom':'prenom').focus();return;}
   SV=($('service').value||'').trim();SSTU=$('sst').value;
   T0=t=parseInt($('duree').value,10)*60;
   idx=0;faits=0;pts=0;erreurs=0;bonnes=0;et={secours:0,incendie:0,tms:0};started=false;
@@ -174,7 +177,7 @@ function showChoix(){$('fin').classList.add('hide');$('choix').classList.remove(
   ckSync();try{window.scrollTo(0,0)}catch(e){}}
 function submitChoices(){
   var btn=$('btnSend');btn.disabled=true;var fb=$('sendfb');fb.classList.remove('hide');fb.className='fb';fb.style.background='#222';fb.style.color='#ddd';fb.textContent='Envoi en cours…';
-  var payload={prenom:PR,service:SV,sst:SSTU,score:LSCORE,temps_total:T0,temps_restant:Math.max(t,0),erreurs:erreurs,bonnes:bonnes,total:S.length,err_secours:et.secours,err_incendie:et.incendie,err_tms:et.tms,badge:LBADGE,want_sst:$('w_sst').checked,want_mac:$('w_mac').checked,want_gp:$('w_gp').checked,want_incendie:$('w_inc').checked,observation:($('obs').value||'').trim()};
+  var payload={prenom:PR,nom:NOM,service:SV,sst:SSTU,score:LSCORE,temps_total:T0,temps_restant:Math.max(t,0),erreurs:erreurs,bonnes:bonnes,total:S.length,err_secours:et.secours,err_incendie:et.incendie,err_tms:et.tms,badge:LBADGE,want_sst:$('w_sst').checked,want_mac:$('w_mac').checked,want_gp:$('w_gp').checked,want_incendie:$('w_inc').checked,observation:($('obs').value||'').trim()};
   function done(ok){$('choix').innerHTML="<h2 style='color:var(--v)'>✅ Merci "+be(PR)+" !</h2><p>"+(ok?"Tes choix de formation ont été transmis au service RH (Hugo). On se retrouve bientôt en formation ! 💪":"Tes choix ont été enregistrés (connexion limitée — ils seront remontés au RH).")+"</p><div class='cta'>« Le jeu ouvre les yeux ; la formation, sur le terrain comme en salle, sauve des vies. »</div><div class='row2' style='margin-top:14px'><button class='big' onclick='location.reload()'>↻ Joueur suivant</button><button class='big ghost' onclick='showBoard()'>🏆 Classement</button></div>";}
   fetch(API,{method:'POST',body:JSON.stringify(payload)}).then(function(r){return r.json()}).then(function(){done(true)}).catch(function(){done(false)});
 }

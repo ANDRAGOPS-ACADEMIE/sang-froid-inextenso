@@ -79,7 +79,7 @@ footer{color:var(--mut);font-size:12px;margin-top:18px;text-align:center}
     <h2>🎓 Demandes de formation (volontariat des salariés)</h2>
     <div id="fdem" class="fdem"></div>
     <h2>👥 Participants & choix</h2>
-    <table><thead><tr><th>#</th><th>Prénom</th><th>Service</th><th>SST</th><th>Score</th><th>Badge</th><th>Formations demandées</th><th>Observation</th><th>Date</th></tr></thead><tbody id="rows"><tr><td colspan="9" style="padding:16px">Chargement…</td></tr></tbody></table>
+    <table><thead><tr><th>#</th><th>Prénom</th><th>Nom</th><th>Service</th><th>SST</th><th>Score</th><th>Badge</th><th>Formations demandées</th><th>Observation</th><th>Date</th></tr></thead><tbody id="rows"><tr><td colspan="10" style="padding:16px">Chargement…</td></tr></tbody></table>
     <h2>🔎 Analyse des lacunes (diagnostic)</h2>
     <div id="reco"></div>
   </div>
@@ -108,19 +108,19 @@ function resetGame(){if(!askCode())return;if(!confirm("⚠️ Effacer TOUTES les
 
 function charger(){if(!askCode())return;
 fetch(API+"?admin="+encodeURIComponent(CODE)+"&z="+Date.now()).then(function(r){return r.json()}).then(function(rows){
- if(!Array.isArray(rows)){$('rows').innerHTML="<tr><td colspan=9 style='padding:16px;color:#C01A1A'>Code incorrect. <a href='#' onclick='localStorage.removeItem(\"inext_code\");location.reload()'>réessayer</a></td></tr>";return}
+ if(!Array.isArray(rows)){$('rows').innerHTML="<tr><td colspan=10 style='padding:16px;color:#C01A1A'>Code incorrect. <a href='#' onclick='localStorage.removeItem(\"inext_code\");location.reload()'>réessayer</a></td></tr>";return}
  DATA=rows;
  var n=DATA.length;var moy=n?Math.round(DATA.reduce(function(s,r){return s+(r.score||0)},0)/n):0;
  var sstOui=DATA.filter(function(r){return r.sst==='oui'}).length;
  $('kpis').innerHTML="<div class='k'><div class='n'>Parties jouées</div><b>"+n+"</b></div><div class='k'><div class='n'>Score moyen</div><b>"+moy+"</b></div><div class='k'><div class='n'>Déjà SST</div><b>"+sstOui+"</b></div><div class='k'><div class='n'>Non SST</div><b>"+(n-sstOui)+"</b></div>";
  var dem={want_sst:0,want_mac:0,want_gp:0,want_incendie:0};DATA.forEach(function(r){for(var k in dem)if(r[k])dem[k]++});
  $('fdem').innerHTML="<div class='fc'><div class='num'>"+dem.want_sst+"</div><div class='lab'>SST</div><div class='sub'>Sauveteur Secouriste</div></div><div class='fc'><div class='num'>"+dem.want_mac+"</div><div class='lab'>MAC SST</div><div class='sub'>recyclage</div></div><div class='fc'><div class='num'>"+dem.want_gp+"</div><div class='lab'>Gestes & Postures</div><div class='sub'>écran / TMS</div></div><div class='fc'><div class='num'>"+dem.want_incendie+"</div><div class='lab'>Incendie</div><div class='sub'>extincteurs / évac.</div></div>";
- $('rows').innerHTML=n?DATA.map(function(r,i){var w=wants(r);return "<tr><td>"+(i+1)+"</td><td>"+esc(r.prenom)+"</td><td>"+esc(r.service||'—')+"</td><td>"+(r.sst==='oui'?'Oui':'Non')+"</td><td>"+(r.score||0)+"</td><td>"+esc(r.badge||'')+"</td><td>"+(w.length?w.map(function(x){return "<span class='pill'>"+x+"</span>"}).join(" "):"<span style='color:#999'>—</span>")+"</td><td>"+esc(r.observation||'')+"</td><td>"+(r.created_at?new Date(r.created_at).toLocaleString('fr-FR'):'')+"</td></tr>"}).join(""):"<tr><td colspan=9 style='padding:16px'>Aucune partie pour le moment.</td></tr>";
+ $('rows').innerHTML=n?DATA.map(function(r,i){var w=wants(r);return "<tr><td>"+(i+1)+"</td><td>"+esc(r.prenom)+"</td><td>"+esc(r.nom||'—')+"</td><td>"+esc(r.service||'—')+"</td><td>"+(r.sst==='oui'?'Oui':'Non')+"</td><td>"+(r.score||0)+"</td><td>"+esc(r.badge||'')+"</td><td>"+(w.length?w.map(function(x){return "<span class='pill'>"+x+"</span>"}).join(" "):"<span style='color:#999'>—</span>")+"</td><td>"+esc(r.observation||'')+"</td><td>"+(r.created_at?new Date(r.created_at).toLocaleString('fr-FR'):'')+"</td></tr>"}).join(""):"<tr><td colspan=10 style='padding:16px'>Aucune partie pour le moment.</td></tr>";
  var tot={err_secours:0,err_incendie:0,err_tms:0};DATA.forEach(function(r){for(var k in tot)tot[k]+=(r[k]||0)});
  var ks=Object.keys(tot).sort(function(a,b){return tot[b]-tot[a]});var html="";ks.forEach(function(k){if(tot[k]>0)html+="<div class='reco'><b>"+DOM[k][0]+"</b> — "+tot[k]+" erreur(s) cumulée(s) → formation conseillée : <b>"+DOM[k][1]+"</b></div>"});
  $('reco').innerHTML=n?(html||"<p style='color:#1f6f3f'>Aucune faiblesse marquée — excellent niveau global.</p>"):"<p style='color:#6b7280'>En attente de participations.</p>";
  if($('paneR').className.indexOf('show')>=0)drawLacunes();
-}).catch(function(){$('rows').innerHTML="<tr><td colspan=9 style='padding:16px;color:#C01A1A'>Erreur réseau.</td></tr>"})}
+}).catch(function(){$('rows').innerHTML="<tr><td colspan=10 style='padding:16px;color:#C01A1A'>Erreur réseau.</td></tr>"})}
 </script>
 <script>
 function demCounts(){var d={sst:0,mac:0,gp:0,inc:0};DATA.forEach(function(r){if(r.want_sst)d.sst++;if(r.want_mac)d.mac++;if(r.want_gp)d.gp++;if(r.want_incendie)d.inc++});return d;}
@@ -131,14 +131,14 @@ function genWord(){
  var tot={err_secours:0,err_incendie:0,err_tms:0};DATA.forEach(function(r){for(var k in tot)tot[k]+=(r[k]||0)});
  var ks=Object.keys(tot).sort(function(a,b){return tot[b]-tot[a]});
  var d=new Date().toLocaleDateString('fr-FR');
- var rowsTable=DATA.map(function(r,i){return "<tr><td>"+(i+1)+"</td><td>"+esc(r.prenom)+"</td><td>"+esc(r.service||'')+"</td><td>"+(r.sst==='oui'?'Oui':'Non')+"</td><td>"+(r.score||0)+"</td><td>"+esc(r.badge||'')+"</td><td>"+esc(wants(r).join(', ')||'—')+"</td><td>"+esc(r.observation||'')+"</td></tr>"}).join("");
+ var rowsTable=DATA.map(function(r,i){return "<tr><td>"+(i+1)+"</td><td>"+esc(r.prenom)+"</td><td>"+esc(r.nom||'')+"</td><td>"+esc(r.service||'')+"</td><td>"+(r.sst==='oui'?'Oui':'Non')+"</td><td>"+(r.score||0)+"</td><td>"+esc(r.badge||'')+"</td><td>"+esc(wants(r).join(', ')||'—')+"</td><td>"+esc(r.observation||'')+"</td></tr>"}).join("");
  var recoList=ks.filter(function(k){return tot[k]>0}).map(function(k){return "<li><b>"+DOM[k][0]+"</b> ("+tot[k]+" erreur(s)) → <b>"+DOM[k][1]+"</b></li>"}).join("")||"<li>Aucune faiblesse marquée — recyclages d'entretien conseillés.</li>";
  var h="<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word'><head><meta charset='utf-8'><style>body{font-family:Calibri,Arial;color:#222}h1{color:#1F4E79}h2{color:#1F4E79;border-bottom:2px solid #1F4E79;padding-bottom:3px}table{border-collapse:collapse;width:100%}td,th{border:1px solid #999;padding:6px;font-size:10.5pt}th{background:#1F4E79;color:#fff}.big{font-size:22pt;font-weight:bold;color:#1F4E79}</style></head><body>";
  h+="<h1>Synthèse — Opération Sang-Froid · In Extenso</h1>";
  h+="<p><b>Date d'édition :</b> "+d+"<br><b>Réalisé par :</b> ANDRAGOPS Académie — 07 59 73 82 72 — damien.lemort@gmail.com</p>";
  h+="<h2>1. Participation</h2><p>Parties jouées : <b>"+n+"</b> · Score moyen : <b>"+moy+"</b> · Déjà SST : <b>"+sstOui+"</b> · Non SST : <b>"+(n-sstOui)+"</b></p>";
  h+="<h2>2. Demandes de formation (volontariat)</h2><table><tr><th>Formation</th><th>Nombre de volontaires</th></tr><tr><td>SST — Sauveteur Secouriste du Travail</td><td>"+dem.sst+"</td></tr><tr><td>MAC SST (recyclage)</td><td>"+dem.mac+"</td></tr><tr><td>Gestes & Postures (écran / TMS)</td><td>"+dem.gp+"</td></tr><tr><td>Incendie / évacuation</td><td>"+dem.inc+"</td></tr></table>";
- h+="<h2>3. Détail des participants</h2><table><tr><th>#</th><th>Prénom</th><th>Service</th><th>SST</th><th>Score</th><th>Badge</th><th>Formations demandées</th><th>Observation</th></tr>"+rowsTable+"</table>";
+ h+="<h2>3. Détail des participants</h2><table><tr><th>#</th><th>Prénom</th><th>Nom</th><th>Service</th><th>SST</th><th>Score</th><th>Badge</th><th>Formations demandées</th><th>Observation</th></tr>"+rowsTable+"</table>";
  h+="<h2>4. Analyse des lacunes (diagnostic)</h2><ul>"+recoList+"</ul>";
  h+="<h2>5. Recommandation ANDRAGOPS</h2><p>Sur la base de ce diagnostic ludique et des volontariats exprimés, nous recommandons un plan de formation présentiel ciblé (80% de pratique). Organisme engagé Qualiopi — prise en charge OPCO possible. Déplacement inclus 50 km autour de Strasbourg.</p>";
  h+="<p style='margin-top:18px;color:#888;font-size:9.5pt'>Document généré à partir des résultats du jeu. Bilan indicatif, non certifiant.</p></body></html>";
@@ -146,11 +146,11 @@ function genWord(){
 }
 function genExcel(){
  if(!DATA.length){alert("Aucune donnée. Clique d'abord sur Actualiser.");return}
- var head=["Prénom","Service","Déjà SST","Score","Badge","Err. secours","Err. incendie","Err. TMS","Veut SST","Veut MAC SST","Veut Gestes & Postures","Veut Incendie","Observation","Date"];
+ var head=["Prénom","Nom","Service","Déjà SST","Score","Badge","Err. secours","Err. incendie","Err. TMS","Veut SST","Veut MAC SST","Veut Gestes & Postures","Veut Incendie","Observation","Date"];
  var t="<table border='1'><tr>"+head.map(function(x){return "<th>"+esc(x)+"</th>"}).join("")+"</tr>";
- DATA.forEach(function(r){var c=[r.prenom,r.service,(r.sst==='oui'?'Oui':'Non'),r.score,r.badge,r.err_secours,r.err_incendie,r.err_tms,(r.want_sst?'Oui':''),(r.want_mac?'Oui':''),(r.want_gp?'Oui':''),(r.want_incendie?'Oui':''),r.observation,(r.created_at?new Date(r.created_at).toLocaleString('fr-FR'):'')];t+="<tr>"+c.map(function(v){return "<td>"+esc(v==null?'':v)+"</td>"}).join("")+"</tr>"});
+ DATA.forEach(function(r){var c=[r.prenom,r.nom,r.service,(r.sst==='oui'?'Oui':'Non'),r.score,r.badge,r.err_secours,r.err_incendie,r.err_tms,(r.want_sst?'Oui':''),(r.want_mac?'Oui':''),(r.want_gp?'Oui':''),(r.want_incendie?'Oui':''),r.observation,(r.created_at?new Date(r.created_at).toLocaleString('fr-FR'):'')];t+="<tr>"+c.map(function(v){return "<td>"+esc(v==null?'':v)+"</td>"}).join("")+"</tr>"});
  var dm=demCounts();
- t+="<tr><td colspan='8'><b>TOTAL volontaires</b></td><td><b>"+dm.sst+"</b></td><td><b>"+dm.mac+"</b></td><td><b>"+dm.gp+"</b></td><td><b>"+dm.inc+"</b></td><td></td><td></td></tr></table>";
+ t+="<tr><td colspan='9'><b>TOTAL volontaires</b></td><td><b>"+dm.sst+"</b></td><td><b>"+dm.mac+"</b></td><td><b>"+dm.gp+"</b></td><td><b>"+dm.inc+"</b></td><td></td><td></td></tr></table>";
  var h="<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:x='urn:schemas-microsoft-com:office:excel'><head><meta charset='utf-8'></head><body><h3>Opération Sang-Froid — In Extenso · participants & demandes de formation</h3>"+t+"</body></html>";
  var b=new Blob(['﻿'+h],{type:'application/vnd.ms-excel'});var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download="Participants_Sang-Froid_In-Extenso.xls";document.body.appendChild(a);a.click();document.body.removeChild(a);
 }
