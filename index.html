@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OPÉRATION SANG-FROID — Édition Cabinet · ANDRAGOPS × In Extenso</title>
+<style>
+:root{--r:#C01A1A;--v:#1f8a4c;--o:#e8b50a;--b:#1F4E79}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Arial,sans-serif}
+body{background:#111;color:#eee;min-height:100vh;padding:16px}
+.app{width:100%;max-width:780px;margin:0 auto}
+header{display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid var(--r);padding-bottom:10px;margin-bottom:14px}
+.logo{font-weight:800;letter-spacing:1px;font-size:15px}.logo span{color:var(--r)}
+.hud{display:flex;gap:10px;align-items:center}
+.score{font-size:14px;color:var(--o);font-weight:700}
+.chrono{font-size:26px;font-weight:800;background:#000;padding:5px 12px;border-radius:8px;border:2px solid var(--r);font-variant-numeric:tabular-nums}
+.chrono.warn{animation:blink .6s steps(2) infinite}@keyframes blink{50%{opacity:.3}}
+.card{background:#1d1d1d;border:1px solid #333;border-radius:12px;padding:20px;margin-bottom:12px}
+.brand{display:block;margin:4px auto 12px;width:120px;max-width:42%;height:auto}
+h1{color:var(--r);font-size:24px;margin-bottom:8px}h2{font-size:18px;margin-bottom:8px}p{line-height:1.5;margin-bottom:9px;color:#ddd}
+.pitch{font-style:italic;border-left:4px solid var(--o);padding-left:12px;color:#f0e6c8}
+.tag{display:inline-block;background:var(--r);color:#fff;font-weight:700;padding:3px 11px;border-radius:20px;font-size:12px;margin-bottom:8px}
+.tag.enig{background:#6b21a8}
+.scene{font-size:17px;color:#fff;margin-bottom:6px}
+.go{font-size:60px;font-weight:900;color:var(--o);text-align:center;padding:18px 0}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}@media(max-width:560px){.actions{grid-template-columns:1fr}}
+button.act{background:#2a2a2a;border:1px solid #444;color:#eee;padding:13px;border-radius:10px;text-align:left;cursor:pointer;font-size:14px}
+button.act:hover{border-color:var(--r)}button.act:disabled{opacity:.4;cursor:default}
+.big{background:var(--r);color:#fff;border:none;padding:14px 24px;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;width:100%}
+.ghost{background:#2a2a2a;border:1px solid #444;color:#eee}
+input,select,textarea{width:100%;padding:11px;border-radius:8px;border:1px solid #444;background:#161616;color:#eee;margin-bottom:10px;font-size:15px}
+textarea{resize:vertical}
+label{font-size:13px;color:#aaa;display:block;margin-bottom:4px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media(max-width:560px){.row2{grid-template-columns:1fr}}
+.ck{display:flex;align-items:center;gap:11px;background:#161616;border:1px solid #444;border-radius:9px;padding:13px;margin-bottom:9px;cursor:pointer;font-size:15px;color:#eee}
+.ck input{width:auto;margin:0;transform:scale(1.35)}.ck.on{border-color:var(--v);background:#16331f}
+.fb{margin-top:12px;padding:11px;border-radius:8px;font-weight:600}.ok{background:#16331f;color:#7be0a0;border:1px solid var(--v)}.ko{background:#3a1414;color:#ff9a9a;border:1px solid var(--r)}
+.meta{display:flex;gap:16px;font-size:13px;color:#aaa;margin-top:6px}.bar{height:8px;background:#333;border-radius:6px;overflow:hidden;margin-top:8px}.bar>i{display:block;height:100%;background:var(--v);width:0}
+.verdict{text-align:center;padding:26px}.code{font-size:30px;font-weight:900}.medal{font-size:54px}
+.reco{background:#241a1a;border:1px solid var(--r);border-radius:10px;padding:12px;margin-top:9px;text-align:left}.reco b{color:var(--o)}.hide{display:none}
+.cta{background:var(--b);border:1px solid #2E6CA8;border-radius:10px;padding:14px;margin-top:12px;text-align:left;font-weight:600;color:#fff}
+footer{text-align:center;color:#777;font-size:11px;margin-top:14px}
+#splash{position:fixed;inset:0;background:radial-gradient(circle at 50% 40%,#1a1a1a,#070707);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;text-align:center;transition:opacity .8s;padding:20px}
+#splash.out{opacity:0;pointer-events:none}#splash img{width:170px;max-width:50%;height:auto}
+#splash .stitle{color:#fff;font-size:28px;font-weight:900;letter-spacing:2px;margin-top:16px}#splash .stitle b{color:var(--r)}
+#splash .stag{color:#bbb;margin-top:6px}#splash .skip{margin-top:20px;color:#fff;font-size:14px;background:var(--r);border:none;padding:10px 20px;border-radius:8px;cursor:pointer}
+.ov{position:fixed;inset:0;background:rgba(8,8,8,.95);z-index:900;display:flex;align-items:flex-start;justify-content:center;padding:24px;overflow:auto}
+.ov.hide{display:none}.ov-card{background:#1d1d1d;border:1px solid #333;border-radius:14px;padding:22px;max-width:560px;width:100%}
+.brow{display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid #2c2c2c}
+.brank{color:var(--o);font-weight:800;min-width:34px;font-size:17px}.bscore{color:#7be0a0;font-weight:700;white-space:nowrap}
+</style></head><body>
+<div id="splash" onclick="hideSplash()"><img src="logo.png" alt="ANDRAGOPS"><div class="stitle">OPÉRATION <b>SANG-FROID</b></div><div class="stag">Édition Cabinet · Gardez votre sang-froid, sécurisez les bureaux.</div><button class="skip" onclick="hideSplash()">Commencer ▶</button></div>
+<div class="app">
+<header><div class="logo">OPÉRATION <span>SANG-FROID</span></div><div class="hud"><span id="score" class="score hide">0 pts</span><div id="chrono" class="chrono hide">--:--</div></div></header>
+
+<div id="intro" class="card"><img class="brand" src="logo.png" alt="ANDRAGOPS Académie">
+<span class="tag">ESCAPE GAME PRÉVENTION · ÉDITION CABINET · INDIVIDUEL</span>
+<h1>8h00 — l'audit prévention, et le responsable a disparu…</h1>
+<p class="pitch">Ce matin, l'auditeur sécurité devait passer au cabinet. Introuvable. Et les incidents s'enchaînent : un collègue fait un malaise, un départ de feu près de l'imprimante, des cartons d'archives à déplacer, l'alarme évacuation qui se déclenche… À toi de garder ton <b>SANG-FROID</b> et de sécuriser les bureaux avant la fin du chrono. 😎</p>
+<p><b>Règle :</b> des situations à gérer et des énigmes à résoudre. Les bons réflexes rapportent des points ; une erreur coûte du temps. À la fin : ton badge, un mini-diagnostic, et tu choisis les formations qui t'intéressent.</p>
+<input id="prenom" placeholder="Ton prénom (pour ton résultat)">
+<div class="row2">
+<div><label>Service / équipe (facultatif)</label><input id="service" placeholder="Ex : Compta, Social, Accueil…"></div>
+<div><label>Es-tu déjà SST (sauveteur secouriste du travail) ?</label><select id="sst"><option value="non">Non, pas encore</option><option value="oui">Oui, déjà formé(e)</option></select></div>
+</div>
+<label>Durée de la partie (compte à rebours)</label>
+<select id="duree"><option value="6">6 minutes (express)</option><option value="8" selected>8 minutes (recommandé)</option><option value="10">10 minutes (tranquille)</option></select>
+<button class="big" onclick="launch()">▶ Commencer à jouer</button>
+<button class="big ghost" style="margin-top:8px" onclick="showBoard()">🏆 Classement du cabinet</button></div>
+
+<div id="game" class="card hide"><span id="tag" class="tag"></span><h2 id="titre"></h2><p id="scene" class="scene"></p>
+<div class="bar"><i id="prog"></i></div><div class="meta"><span id="obj"></span><span id="err">Erreurs : 0</span></div>
+<div id="acts" class="actions"></div><div id="fb" class="fb hide"></div></div>
+
+<div id="fin" class="card verdict hide"></div>
+
+<div id="choix" class="card hide">
+<h2>🎓 Quelles formations veux-tu suivre ?</h2>
+<p style="color:#bbb">Coche ce qui t'intéresse — c'est transmis directement au service RH (Hugo). Les cases conseillées par ton diagnostic sont déjà pré-cochées, à toi d'ajuster.</p>
+<label class="ck" id="ck_sst"><input type="checkbox" id="w_sst"><span><b>SST</b> — Sauveteur Secouriste du Travail (14h)</span></label>
+<label class="ck" id="ck_mac"><input type="checkbox" id="w_mac"><span><b>MAC SST</b> — recyclage SST (7h, si déjà formé)</span></label>
+<label class="ck" id="ck_gp"><input type="checkbox" id="w_gp"><span><b>Gestes & Postures</b> — travail sur écran / TMS (7h)</span></label>
+<label class="ck" id="ck_inc"><input type="checkbox" id="w_inc"><span><b>Incendie</b> — extincteurs & évacuation</span></label>
+<label style="margin-top:8px">Une observation ? (disponibilités, questions, créneau…)</label>
+<textarea id="obs" rows="3" placeholder="Optionnel — un mot pour le RH"></textarea>
+<button class="big" id="btnSend" onclick="submitChoices()">✅ Valider mes choix et les transmettre au RH</button>
+<div id="sendfb" class="fb hide"></div></div>
+
+<div id="board" class="ov hide"><div class="ov-card">
+<h2 style="color:var(--o)">🏆 Classement du cabinet</h2>
+<p style="color:#aaa;font-size:13px;margin-bottom:8px">Les meilleurs sang-froid du cabinet.</p>
+<div id="boardList">Chargement…</div>
+<button class="big" style="margin-top:14px" onclick="closeBoard()">← Retour</button>
+</div></div>
+
+<footer>ANDRAGOPS Académie × In Extenso · Outil d'accroche, non certifiant. « Le jeu ouvre les yeux ; la formation sauve. »</footer></div>
+<script>
+var API="https://eumviuptmyzgftrqpape.supabase.co/functions/v1/inextenso";
+var S=[
+{tag:"CHAP. 1 · L'ALERTE",type:"s",theme:"secours",titre:"Un collègue s'effondre",scene:"Un collègue s'effondre au bureau : inconscient, il ne respire pas. Que faites-vous, et dans quel ordre ?",b:["Faire alerter les secours (15) et demander un défibrillateur (DAE)","Commencer immédiatement les compressions thoraciques","Poser le DAE dès qu'il arrive et suivre ses consignes vocales"],p:["Le mettre en PLS et attendre","Lui donner à boire pour le réveiller"]},
+{tag:"CHAP. 1 · LE FEU",type:"s",theme:"incendie",titre:"Départ de feu sur l'imprimante",scene:"De la fumée et des flammes sortent d'une multiprise sous l'imprimante. Vos bons réflexes ?",b:["Couper l'alimentation si c'est possible sans risque","Utiliser un extincteur CO2 (jamais d'eau sur l'électrique)","Donner l'alerte et faire évacuer la zone"],p:["Jeter de l'eau dessus pour éteindre","Débrancher à mains nues l'appareil en feu"]},
+{tag:"CHAP. 1 · LES POSTURES",type:"s",theme:"tms",titre:"Carton d'archives au sol",scene:"Vous devez soulever un carton d'archives lourd posé au sol. Les bons gestes ?",b:["Plier les genoux, dos droit, charge près du corps","Évaluer le poids et demander de l'aide si nécessaire"],p:["Soulever vite en arrondissant le dos","Tourner le buste tout en portant la charge"]},
+{tag:"ÉNIGME · RCP",type:"e",theme:"secours",titre:"Le bon cycle",scene:"Énigme : RCP d'un adulte par un secouriste — quel cycle compressions / insufflations ?",b:["30 compressions / 2 insufflations"],p:["15 compressions / 2 insufflations","5 compressions / 1 insufflation"]},
+{tag:"ÉNIGME · INCENDIE",type:"e",theme:"incendie",titre:"Classe de feu",scene:"Énigme : un feu de corbeille à papier appartient à quelle classe de feu ?",b:["Classe A (solides : papier, carton, bois)"],p:["Classe B (liquides inflammables)","Classe C (gaz)"]},
+{tag:"ÉNIGME · MANUTENTION",type:"e",theme:"tms",titre:"Que dit la règle ?",scene:"Énigme : concernant le port manuel de charges, la réglementation impose surtout…",b:["D'éviter/limiter le port et de fournir des aides à la manutention"],p:["Une limite fixe de 25 kg pour tout le monde","Rien : c'est au salarié de gérer"]},
+{tag:"CHAP. 2 · LE DAE",type:"s",theme:"secours",titre:"« Choc recommandé »",scene:"Le défibrillateur annonce « choc recommandé ». Juste avant d'appuyer, vous…",b:["Vous assurez que PERSONNE ne touche la victime","Annoncez clairement « écartez-vous »"],p:["Continuez le massage pendant le choc","Retirez les électrodes d'abord"]},
+{tag:"CHAP. 2 · ÉVACUATION",type:"s",theme:"incendie",titre:"L'alarme retentit",scene:"L'alarme d'évacuation se déclenche dans le cabinet. La conduite à tenir ?",b:["Cesser toute activité et évacuer par l'issue de secours balisée","Rejoindre le point de rassemblement","Ne pas prendre l'ascenseur"],p:["Finir d'enregistrer son fichier d'abord","Repasser par son bureau récupérer ses affaires"]},
+{tag:"CHAP. 2 · ÉCRAN",type:"s",theme:"tms",titre:"Réglage du poste écran",scene:"Pour prévenir les TMS sur votre poste informatique, vous réglez…",b:["Le haut de l'écran au niveau des yeux, à ~une longueur de bras","Des micro-pauses régulières et des changements de posture"],p:["L'écran le plus bas possible","On ne bouge pas pour finir plus vite"]},
+{tag:"ÉNIGME · CONDUITE À TENIR",type:"e",theme:"secours",titre:"Dans le bon ordre",scene:"Énigme : face à un accident, la conduite à tenir se fait dans l'ordre…",b:["Protéger → Alerter → Secourir"],p:["Alerter → Secourir → Protéger","Secourir → Protéger → Alerter"]},
+{tag:"ÉNIGME · FUMÉES",type:"e",theme:"incendie",titre:"Couloir enfumé",scene:"Énigme : vous devez traverser un couloir envahi par la fumée. Comment progressez-vous ?",b:["Baissé, près du sol, où l'air reste plus respirable"],p:["Debout en courant pour aller plus vite","En retenant sa respiration, les yeux fermés"]},
+{tag:"ÉNIGME · ÉCRAN",type:"e",theme:"tms",titre:"Travail prolongé sur écran",scene:"Énigme : pour limiter fatigue visuelle et TMS sur écran, la bonne habitude est…",b:["Faire des pauses régulières et alterner les postures"],p:["Rester immobile le plus longtemps possible","Travailler dans le noir pour se concentrer"]},
+{tag:"CHAP. 3 · ÉTOUFFEMENT",type:"s",theme:"secours",titre:"Fausse route à la pause",scene:"Un collègue s'étouffe en mangeant : il ne peut plus parler ni tousser. Que faites-vous ?",b:["Donner 5 claques vigoureuses dans le dos","Si ça persiste, 5 compressions abdominales (Heimlich)"],p:["Lui donner de l'eau pour faire passer","Le secouer par les épaules"]},
+{tag:"CHAP. 3 · ÉQUIPES",type:"s",theme:"incendie",titre:"Évacuation organisée",scene:"L'évacuation s'organise. Qui fait quoi ?",b:["Le guide-file ouvre la marche vers la sortie","Le serre-file vérifie que personne ne reste"],p:["Chacun sort par l'issue qu'il préfère","On se regroupe d'abord dans un bureau"]},
+{tag:"ÉNIGME · URGENCE",type:"e",theme:"secours",titre:"Le bon numéro",scene:"Énigme : pour un malaise grave, le numéro à composer en priorité est…",b:["Le 15 (SAMU) — ou le 112 (numéro d'urgence européen)"],p:["Le 18 uniquement","On attend que ça passe tout seul"]},
+{tag:"ÉNIGME · EXTINCTEUR",type:"e",theme:"incendie",titre:"Manomètre au rouge",scene:"Énigme : l'aiguille du manomètre d'un extincteur est dans la zone rouge. Cela signifie…",b:["Extincteur à faire vérifier / remplacer"],p:["Pression idéale, tout va bien","Modèle réservé aux pompiers"]},
+{tag:"CHAP. FINAL · PRÉVENTION",type:"s",theme:"secours",titre:"Ancrer durablement",scene:"Mission presque bouclée. Pour ancrer la prévention au cabinet au quotidien…",b:["Instaurer un quart d'heure sécurité régulier","Faire remonter les presque-accidents sans sanction"],p:["Attendre le prochain accident pour en parler","Une affiche au mur suffit largement"]}
+];
+var KO=["Aïe, ce n'était pas LE réflexe. −50 s ⏱️","Raté ! Le danger en profite. −50 s","Mauvaise pioche. −50 s","Oups, on apprend mais on perd 50 s 😅"];
+var OKL=["Bien joué ! 🎯","Sang-froid validé ✅","Réflexe de pro 👏","Impeccable."];
+
+var t=480,T0=480,idx=0,faits=0,pts=0,erreurs=0,bonnes=0,et={secours:0,incendie:0,tms:0},timer=null,PR="",SV="",SSTU="non",started=false;
+var LSCORE=0,LBADGE="",LFINI=false,recSST=false,recMAC=false,recGP=false,recINC=false,GAMEOPEN=true;
+function $(i){return document.getElementById(i)}
+function fmt(s){if(s<0)s=0;var m=Math.floor(s/60),x=s%60;return (m<10?'0':'')+m+':'+(x<10?'0':'')+x}
+function rnd(a){return a[Math.floor(Math.random()*a.length)]}
+function be(s){return String(s==null?'':s).replace(/[&<>]/g,function(c){return c=='&'?'&amp;':c=='<'?'&lt;':'&gt;'})}
+function hideSplash(){var s=$('splash');if(s){s.classList.add('out');setTimeout(function(){s.style.display='none'},800)}}
+setTimeout(hideSplash,4200);
+function launch(){
+  if(GAMEOPEN===false){alert("Le jeu est fermé pour le moment. Reviens quand le service RH l'aura ouvert. 🔒");return;}
+  PR=($('prenom').value||'').trim();
+  if(!PR){alert("Entre ton prénom pour démarrer (il figure sur ton résultat).");$('prenom').focus();return;}
+  SV=($('service').value||'').trim();SSTU=$('sst').value;
+  T0=t=parseInt($('duree').value,10)*60;
+  idx=0;faits=0;pts=0;erreurs=0;bonnes=0;et={secours:0,incendie:0,tms:0};started=false;
+  $('intro').classList.add('hide');$('game').classList.remove('hide');$('choix').classList.add('hide');$('fin').classList.add('hide');
+  $('chrono').classList.remove('hide');$('score').classList.remove('hide');$('chrono').textContent=fmt(t);
+  $('tag').textContent='PRÉPAREZ-VOUS';$('tag').className='tag';$('titre').textContent='La mission démarre…';$('acts').innerHTML='';$('fb').classList.add('hide');$('obj').textContent='';
+  var seq=['3','2','1','GO !'],k=0;$('scene').innerHTML='<div class="go">'+seq[0]+'</div>';
+  var iv=setInterval(function(){k++;if(k<seq.length){$('scene').innerHTML='<div class="go">'+seq[k]+'</div>';}else{clearInterval(iv);beginGame();}},800);
+  setTimeout(function(){try{clearInterval(iv)}catch(e){}if(!started)beginGame();},4500);
+}
+function beginGame(){if(started)return;started=true;timer=setInterval(tick,1000);load();}
+function tick(){t--;$('chrono').textContent=fmt(t);if(t<=60)$('chrono').classList.add('warn');if(t<=0){clearInterval(timer);fin()}}
+function load(){var a=S[idx];faits=0;$('tag').textContent=a.tag+'  ·  '+(idx+1)+'/'+S.length;$('tag').className='tag'+(a.type==='e'?' enig':'');$('titre').textContent=a.titre;$('scene').textContent=a.scene;$('obj').textContent=(a.type==='e'?'Trouve la bonne réponse':'Bonnes actions : 0/'+a.b.length);$('prog').style.width='0%';$('fb').classList.add('hide');
+  var o=a.b.map(function(x){return{t:x,ok:true}}).concat(a.p.map(function(x){return{t:x,ok:false}}));
+  for(var z=o.length-1;z>0;z--){var w=Math.floor(Math.random()*(z+1)),tt=o[z];o[z]=o[w];o[w]=tt;}
+  var bx=$('acts');bx.innerHTML='';o.forEach(function(it){var b=document.createElement('button');b.className='act';b.textContent=it.t;b.onclick=function(){pick(b,it,a)};bx.appendChild(b)})}
+function pick(btn,it,a){var f=$('fb');f.classList.remove('hide');
+  if(it.ok){btn.disabled=true;faits++;pts+=(a.type==='e'?120:40);$('score').textContent=pts+' pts';f.className='fb ok';f.textContent=rnd(OKL);
+    if(a.type!=='e')$('obj').textContent='Bonnes actions : '+faits+'/'+a.b.length;$('prog').style.width=Math.round(faits/a.b.length*100)+'%';
+    if(faits>=a.b.length){bonnes++;setTimeout(next,520)}}
+  else{btn.disabled=true;erreurs++;if(et[a.theme]!=null)et[a.theme]++;pts=Math.max(0,pts-25);$('score').textContent=pts+' pts';t-=50;$('chrono').textContent=fmt(t);$('err').textContent='Erreurs : '+erreurs;f.className='fb ko';f.textContent=rnd(KO)}}
+function next(){idx++;if(idx>=S.length){clearInterval(timer);fin()}else{load()}}
+function fin(){clearInterval(timer);$('game').classList.add('hide');$('intro').classList.add('hide');var el=$('fin');el.classList.remove('hide');
+  LFINI=idx>=S.length;var bonus=Math.max(0,t);LSCORE=Math.max(0,pts+bonus);
+  var medal,grade,col;
+  if(!LFINI){medal='⏰';grade='MISSION INTERROMPUE';col='#C01A1A';LBADGE='Interrompu';}
+  else if(erreurs<=2){medal='🥇';grade='BADGE OR — SANG-FROID ABSOLU';col='#e8b50a';LBADGE='Or';}
+  else if(erreurs<=5){medal='🥈';grade='BADGE ARGENT — SOLIDE';col='#cfd3d6';LBADGE='Argent';}
+  else{medal='🥉';grade='BADGE BRONZE — À CONSOLIDER';col='#cd7f32';LBADGE='Bronze';}
+  recSST=(et.secours>0&&SSTU==='non');recMAC=(et.secours>0&&SSTU==='oui');recGP=(et.tms>0);recINC=(et.incendie>0);
+  var reco='';
+  if(recMAC)reco+="<div class='reco'><b>Secours :</b> des gestes ont manqué. → <b>MAC SST</b> (recyclage des secouristes, tous les 24 mois).</div>";
+  else if(recSST)reco+="<div class='reco'><b>Secours :</b> des gestes ont manqué. → <b>SST</b> — Sauveteur Secouriste du Travail.</div>";
+  if(recINC)reco+="<div class='reco'><b>Incendie :</b> conduite à tenir à consolider. → <b>Manipulation extincteurs & Exercice d'évacuation</b>.</div>";
+  if(recGP)reco+="<div class='reco'><b>Gestes & postures :</b> prévention des TMS et du travail sur écran. → <b>Gestes & Postures</b>.</div>";
+  if(!reco)reco=(SSTU==='non'?"<div class='reco'>Sans-faute, bravo ! Pour officialiser ces réflexes, le diplôme <b>SST</b> est la suite logique.</div>":"<div class='reco'>Sans-faute ! Pour entretenir ce niveau : <b>MAC SST</b> (recyclage) et exercices réguliers.</div>");
+  var svline=(SV?" · "+be(SV):"");
+  el.innerHTML="<div class='medal'>"+medal+"</div><div class='code' style='color:"+col+"'>"+grade+"</div><h2 style='margin-top:10px'>Score : "+LSCORE+" points</h2><p>Joueur : <b>"+be(PR)+"</b>"+svline+"<br>Bonnes étapes : <b>"+bonnes+"/"+S.length+"</b> · Erreurs : <b>"+erreurs+"</b> · Temps restant : <b>"+fmt(Math.max(t,0))+"</b></p><h2>Ton mini-diagnostic</h2>"+reco+"<div class='cta'>👉 Dernière étape : choisis les formations qui t'intéressent — elles seront transmises au service RH.</div><button class='big' style='margin-top:14px' onclick='showChoix()'>🎓 Choisir mes formations →</button>";
+}
+
+function ckSync(){[['w_sst','ck_sst'],['w_mac','ck_mac'],['w_gp','ck_gp'],['w_inc','ck_inc']].forEach(function(p){var c=$(p[0]),l=$(p[1]);if(c&&l)l.classList.toggle('on',c.checked);});}
+function showChoix(){$('fin').classList.add('hide');$('choix').classList.remove('hide');
+  $('w_sst').checked=recSST;$('w_mac').checked=recMAC;$('w_gp').checked=recGP;$('w_inc').checked=recINC;
+  ['w_sst','w_mac','w_gp','w_inc'].forEach(function(id){$(id).onchange=ckSync;});
+  ckSync();try{window.scrollTo(0,0)}catch(e){}}
+function submitChoices(){
+  var btn=$('btnSend');btn.disabled=true;var fb=$('sendfb');fb.classList.remove('hide');fb.className='fb';fb.style.background='#222';fb.style.color='#ddd';fb.textContent='Envoi en cours…';
+  var payload={prenom:PR,service:SV,sst:SSTU,score:LSCORE,temps_total:T0,temps_restant:Math.max(t,0),erreurs:erreurs,bonnes:bonnes,total:S.length,err_secours:et.secours,err_incendie:et.incendie,err_tms:et.tms,badge:LBADGE,want_sst:$('w_sst').checked,want_mac:$('w_mac').checked,want_gp:$('w_gp').checked,want_incendie:$('w_inc').checked,observation:($('obs').value||'').trim()};
+  function done(ok){$('choix').innerHTML="<h2 style='color:var(--v)'>✅ Merci "+be(PR)+" !</h2><p>"+(ok?"Tes choix de formation ont été transmis au service RH (Hugo). On se retrouve bientôt en formation ! 💪":"Tes choix ont été enregistrés (connexion limitée — ils seront remontés au RH).")+"</p><div class='cta'>« Le jeu ouvre les yeux ; la formation, sur le terrain comme en salle, sauve des vies. »</div><div class='row2' style='margin-top:14px'><button class='big' onclick='location.reload()'>↻ Joueur suivant</button><button class='big ghost' onclick='showBoard()'>🏆 Classement</button></div>";}
+  fetch(API,{method:'POST',body:JSON.stringify(payload)}).then(function(r){return r.json()}).then(function(){done(true)}).catch(function(){done(false)});
+}
+function showBoard(){var ov=$('board');ov.classList.remove('hide');var L=$('boardList');L.innerHTML='Chargement…';
+  fetch(API+"?board=1&z="+Date.now()).then(function(r){return r.json()}).then(function(rows){
+   if(!Array.isArray(rows)||!rows.length){L.innerHTML="<p style='color:#aaa'>Personne n'a encore joué. Sois le premier !</p>";return;}
+   var med=["🥇","🥈","🥉"];
+   L.innerHTML=rows.slice(0,15).map(function(r,i){return "<div class='brow'><span class='brank'>"+(i<3?med[i]:(i+1))+"</span><b style='flex:1'>"+be(r.prenom||'(joueur)')+(r.service?" <span style='color:#888;font-weight:400'>· "+be(r.service)+"</span>":"")+"</b><span class='bscore'>"+(r.score||0)+" pts</span></div>"}).join("");
+  }).catch(function(){L.innerHTML="<p style='color:#ff9a9a'>Classement indisponible (réseau).</p>"});}
+function closeBoard(){$('board').classList.add('hide');}
+function gameClosed(){var i=$('intro');if(i){i.innerHTML="<img class='brand' src='logo.png' alt='ANDRAGOPS'><span class='tag'>JEU FERMÉ</span><h1>Le jeu n'est pas ouvert pour le moment</h1><p>OPÉRATION SANG-FROID est actuellement fermé par le service RH. Reviens un peu plus tard. 🔒</p>";}}
+fetch(API+"?state=1&z="+Date.now()).then(function(r){return r.json()}).then(function(j){if(j&&j.open===false){GAMEOPEN=false;gameClosed();}}).catch(function(){});
+</script></body></html>
