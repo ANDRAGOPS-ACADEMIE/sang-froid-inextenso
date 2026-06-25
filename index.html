@@ -93,7 +93,7 @@ footer{text-align:center;color:#777;font-size:11px;margin-top:14px}
 <button class="big" style="margin-top:14px" onclick="closeBoard()">← Retour</button>
 </div></div>
 
-<footer>ANDRAGOPS Académie × In Extenso · Outil d'accroche, non certifiant. « Le jeu ouvre les yeux ; la formation sauve. »</footer></div>
+<footer>ANDRAGOPS Académie × In Extenso · « Le jeu ouvre les yeux ; la formation sauve. »</footer></div>
 <script>
 var API="https://eumviuptmyzgftrqpape.supabase.co/functions/v1/inextenso";
 var S=[
@@ -155,10 +155,10 @@ function next(){idx++;if(idx>=S.length){clearInterval(timer);fin()}else{load()}}
 function fin(){clearInterval(timer);$('game').classList.add('hide');$('intro').classList.add('hide');var el=$('fin');el.classList.remove('hide');
   LFINI=idx>=S.length;var bonus=Math.max(0,t);LSCORE=Math.max(0,pts+bonus);
   var medal,grade,col;
-  if(!LFINI){medal='⏰';grade='MISSION INTERROMPUE';col='#C01A1A';LBADGE='Interrompu';}
-  else if(erreurs<=2){medal='🥇';grade='BADGE OR — SANG-FROID ABSOLU';col='#e8b50a';LBADGE='Or';}
-  else if(erreurs<=5){medal='🥈';grade='BADGE ARGENT — SOLIDE';col='#cfd3d6';LBADGE='Argent';}
-  else{medal='🥉';grade='BADGE BRONZE — À CONSOLIDER';col='#cd7f32';LBADGE='Bronze';}
+  if(!LFINI){medal='<svg width="62" height="62" viewBox="0 0 64 64" fill="none"><path d="M26 9h12M32 9v6" stroke="#C01A1A" stroke-width="3.4" stroke-linecap="round"/><circle cx="32" cy="36" r="17" stroke="#C01A1A" stroke-width="3.4"/><path d="M32 36V25M32 36l8 5" stroke="#C01A1A" stroke-width="3.4" stroke-linecap="round"/></svg>';grade='MISSION INTERROMPUE';col='#C01A1A';LBADGE='Interrompu';}
+  else if(erreurs<=2){medal='<svg width="64" height="64" viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="22" fill="#e8b50a"/><circle cx="32" cy="32" r="22" stroke="#0003" stroke-width="2"/><path d="M32 19l3.4 7 7.6 1-5.5 5.4 1.3 7.6-6.8-3.6-6.8 3.6 1.3-7.6-5.5-5.4 7.6-1z" fill="#fff"/></svg>';grade='BADGE OR — SANG-FROID ABSOLU';col='#e8b50a';LBADGE='Or';}
+  else if(erreurs<=5){medal='<svg width="64" height="64" viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="22" fill="#9aa3ad"/><circle cx="32" cy="32" r="22" stroke="#0003" stroke-width="2"/><path d="M32 19l3.4 7 7.6 1-5.5 5.4 1.3 7.6-6.8-3.6-6.8 3.6 1.3-7.6-5.5-5.4 7.6-1z" fill="#fff"/></svg>';grade='BADGE ARGENT — SOLIDE';col='#8a929c';LBADGE='Argent';}
+  else{medal='<svg width="64" height="64" viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="22" fill="#cd7f32"/><circle cx="32" cy="32" r="22" stroke="#0003" stroke-width="2"/><path d="M32 19l3.4 7 7.6 1-5.5 5.4 1.3 7.6-6.8-3.6-6.8 3.6 1.3-7.6-5.5-5.4 7.6-1z" fill="#fff"/></svg>';grade='BADGE BRONZE — À CONSOLIDER';col='#cd7f32';LBADGE='Bronze';}
   recSST=(et.secours>0&&SSTU==='non');recMAC=(et.secours>0&&SSTU==='oui');recGP=(et.tms>0);recINC=(et.incendie>0);
   var reco='';
   if(recMAC)reco+="<div class='reco'><b>Secours :</b> des gestes ont manqué. → <b>MAC SST</b> (recyclage des secouristes, tous les 24 mois).</div>";
@@ -167,7 +167,7 @@ function fin(){clearInterval(timer);$('game').classList.add('hide');$('intro').c
   if(recGP)reco+="<div class='reco'><b>Gestes & postures :</b> prévention des TMS et du travail sur écran. → <b>Gestes & Postures</b>.</div>";
   if(!reco)reco=(SSTU==='non'?"<div class='reco'>Sans-faute, bravo ! Pour officialiser ces réflexes, le diplôme <b>SST</b> est la suite logique.</div>":"<div class='reco'>Sans-faute ! Pour entretenir ce niveau : <b>MAC SST</b> (recyclage) et exercices réguliers.</div>");
   var svline=(SV?" · "+be(SV):"");
-  el.innerHTML="<div class='medal'>"+medal+"</div><div class='code' style='color:"+col+"'>"+grade+"</div><h2 style='margin-top:10px'>Score : "+LSCORE+" points</h2><p>Joueur : <b>"+be(PR)+"</b>"+svline+"<br>Bonnes étapes : <b>"+bonnes+"/"+S.length+"</b> · Erreurs : <b>"+erreurs+"</b> · Temps restant : <b>"+fmt(Math.max(t,0))+"</b></p><h2>Ton mini-diagnostic</h2>"+reco+"<div class='cta'>👉 Dernière étape : choisis les formations qui t'intéressent — elles seront transmises au service RH.</div><button class='big' style='margin-top:14px' onclick='showChoix()'>🎓 Choisir mes formations →</button>";
+  el.innerHTML="<div class='medal'>"+medal+"</div><div class='code' style='color:"+col+"'>"+grade+"</div><h2 style='margin-top:10px'>Score : "+LSCORE+" points</h2><p>Joueur : <b>"+be(PR)+"</b>"+svline+"<br>Bonnes étapes : <b>"+bonnes+"/"+S.length+"</b> · Erreurs : <b>"+erreurs+"</b> · Temps restant : <b>"+fmt(Math.max(t,0))+"</b></p><h2>Ton mini-diagnostic</h2>"+reco+"<div class='cta'>Dernière étape : choisis les formations qui t'intéressent — elles seront transmises au service RH.</div><button class='big' style='margin-top:14px' onclick='showChoix()'>Choisir mes formations →</button>";
 }
 
 function ckSync(){[['w_sst','ck_sst'],['w_mac','ck_mac'],['w_gp','ck_gp'],['w_inc','ck_inc']].forEach(function(p){var c=$(p[0]),l=$(p[1]);if(c&&l)l.classList.toggle('on',c.checked);});}
