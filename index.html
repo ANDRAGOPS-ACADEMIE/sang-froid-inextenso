@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>OPÉRATION SANG-FROID — Édition Cabinet · ANDRAGOPS × In Extenso</title>
+<title>OPÉRATION SANG-FROID · Une journée au cabinet · ANDRAGOPS × In Extenso</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap');
 :root{--r:#e23b3b;--rd:#b4151a;--v:#2fbf71;--o:#f0b429;--b:#3b82f6;--bg:#0a0d13;--panel:#10151f;--panel2:#141b27;--line:rgba(255,255,255,.08);--ink:#e8edf5;--mut:#8696ad}
@@ -8,41 +8,80 @@
 body{background:radial-gradient(1200px 720px at 50% -12%,#16222f,#0a0d13 62%),#0a0d13;color:var(--ink);min-height:100vh;padding:18px;-webkit-font-smoothing:antialiased;position:relative;overflow-x:hidden}
 body::before{content:"";position:fixed;inset:0;background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.016) 0 1px,transparent 1px 38px),repeating-linear-gradient(90deg,rgba(255,255,255,.016) 0 1px,transparent 1px 38px);pointer-events:none;z-index:0}
 .app{width:100%;max-width:820px;margin:0 auto;position:relative;z-index:1}
-header{display:flex;justify-content:space-between;align-items:center;padding:10px 2px;margin-bottom:16px;border-bottom:1px solid var(--line)}
+header{display:flex;justify-content:space-between;align-items:center;padding:10px 2px;margin-bottom:16px;border-bottom:1px solid var(--line);gap:10px}
 .logo{font-family:'Rajdhani';font-weight:700;letter-spacing:3px;font-size:17px;text-transform:uppercase}.logo span{color:var(--r)}
 .hud{display:flex;gap:12px;align-items:center}
 .score{font-family:'Rajdhani';font-size:16px;color:var(--o);font-weight:700;letter-spacing:1px}
 .chrono{font-family:'Rajdhani';font-size:30px;font-weight:700;background:#05080d;padding:2px 14px;border-radius:4px;border:1px solid var(--r);color:#fff;font-variant-numeric:tabular-nums;letter-spacing:2px;box-shadow:0 0 18px rgba(226,59,59,.25),inset 0 0 12px rgba(226,59,59,.12)}
 .chrono.warn{animation:blink .6s steps(2) infinite}@keyframes blink{50%{opacity:.35}}
+.chrono.pause{border-color:var(--o);color:var(--o);box-shadow:0 0 14px rgba(240,180,41,.2)}
 .card{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:4px;padding:24px;margin-bottom:14px;position:relative;box-shadow:0 18px 40px rgba(0,0,0,.45)}
 .card::before{content:"";position:absolute;left:0;top:14px;bottom:14px;width:3px;background:linear-gradient(180deg,var(--r),var(--rd))}
 .card::after{content:"";position:absolute;top:0;right:0;width:22px;height:22px;background:linear-gradient(225deg,var(--r) 0 2px,transparent 2px)}
 .brand{display:block;margin:2px auto 14px;width:108px;max-width:40%;height:auto;filter:drop-shadow(0 4px 12px rgba(0,0,0,.5))}
-h1{font-family:'Rajdhani';color:#fff;font-size:27px;line-height:1.12;margin-bottom:10px;font-weight:700;letter-spacing:.5px}h2{font-family:'Rajdhani';font-size:21px;margin-bottom:10px;font-weight:700;letter-spacing:.5px;color:#fff}p{line-height:1.6;margin-bottom:10px;color:#c4cee0}
-.pitch{border-left:3px solid var(--o);padding:4px 0 4px 14px;color:#e7d6a6;background:linear-gradient(90deg,rgba(240,180,41,.06),transparent)}
+h1{font-family:'Rajdhani';color:#fff;font-size:28px;line-height:1.12;margin-bottom:10px;font-weight:700;letter-spacing:.5px}h2{font-family:'Rajdhani';font-size:21px;margin-bottom:10px;font-weight:700;letter-spacing:.5px;color:#fff}p{line-height:1.6;margin-bottom:10px;color:#c4cee0}
+.pitch{border-left:3px solid var(--o);padding:6px 0 6px 14px;color:#e7d6a6;background:linear-gradient(90deg,rgba(240,180,41,.06),transparent)}
 .tag{display:inline-block;background:var(--r);color:#fff;font-family:'Rajdhani';font-weight:700;padding:4px 14px;border-radius:3px;font-size:12px;letter-spacing:1.5px;margin-bottom:10px;text-transform:uppercase;clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%)}
-.tag.enig{background:#7c3aed}
+.tag.enig{background:#7c3aed}.tag.ordre{background:#2563eb}.tag.bilan{background:#a16207}
+.clock{font-weight:700;background:rgba(0,0,0,.28);padding:1px 7px;border-radius:2px;margin-right:6px;letter-spacing:1px}
 .scene{font-size:17px;color:#fff;margin-bottom:6px;line-height:1.55}
 .go{font-family:'Rajdhani';font-size:62px;font-weight:700;color:var(--o);text-align:center;padding:18px 0;letter-spacing:2px;text-shadow:0 0 30px rgba(240,180,41,.4)}
 .actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}@media(max-width:560px){.actions{grid-template-columns:1fr}}
-button.act{background:rgba(255,255,255,.03);border:1px solid var(--line);border-left:3px solid #2a3850;color:#dbe4f2;padding:14px;border-radius:3px;text-align:left;cursor:pointer;font-size:14px;transition:.15s;font-weight:500}
+button.act{background:rgba(255,255,255,.03);border:1px solid var(--line);border-left:3px solid #2a3850;color:#dbe4f2;padding:14px;border-radius:3px;text-align:left;cursor:pointer;font-size:14px;transition:.15s;font-weight:500;line-height:1.45}
 button.act:hover{border-left-color:var(--r);background:rgba(226,59,59,.08);transform:translateX(2px)}button.act:disabled{opacity:.35;cursor:default;transform:none}
+button.act.good,button.act.good:disabled{opacity:1;border-left-color:var(--v);background:rgba(47,191,113,.10);color:#d9f7e6}
+button.act.bad,button.act.bad:disabled{opacity:.55;border-left-color:var(--r);background:rgba(226,59,59,.07);text-decoration:line-through;text-decoration-color:rgba(255,120,120,.6)}
+.ordn{display:inline-block;min-width:22px;height:22px;line-height:22px;text-align:center;border-radius:50%;background:var(--v);color:#05210f;font-family:'Rajdhani';font-weight:700;margin-right:8px;font-size:14px}
 .big{background:linear-gradient(135deg,var(--r),var(--rd));color:#fff;border:none;padding:15px 24px;border-radius:3px;font-family:'Rajdhani';font-size:17px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;width:100%;transition:.15s;box-shadow:0 8px 24px rgba(226,59,59,.25)}
-.big:hover{filter:brightness(1.08);box-shadow:0 10px 30px rgba(226,59,59,.4)}
+.big:hover{filter:brightness(1.08);box-shadow:0 10px 30px rgba(226,59,59,.4)}.big:disabled{opacity:.5;cursor:default}
 .ghost{background:rgba(255,255,255,.04);border:1px solid var(--line);color:#dbe4f2;box-shadow:none}.ghost:hover{border-color:var(--mut);filter:none}
 input,select,textarea{width:100%;padding:12px;border-radius:3px;border:1px solid var(--line);background:#0a0e15;color:var(--ink);margin-bottom:11px;font-size:15px;font-family:'Inter';transition:.15s}
 input:focus,select:focus,textarea:focus{outline:none;border-color:var(--r);box-shadow:0 0 0 3px rgba(226,59,59,.15)}
 textarea{resize:vertical}
 label{font-family:'Rajdhani';font-size:13px;color:var(--mut);display:block;margin-bottom:5px;letter-spacing:.8px;text-transform:uppercase;font-weight:600}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(max-width:560px){.row2{grid-template-columns:1fr}}
-.ck{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:3px;padding:14px;margin-bottom:10px;cursor:pointer;font-size:15px;color:#dbe4f2;transition:.15s}.ck:hover{border-color:#2a3850}
-.ck input{width:auto;margin:0;transform:scale(1.4);accent-color:var(--v)}.ck.on{border-color:var(--v);background:rgba(47,191,113,.1)}
-.fb{margin-top:12px;padding:12px;border-radius:3px;font-weight:600}.ok{background:rgba(47,191,113,.12);color:#8ff0b8;border:1px solid var(--v)}.ko{background:rgba(226,59,59,.12);color:#ffb0b0;border:1px solid var(--r)}
-.meta{display:flex;gap:18px;font-family:'Rajdhani';font-size:14px;color:var(--mut);margin-top:8px;letter-spacing:.5px;font-weight:600}.bar{height:6px;background:rgba(255,255,255,.07);border-radius:6px;overflow:hidden;margin-top:10px}.bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--v),#7be0a0);width:0;transition:width .3s;box-shadow:0 0 10px rgba(47,191,113,.5)}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:6px 0 16px}@media(max-width:560px){.rules{grid-template-columns:1fr}}
+.rules div{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:3px;padding:10px 12px;font-size:13px;color:#c4cee0;line-height:1.45}
+.rules b{display:block;font-family:'Rajdhani';font-size:20px;color:var(--o);letter-spacing:.5px}
+.note{font-size:12.5px;color:#8fa0b8;border-top:1px solid var(--line);padding-top:10px;margin:4px 0 12px;line-height:1.5}
+.sms{background:#0d1420;border:1px solid var(--line);border-radius:16px 16px 16px 4px;padding:14px 16px;margin:8px 0 18px;max-width:560px}
+.sms .who{font-family:'Rajdhani';font-size:13px;color:var(--o);letter-spacing:1px;text-transform:uppercase;font-weight:700;margin-bottom:6px}
+.sms p{color:#eef2f8;margin:0;font-size:15.5px}
+.ck{display:flex;align-items:flex-start;gap:12px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:3px;padding:14px;margin-bottom:10px;cursor:pointer;font-size:15px;color:#dbe4f2;transition:.15s;line-height:1.4}.ck:hover{border-color:#2a3850}
+.ck input{width:auto;margin:3px 0 0;transform:scale(1.4);accent-color:var(--v);flex:0 0 auto}.ck.on{border-color:var(--v);background:rgba(47,191,113,.1)}
+.ck small{display:block;color:var(--mut);font-size:12.5px;margin-top:3px}
+label.ck{font-family:'Inter',system-ui,Arial,sans-serif;text-transform:none;letter-spacing:0;font-weight:500;font-size:15px;color:#dbe4f2}label.ck b{color:#fff}
+.fb{margin-top:12px;padding:12px;border-radius:3px;font-weight:500;line-height:1.5}.ok{background:rgba(47,191,113,.12);color:#8ff0b8;border:1px solid var(--v);font-weight:600}.ko{background:rgba(226,59,59,.12);color:#ffc4c4;border:1px solid var(--r)}.ko b{color:#fff}
+.lesson{margin-top:14px;background:linear-gradient(90deg,rgba(240,180,41,.10),rgba(240,180,41,.03));border:1px solid rgba(240,180,41,.35);border-left:3px solid var(--o);border-radius:3px;padding:14px 16px}
+.lesson .lh{font-family:'Rajdhani';font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--o);font-size:14px;margin-bottom:6px}
+.lesson p{color:#eef2f8;margin-bottom:12px}
+.meta{display:flex;gap:18px;font-family:'Rajdhani';font-size:14px;color:var(--mut);margin-top:8px;letter-spacing:.5px;font-weight:600;flex-wrap:wrap}.bar{height:6px;background:rgba(255,255,255,.07);border-radius:6px;overflow:hidden;margin-top:10px}.bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--v),#7be0a0);width:0;transition:width .3s;box-shadow:0 0 10px rgba(47,191,113,.5)}
 .verdict{text-align:center;padding:28px}.code{font-family:'Rajdhani';font-size:30px;font-weight:700;letter-spacing:1px}.medal{font-size:54px;line-height:1}
-.reco{background:rgba(226,59,59,.06);border:1px solid rgba(226,59,59,.25);border-left:3px solid var(--r);border-radius:3px;padding:13px;margin-top:10px;text-align:left;color:#dbe4f2}.reco b{color:var(--o)}.hide{display:none}
-.cta{background:linear-gradient(135deg,rgba(59,130,246,.14),rgba(59,130,246,.04));border:1px solid rgba(59,130,246,.35);border-radius:3px;padding:15px;margin-top:14px;text-align:left;font-weight:500;color:#dbeafe}
+.epi{background:rgba(255,255,255,.03);border:1px solid var(--line);border-left:3px solid var(--o);border-radius:3px;padding:14px 16px;text-align:left;color:#dbe4f2;margin:16px 0}
+.epi .eh{font-family:'Rajdhani';font-weight:700;color:var(--o);letter-spacing:1px;text-transform:uppercase;font-size:13px;margin-bottom:4px}
+.sec{text-align:left;margin-top:18px}
+.day{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px}@media(max-width:560px){.day{grid-template-columns:1fr}}
+.day div{font-size:13px;padding:7px 10px;border-radius:3px;background:rgba(255,255,255,.03);border-left:3px solid #2a3850;color:#c4cee0}
+.day .d-ok{border-left-color:var(--v)}.day .d-err{border-left-color:var(--o)}.day .d-nj{opacity:.45}
+.day i{font-style:normal;font-family:'Rajdhani';font-weight:700;color:var(--mut);margin-right:6px}
+.dom .rw{display:flex;align-items:center;gap:10px;margin:8px 0;font-size:14px;color:#dbe4f2}.dom .rw>span{min-width:150px}
+.dom .g{flex:1;height:8px;background:rgba(255,255,255,.07);border-radius:8px;overflow:hidden}.dom .g i{display:block;height:100%;background:linear-gradient(90deg,var(--v),#7be0a0)}
+.dom .rw b{min-width:92px;text-align:right;font-family:'Rajdhani';font-size:15px}
+@media(max-width:560px){.dom .rw>span{min-width:110px}.dom .rw b{min-width:70px}}
+.reco{background:rgba(226,59,59,.06);border:1px solid rgba(226,59,59,.25);border-left:3px solid var(--r);border-radius:3px;padding:13px;margin-top:10px;text-align:left;color:#dbe4f2;line-height:1.5}.reco b{color:var(--o)}.hide{display:none}
+.cta{background:linear-gradient(135deg,rgba(59,130,246,.14),rgba(59,130,246,.04));border:1px solid rgba(59,130,246,.35);border-radius:3px;padding:15px;margin-top:14px;text-align:left;font-weight:500;color:#dbeafe;line-height:1.5}
+.duel{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.duel div{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:3px;padding:12px;text-align:center}
+.duel .lead{border-color:var(--o);box-shadow:inset 0 0 0 1px rgba(240,180,41,.35)}
+.duel .sn{font-family:'Rajdhani';font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#dbe4f2}
+.duel b{display:block;font-family:'Rajdhani';font-size:30px;color:#fff;line-height:1.1}
+.duel span{font-size:12px;color:var(--mut)}
+.btabs{display:flex;gap:6px;margin:6px 0 10px;flex-wrap:wrap}
+.btabs button{background:rgba(255,255,255,.04);border:1px solid var(--line);color:#c4cee0;padding:8px 13px;border-radius:3px;cursor:pointer;font-family:'Rajdhani';font-weight:700;letter-spacing:.5px;text-transform:uppercase;font-size:13px}
+.btabs button.on{background:var(--r);border-color:var(--r);color:#fff}
+.sitetag{font-size:11px;color:var(--mut);font-weight:500;margin-left:6px}
 footer{text-align:center;color:#566377;font-size:11px;margin-top:18px;letter-spacing:.3px}
+@media(max-width:560px){body{padding:12px}.card{padding:18px 16px}.logo{font-size:13px;letter-spacing:1.5px}.chrono{font-size:24px;padding:2px 10px}.score{font-size:14px;white-space:nowrap}h1{font-size:25px}.scene{font-size:16px}}
 #splash{position:fixed;inset:0;background:radial-gradient(circle at 50% 35%,#13202f,#05080d 65%);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;text-align:center;transition:opacity .8s;padding:20px}
 #splash::before{content:"";position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.02) 0 1px,transparent 1px 40px),repeating-linear-gradient(90deg,rgba(255,255,255,.02) 0 1px,transparent 1px 40px)}
 #splash.out{opacity:0;pointer-events:none}#splash img{width:158px;max-width:48%;height:auto;position:relative;filter:drop-shadow(0 8px 30px rgba(0,0,0,.6))}
@@ -53,49 +92,64 @@ footer{text-align:center;color:#566377;font-size:11px;margin-top:18px;letter-spa
 .brow{display:flex;align-items:center;gap:12px;padding:11px 12px;border-bottom:1px solid var(--line)}
 .brank{font-family:'Rajdhani';color:var(--o);font-weight:700;min-width:34px;font-size:18px}.bscore{font-family:'Rajdhani';color:#8ff0b8;font-weight:700;white-space:nowrap;letter-spacing:.5px}
 </style></head><body>
-<div id="splash" onclick="hideSplash()"><img src="logo.png" alt="ANDRAGOPS"><div class="stitle">OPÉRATION <b>SANG-FROID</b></div><div class="stag">Édition Cabinet · Gardez votre sang-froid, sécurisez les bureaux.</div><button class="skip" onclick="hideSplash()">Commencer ▶</button></div>
+<div id="splash" onclick="hideSplash()"><img src="logo.png" alt="ANDRAGOPS"><div class="stitle">OPÉRATION <b>SANG-FROID</b></div><div class="stag">Édition cabinet · Une journée, dix-huit réflexes.</div><button class="skip" onclick="hideSplash()">Commencer ▶</button></div>
 <div class="app">
 <header><div class="logo">OPÉRATION <span>SANG-FROID</span></div><div class="hud"><span id="score" class="score hide">0 pts</span><div id="chrono" class="chrono hide">--:--</div></div></header>
 
 <div id="intro" class="card"><img class="brand" src="logo.png" alt="ANDRAGOPS Académie">
-<span class="tag">ESCAPE GAME PRÉVENTION · ÉDITION CABINET · INDIVIDUEL</span>
-<h1>8h00 — l'audit prévention, et le responsable a disparu…</h1>
-<p class="pitch">Ce matin, l'auditeur sécurité devait passer au cabinet. Introuvable. Et les incidents s'enchaînent : un collègue fait un malaise, un départ de feu près de l'imprimante, des cartons d'archives à déplacer, l'alarme évacuation qui se déclenche… À toi de garder ton <b>SANG-FROID</b> et de sécuriser les bureaux avant la fin du chrono. 😎</p>
-<p><b>Règle :</b> des situations à gérer et des énigmes à résoudre. Les bons réflexes rapportent des points ; une erreur coûte du temps. À la fin : ton badge, un mini-diagnostic, et tu choisis les formations qui t'intéressent.</p>
-<div class="row2">
-<div><label>Ton prénom</label><input id="prenom" placeholder="Prénom"></div>
-<div><label>Ton nom</label><input id="nom" placeholder="Nom"></div>
+<span class="tag">Escape game prévention · Édition cabinet</span>
+<h1>7 h 58 : jour de clôture au cabinet</h1>
+<p class="pitch">Les comptes de trois clients doivent partir ce soir. Et le référent sécurité vient d'appeler : il est retenu toute la journée sur l'autre site. <b>C'est toi qui le remplaces.</b> Une ronde, un rendez-vous bilan, la pause déjeuner, une alarme… De 8 h à 18 h, garde ton <b>SANG-FROID</b>.</p>
+<div class="rules">
+<div><b>18</b>situations et énigmes, dans l'ordre d'une vraie journée</div>
+<div><b>−30 s</b>par mauvais réflexe ; chaque bon réflexe rapporte des points</div>
+<div><b>Pause</b>le chrono s'arrête pendant que tu lis le bon réflexe</div>
 </div>
 <div class="row2">
-<div><label>Service / équipe (facultatif)</label><input id="service" placeholder="Ex : Compta, Social, Accueil…"></div>
-<div><label>Es-tu déjà SST (sauveteur secouriste du travail) ?</label><select id="sst"><option value="non">Non, pas encore</option><option value="oui">Oui, déjà formé(e)</option></select></div>
+<div><label for="prenom">Ton prénom</label><input id="prenom" placeholder="Prénom" autocomplete="given-name" maxlength="60"></div>
+<div><label for="nom">Ton nom</label><input id="nom" placeholder="Nom" autocomplete="family-name" maxlength="60"></div>
 </div>
-<label>Durée de la partie (compte à rebours)</label>
-<select id="duree"><option value="6">6 minutes (express)</option><option value="8" selected>8 minutes (recommandé)</option><option value="10">10 minutes (tranquille)</option></select>
-<button class="big" onclick="launch()">▶ Commencer à jouer</button>
-<button class="big ghost" style="margin-top:8px" onclick="showBoard()">🏆 Classement du cabinet</button></div>
+<div class="row2">
+<div><label for="site">Ton site</label><select id="site"><option value="">Choisis ton site</option><option value="Strasbourg">Strasbourg</option><option value="Haguenau">Haguenau</option></select></div>
+<div><label for="service">Ton service (facultatif)</label><select id="service"><option value="">Non précisé</option><option>Expertise comptable</option><option>Social et paie</option><option>Juridique</option><option>Audit</option><option>Accueil et secrétariat</option><option>Encadrement</option><option>Autre</option></select></div>
+</div>
+<div class="row2">
+<div><label for="sst">Es-tu sauveteur secouriste du travail (SST) ?</label><select id="sst"><option value="non">Non</option><option value="oui">Oui, formation ou recyclage il y a moins de 2 ans</option><option value="expire">Oui, mais il y a plus de 2 ans (ou je ne sais plus)</option></select></div>
+<div><label for="duree">Durée du chrono</label><select id="duree"><option value="6">6 minutes (express)</option><option value="8" selected>8 minutes (recommandé)</option><option value="10">10 minutes (tranquille)</option></select></div>
+</div>
+<p class="note">Transmis au service RH : prénom, nom, site, service, résultats de la partie et formations choisies, pour organiser les formations. Le classement n'affiche que ton prénom. C'est un jeu, pas un examen.</p>
+<button class="big" onclick="launch()">▶ Commencer ma journée</button>
+<button class="big ghost" style="margin-top:8px" onclick="showBoard('')">🏆 Classement du cabinet</button></div>
+
+<div id="brief" class="card hide">
+<span class="tag">07 h 52 · Message reçu</span>
+<div class="sms"><div class="who">Le référent sécurité</div><p id="smsText"></p></div>
+<button class="big" onclick="countdown()">Je prends le relais ▶</button></div>
 
 <div id="game" class="card hide"><span id="tag" class="tag"></span><h2 id="titre"></h2><p id="scene" class="scene"></p>
 <div class="bar"><i id="prog"></i></div><div class="meta"><span id="obj"></span><span id="err">Erreurs : 0</span></div>
-<div id="acts" class="actions"></div><div id="fb" class="fb hide"></div></div>
+<div id="acts" class="actions"></div><div id="fb" class="fb hide"></div>
+<div id="lesson" class="lesson hide"><div class="lh">Le bon réflexe</div><p id="lessonTxt"></p><button class="big" id="lessonBtn" onclick="nextEp()">Situation suivante ▶</button></div></div>
 
 <div id="fin" class="card verdict hide"></div>
 
 <div id="choix" class="card hide">
-<h2><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:7px"><path d="M12 4 2.5 9 12 14l9.5-5z"/><path d="M6 11.2V16c0 1.1 2.7 2.5 6 2.5s6-1.4 6-2.5v-4.8"/><path d="M21.5 9.5v4.5"/></svg>Quelles formations veux-tu suivre ?</h2>
-<p style="color:#bbb">Coche ce qui t'intéresse — c'est transmis directement au service RH (Hugo). Les cases conseillées par ton diagnostic sont déjà pré-cochées, à toi d'ajuster.</p>
-<label class="ck" id="ck_sst"><input type="checkbox" id="w_sst"><span><b>SST</b> — Sauveteur Secouriste du Travail (14h)</span></label>
-<label class="ck" id="ck_mac"><input type="checkbox" id="w_mac"><span><b>MAC SST</b> — recyclage SST (7h, si déjà formé)</span></label>
-<label class="ck" id="ck_gp"><input type="checkbox" id="w_gp"><span><b>Gestes & Postures</b> — travail sur écran / TMS (7h)</span></label>
-<label class="ck" id="ck_inc"><input type="checkbox" id="w_inc"><span><b>Incendie</b> — extincteurs & évacuation</span></label>
-<label style="margin-top:8px">Une observation ? (disponibilités, questions, créneau…)</label>
-<textarea id="obs" rows="3" placeholder="Optionnel — un mot pour le RH"></textarea>
-<button class="big" id="btnSend" onclick="submitChoices()">✅ Valider mes choix et les transmettre au RH</button>
+<h2>Quelles formations veux-tu suivre ?</h2>
+<p>Coche ce qui t'intéresse. Les cases conseillées par ton bilan sont déjà cochées : à toi d'ajuster.</p>
+<label class="ck" id="ck_sst"><input type="checkbox" id="w_sst"><span><b>SST</b> · Sauveteur secouriste du travail<small>2 jours (14 h) · alerter, masser, défibriller, dégager une fausse route : les gestes de la journée, pour de vrai, avec le certificat SST</small></span></label>
+<label class="ck" id="ck_mac"><input type="checkbox" id="w_mac"><span><b>MAC SST</b> · Maintien et actualisation des compétences<small>1 jour (7 h) · le recyclage obligatoire tous les 24 mois pour garder ton certificat SST valable</small></span></label>
+<label class="ck" id="ck_gp"><input type="checkbox" id="w_gp"><span><b>Gestes et postures</b> · Prévention des TMS<small>1 jour (7 h) · réglage du poste écran, double écran, port des cartons d'archives</small></span></label>
+<label class="ck" id="ck_inc"><input type="checkbox" id="w_inc"><span><b>Sécurité incendie</b> · Manipulation des extincteurs et évacuation<small>Une demi-journée (4 h) · quel extincteur sur quel feu, et comment sortir quand l'alarme sonne</small></span></label>
+<label for="obs" style="margin-top:8px">Un mot pour le service RH ? (facultatif)</label>
+<textarea id="obs" rows="3" maxlength="280" placeholder="Disponibilités, périodes à éviter (clôtures, échéances fiscales…), questions"></textarea>
+<p class="note" id="noteEnvoi"></p>
+<button class="big" id="btnSend" onclick="submitChoices()">✅ Transmettre mes choix au service RH</button>
 <div id="sendfb" class="fb hide"></div></div>
 
 <div id="board" class="ov hide"><div class="ov-card">
-<h2 style="color:var(--o)">🏆 Classement du cabinet</h2>
-<p style="color:#aaa;font-size:13px;margin-bottom:8px">Les meilleurs sang-froid du cabinet.</p>
+<h2 style="color:var(--o)">🏆 Classement</h2>
+<div id="duelB"></div>
+<div class="btabs" id="btabs"><button data-s="" onclick="showBoard('')">Tout le cabinet</button><button data-s="Strasbourg" onclick="showBoard('Strasbourg')">Strasbourg</button><button data-s="Haguenau" onclick="showBoard('Haguenau')">Haguenau</button></div>
 <div id="boardList">Chargement…</div>
 <button class="big" style="margin-top:14px" onclick="closeBoard()">← Retour</button>
 </div></div>
@@ -103,98 +157,282 @@ footer{text-align:center;color:#566377;font-size:11px;margin-top:18px;letter-spa
 <footer>ANDRAGOPS Académie × In Extenso · « Le jeu ouvre les yeux ; la formation sauve. »</footer></div>
 <script>
 var API="https://eumviuptmyzgftrqpape.supabase.co/functions/v1/inextenso";
+var SITES=["Strasbourg","Haguenau"];
+/* Une journée au cabinet, de 8 h à 18 h. Chaque incident de l'après-midi découle d'un risque repéré lors de la ronde du matin.
+   type : s = plusieurs bons réflexes (ordre libre) · e = énigme, une seule bonne réponse · o = actions à cliquer dans l'ordre
+   theme : secours / incendie / tms → diagnostic et formations ; bilan → hors diagnostic */
 var S=[
-{tag:"CHAP. 1 · L'ALERTE",type:"s",theme:"secours",titre:"Un collègue s'effondre",scene:"Un collègue s'effondre au bureau : inconscient, il ne respire pas. Que faites-vous, et dans quel ordre ?",b:["Faire alerter les secours (15) et demander un défibrillateur (DAE)","Commencer immédiatement les compressions thoraciques","Poser le DAE dès qu'il arrive et suivre ses consignes vocales"],p:["Le mettre en PLS et attendre","Lui donner à boire pour le réveiller"]},
-{tag:"CHAP. 1 · LE FEU",type:"s",theme:"incendie",titre:"Départ de feu sur l'imprimante",scene:"De la fumée et des flammes sortent d'une multiprise sous l'imprimante. Vos bons réflexes ?",b:["Couper l'alimentation si c'est possible sans risque","Utiliser un extincteur CO2 (jamais d'eau sur l'électrique)","Donner l'alerte et faire évacuer la zone"],p:["Jeter de l'eau dessus pour éteindre","Débrancher à mains nues l'appareil en feu"]},
-{tag:"CHAP. 1 · LES POSTURES",type:"s",theme:"tms",titre:"Carton d'archives au sol",scene:"Vous devez soulever un carton d'archives lourd posé au sol. Les bons gestes ?",b:["Plier les genoux, dos droit, charge près du corps","Évaluer le poids et demander de l'aide si nécessaire"],p:["Soulever vite en arrondissant le dos","Tourner le buste tout en portant la charge"]},
-{tag:"ÉNIGME · RCP",type:"e",theme:"secours",titre:"Le bon cycle",scene:"Énigme : RCP d'un adulte par un secouriste — quel cycle compressions / insufflations ?",b:["30 compressions / 2 insufflations"],p:["15 compressions / 2 insufflations","5 compressions / 1 insufflation"]},
-{tag:"ÉNIGME · INCENDIE",type:"e",theme:"incendie",titre:"Classe de feu",scene:"Énigme : un feu de corbeille à papier appartient à quelle classe de feu ?",b:["Classe A (solides : papier, carton, bois)"],p:["Classe B (liquides inflammables)","Classe C (gaz)"]},
-{tag:"ÉNIGME · MANUTENTION",type:"e",theme:"tms",titre:"Que dit la règle ?",scene:"Énigme : concernant le port manuel de charges, la réglementation impose surtout…",b:["D'éviter/limiter le port et de fournir des aides à la manutention"],p:["Une limite fixe de 25 kg pour tout le monde","Rien : c'est au salarié de gérer"]},
-{tag:"CHAP. 2 · LE DAE",type:"s",theme:"secours",titre:"« Choc recommandé »",scene:"Le défibrillateur annonce « choc recommandé ». Juste avant d'appuyer, vous…",b:["Vous assurez que PERSONNE ne touche la victime","Annoncez clairement « écartez-vous »"],p:["Continuez le massage pendant le choc","Retirez les électrodes d'abord"]},
-{tag:"CHAP. 2 · ÉVACUATION",type:"s",theme:"incendie",titre:"L'alarme retentit",scene:"L'alarme d'évacuation se déclenche dans le cabinet. La conduite à tenir ?",b:["Cesser toute activité et évacuer par l'issue de secours balisée","Rejoindre le point de rassemblement","Ne pas prendre l'ascenseur"],p:["Finir d'enregistrer son fichier d'abord","Repasser par son bureau récupérer ses affaires"]},
-{tag:"CHAP. 2 · ÉCRAN",type:"s",theme:"tms",titre:"Réglage du poste écran",scene:"Pour prévenir les TMS sur votre poste informatique, vous réglez…",b:["Le haut de l'écran au niveau des yeux, à ~une longueur de bras","Des micro-pauses régulières et des changements de posture"],p:["L'écran le plus bas possible","On ne bouge pas pour finir plus vite"]},
-{tag:"ÉNIGME · CONDUITE À TENIR",type:"e",theme:"secours",titre:"Dans le bon ordre",scene:"Énigme : face à un accident, la conduite à tenir se fait dans l'ordre…",b:["Protéger → Alerter → Secourir"],p:["Alerter → Secourir → Protéger","Secourir → Protéger → Alerter"]},
-{tag:"ÉNIGME · FUMÉES",type:"e",theme:"incendie",titre:"Couloir enfumé",scene:"Énigme : vous devez traverser un couloir envahi par la fumée. Comment progressez-vous ?",b:["Baissé, près du sol, où l'air reste plus respirable"],p:["Debout en courant pour aller plus vite","En retenant sa respiration, les yeux fermés"]},
-{tag:"ÉNIGME · ÉCRAN",type:"e",theme:"tms",titre:"Travail prolongé sur écran",scene:"Énigme : pour limiter fatigue visuelle et TMS sur écran, la bonne habitude est…",b:["Faire des pauses régulières et alterner les postures"],p:["Rester immobile le plus longtemps possible","Travailler dans le noir pour se concentrer"]},
-{tag:"CHAP. 3 · ÉTOUFFEMENT",type:"s",theme:"secours",titre:"Fausse route à la pause",scene:"Un collègue s'étouffe en mangeant : il ne peut plus parler ni tousser. Que faites-vous ?",b:["Donner 5 claques vigoureuses dans le dos","Si ça persiste, 5 compressions abdominales (Heimlich)"],p:["Lui donner de l'eau pour faire passer","Le secouer par les épaules"]},
-{tag:"CHAP. 3 · ÉQUIPES",type:"s",theme:"incendie",titre:"Évacuation organisée",scene:"L'évacuation s'organise. Qui fait quoi ?",b:["Le guide-file ouvre la marche vers la sortie","Le serre-file vérifie que personne ne reste"],p:["Chacun sort par l'issue qu'il préfère","On se regroupe d'abord dans un bureau"]},
-{tag:"ÉNIGME · URGENCE",type:"e",theme:"secours",titre:"Le bon numéro",scene:"Énigme : pour un malaise grave, le numéro à composer en priorité est…",b:["Le 15 (SAMU) — ou le 112 (numéro d'urgence européen)"],p:["Le 18 uniquement","On attend que ça passe tout seul"]},
-{tag:"ÉNIGME · EXTINCTEUR",type:"e",theme:"incendie",titre:"Manomètre au rouge",scene:"Énigme : l'aiguille du manomètre d'un extincteur est dans la zone rouge. Cela signifie…",b:["Extincteur à faire vérifier / remplacer"],p:["Pression idéale, tout va bien","Modèle réservé aux pompiers"]},
-{tag:"CHAP. FINAL · PRÉVENTION",type:"s",theme:"secours",titre:"Ancrer durablement",scene:"Mission presque bouclée. Pour ancrer la prévention au cabinet au quotidien…",b:["Instaurer un quart d'heure sécurité régulier","Faire remonter les presque-accidents sans sanction"],p:["Attendre le prochain accident pour en parler","Une affiche au mur suffit largement"]}
+{h:"08 h 05",ch:"La ronde du matin",type:"s",theme:"incendie",titre:"La ronde du référent",
+ scene:"Première consigne du référent : faire le tour de l'étage avant l'arrivée des équipes. Repère les trois situations qui posent problème.",
+ b:["Une multiprise branchée dans une autre multiprise, sous le bureau de la paie","De vieux cartons d'archives empilés devant la porte de l'issue de secours","La porte coupe-feu de l'escalier principal calée ouverte avec un carton"],
+ p:[{t:"L'extincteur près de l'ascenseur : accroché au mur, signalé, aiguille du manomètre dans le vert",w:"Rien à signaler : il est accessible, signalé, et l'aiguille dans le vert indique qu'il est sous pression."},
+    {t:"Le plan d'évacuation affiché à l'entrée de l'étage",w:"C'est exactement là qu'il doit être : visible, à chaque niveau."}],
+ ex:"Multiprises en cascade : surchauffe. Issue encombrée : sortie bloquée le jour où il faut fuir. Porte coupe-feu calée : la fumée passe librement dans l'escalier. Tu notes les trois pour le référent. Retiens-les, ils vont revenir dans ta journée."},
+{h:"08 h 20",ch:"La ronde du matin",type:"s",theme:"tms",titre:"Le poste du nouvel alternant",
+ scene:"Le nouvel alternant du pôle comptable s'installe pour une journée de saisie : écran posé directement sur le bureau, trop bas, sur le côté, face à la fenêtre. Que lui conseilles-tu ?",
+ b:["Placer l'écran bien en face de lui, le haut de l'écran à hauteur des yeux","Reculer l'écran à environ une longueur de bras (50 à 70 cm)","Orienter le poste pour avoir la fenêtre sur le côté, ni devant ni derrière"],
+ p:[{t:"Garder l'écran face à la fenêtre pour profiter de la lumière du jour",w:"Face à la fenêtre, les yeux sont éblouis toute la journée ; dos à la fenêtre, ce sont les reflets sur l'écran."},
+    {t:"Laisser l'écran sur le côté : il tournera la tête quand il en aura besoin",w:"Tourner la tête des centaines de fois par jour, c'est la nuque et les épaules qui trinquent : les TMS commencent comme ça."}],
+ ex:"Écran en face, haut de l'écran à hauteur des yeux, à une longueur de bras, fenêtre sur le côté : quatre réglages gratuits qui évitent nuque raide, épaules nouées et yeux qui piquent en fin de journée."},
+{h:"08 h 30",ch:"La ronde du matin",type:"e",theme:"tms",titre:"Le double écran",
+ scene:"Toi, tu travailles sur deux écrans : le logiciel comptable à gauche, le tableur à droite, et tu passes autant de temps sur l'un que sur l'autre. Comment les places-tu ?",
+ b:["Côte à côte, à la même hauteur, la jonction des deux écrans juste en face de toi"],
+ p:[{t:"Le premier écran en face de toi, le second loin sur le côté",w:"Ce placement convient quand un écran sert beaucoup plus que l'autre. À parts égales, tu tournerais la tête sans arrêt."},
+    {t:"L'un au-dessus de l'autre, pour gagner de la place sur le bureau",w:"L'écran du haut oblige à lever la tête : la nuque travaille en extension toute la journée."}],
+ ex:"Deux écrans utilisés à parts égales : côte à côte, collés, à la même hauteur, la jonction face à toi. Si l'un sert nettement plus que l'autre, il passe en face et le second sur le côté."},
+{h:"09 h 40",ch:"Le rendez-vous bilan",type:"s",theme:"tms",titre:"Les pièces du client",
+ scene:"Un client dépose les pièces de l'année pour son bilan : six cartons d'archives à monter en salle d'archives, au premier étage. Les bons gestes ?",
+ b:["Prendre le chariot de transport plutôt que porter à bout de bras","Pour soulever : approcher la charge, plier les genoux, dos droit, carton contre soi","Un carton à la fois, ou à deux pour les plus lourds"],
+ p:[{t:"Empiler les six cartons pour faire un seul voyage",w:"Charge trop lourde et vue masquée dans l'escalier : la chute et le tour de reins sont garantis."},
+    {t:"Soulever jambes tendues, en se penchant en avant",w:"Ce sont alors les vertèbres du bas du dos qui encaissent tout le poids. Ce sont les cuisses qui doivent travailler."},
+    {t:"Pivoter le buste en tenant le carton pour le poser sur l'étagère",w:"La torsion avec une charge est le mouvement le plus traumatisant pour le dos : on tourne avec les pieds."}],
+ ex:"D'abord se demander si l'on peut éviter de porter : chariot, plusieurs voyages, aide d'un collègue. Si l'on porte : charge contre soi, genoux fléchis, dos droit, et on pivote avec les pieds. Au passage, tu fais monter aussi les vieux cartons qui bloquaient l'issue de secours. Restent la multiprise et la porte coupe-feu sur ta liste…"},
+{h:"10 h 15",ch:"Le rendez-vous bilan",type:"s",theme:"secours",titre:"Le client ne se sent pas bien",
+ scene:"En salle de réunion, le client venu signer ses comptes devient pâle, transpire et se tient la poitrine. Il est conscient et dit qu'il a « juste besoin d'air ».",
+ b:["Le mettre au repos, assis ou à demi assis, et le rassurer","Lui demander depuis quand, s'il a un traitement, si c'est déjà arrivé","Faire alerter le 15 et suivre les consignes du médecin régulateur"],
+ p:[{t:"Le faire marcher dehors pour qu'il prenne l'air",w:"Un effort, même léger, aggrave un malaise cardiaque. Le repos est la première chose à faire."},
+    {t:"Le raccompagner à sa voiture pour qu'il aille voir son médecin",w:"Une douleur dans la poitrine peut être un infarctus : jamais de départ au volant, c'est le 15 qui décide."},
+    {t:"Lui donner un cachet de la boîte à pharmacie du cabinet",w:"Pas de médicament de ta propre initiative : seul le médecin du 15 peut le conseiller."}],
+ ex:"Malaise : repos, questions, alerte au 15, surveillance. Une douleur dans la poitrine, même chez quelqu'un qui minimise, justifie toujours l'appel. Ta collègue de l'accueil compose le 15."},
+{h:"10 h 18",ch:"Le rendez-vous bilan",type:"o",theme:"secours",titre:"Il s'effondre",
+ scene:"Ta collègue est encore au téléphone avec le 15 quand le client s'effondre. Il ne répond plus et ne respire plus. Clique les actions dans le bon ordre.",
+ b:["Lui faire dire au 15 « il ne respire plus », et envoyer chercher le défibrillateur","Commencer tout de suite les compressions thoraciques","Dès que le défibrillateur arrive : l'allumer et suivre ses consignes"],
+ p:[{t:"Le mettre en position latérale de sécurité (PLS)",w:"La PLS, c'est pour une victime inconsciente qui respire. Ici, il ne respire plus : sans massage, ses chances chutent à chaque minute."},
+    {t:"Ne pas le toucher en attendant les secours, pour ne rien aggraver",w:"Sans massage, le cerveau manque d'oxygène en quelques minutes. Masser ne peut pas aggraver un arrêt cardiaque."}],
+ ex:"Il ne répond pas et ne respire pas : c'est un arrêt cardiaque. Faire alerter, masser, défibriller, sans perdre une seconde. Masser ne peut pas aggraver la situation ; ne rien faire, si."},
+{h:"10 h 19",ch:"Le rendez-vous bilan",type:"e",theme:"secours",titre:"« Je raccroche ? »",
+ scene:"Ta collègue a donné l'adresse du cabinet au 15. Elle te demande si elle peut raccrocher pour aller elle-même chercher le défibrillateur.",
+ b:["Non : elle reste en ligne jusqu'à ce que le 15 lui dise de raccrocher ; un autre collègue va chercher le défibrillateur"],
+ p:[{t:"Oui : l'adresse est donnée, c'est l'essentiel",w:"Le médecin a souvent encore des questions, et il peut guider le massage au téléphone. On ne raccroche jamais le premier."},
+    {t:"Oui, et elle rappellera dans cinq minutes pour donner des nouvelles",w:"En raccrochant, on perd les conseils du médecin régulateur, et rappeler fait perdre un temps précieux."}],
+ ex:"On ne raccroche jamais le premier : c'est le régulateur qui met fin à l'appel. Pour le défibrillateur, on envoie quelqu'un d'autre. À plusieurs, chacun son rôle."},
+{h:"10 h 21",ch:"Le rendez-vous bilan",type:"e",theme:"secours",titre:"Le bon rythme",
+ scene:"Tu masses. Un collègue du pôle social va prendre le relais et te demande à quel rythme appuyer.",
+ b:["100 à 120 compressions par minute, en enfonçant la poitrine de 5 à 6 cm"],
+ p:[{t:"Environ 60 par minute, comme un cœur au repos",w:"Trop lent : le sang ne circule pas assez pour irriguer le cerveau."},
+    {t:"Le plus vite possible, sans compter",w:"Trop vite, le cœur n'a pas le temps de se remplir entre deux compressions : le massage perd son efficacité."}],
+ ex:"100 à 120 compressions par minute, 5 à 6 cm d'enfoncement, en laissant la poitrine remonter entre chaque. Changer de masseur toutes les deux minutes évite que la fatigue fasse baisser la qualité."},
+{h:"10 h 24",ch:"Le rendez-vous bilan",type:"s",theme:"secours",titre:"« Choc recommandé »",
+ scene:"Le défibrillateur est en place, électrodes collées sur la poitrine du client. Il annonce : « Choc recommandé. Ne touchez pas la victime. »",
+ b:["Annoncer à voix haute : « Écartez-vous ! »","Vérifier que plus personne ne touche le client, puis appuyer quand l'appareil le demande","Reprendre les compressions dès que l'appareil le demande"],
+ p:[{t:"Continuer à masser pendant le choc pour ne pas perdre de temps",w:"Le courant passerait dans le sauveteur : personne ne touche la victime pendant l'analyse et le choc."},
+    {t:"Décoller les électrodes avant d'appuyer",w:"Les électrodes restent en place jusqu'à l'arrivée des secours : c'est par elles que passe le choc."}],
+ ex:"Le défibrillateur décide seul s'il faut un choc. Ton rôle : écarter tout le monde, appuyer quand il le demande, reprendre le massage aussitôt. 10 h 31 : les secours prennent le relais. Le client part à l'hôpital, pris en charge à temps."},
+{h:"12 h 35",ch:"La pause déjeuner",type:"s",theme:"secours",titre:"Fausse route à la pause",
+ scene:"Salle de pause. La gestionnaire de paie porte les mains à sa gorge en mangeant : elle ne peut plus parler, ni tousser, ni respirer.",
+ b:["La pencher en avant et donner jusqu'à 5 claques vigoureuses entre les omoplates","Si ça ne passe pas : jusqu'à 5 compressions abdominales","Une fois dégagée : la faire asseoir et demander un avis médical au 15"],
+ p:[{t:"Lui donner un verre d'eau pour faire passer",w:"Elle ne peut pas avaler : l'eau risque d'aggraver l'obstruction."},
+    {t:"L'allonger sur le dos pour qu'elle se calme",w:"Tant qu'elle est consciente, claques et compressions se font debout ou assise, penchée en avant. On ne l'allonge que si elle perd connaissance, pour commencer le massage."}],
+ ex:"Elle ne peut ni parler ni tousser : l'obstruction est totale. Claques dans le dos, puis compressions abdominales, en alternant jusqu'à ce que ça passe. Ensuite, toujours un avis médical. Si elle avait pu tousser, il aurait fallu l'encourager à tousser, sans taper."},
+{h:"13 h 40",ch:"La pause déjeuner",type:"o",theme:"secours",titre:"Le radiateur d'appoint",
+ scene:"Retour de pause au pôle social. Une collègue a voulu débrancher le radiateur d'appoint au câble abîmé : elle est au sol, la main encore sur le câble. Clique les actions dans le bon ordre.",
+ b:["Protéger : couper le courant au tableau électrique, sans la toucher","Examiner : répond-elle ? respire-t-elle ?","Faire alerter le 15 en décrivant ce que tu as constaté","Secourir selon son état, jusqu'à l'arrivée des secours"],
+ p:[{t:"La tirer par le bras pour la dégager du câble",w:"Tant que le courant passe, la toucher, c'est devenir la deuxième victime. On coupe d'abord."}],
+ ex:"Protéger, examiner, faire alerter, secourir : c'est la conduite à tenir du sauveteur secouriste du travail, toujours dans cet ordre. Ta collègue reprend ses esprits ; le 15 la fait quand même examiner, car une électrisation peut toucher le cœur. Le radiateur, lui, part au débarras."},
+{h:"14 h 10",ch:"L'alerte incendie",type:"s",theme:"incendie",titre:"Ça sent le brûlé",
+ scene:"Odeur de plastique chaud dans le local reprographie. De la fumée et une flamme sortent de la multiprise en cascade repérée ce matin, sous le copieur et le destructeur de documents.",
+ b:["Donner l'alerte : prévenir les collègues et déclencher l'alarme","Couper le courant au tableau électrique, si c'est possible sans danger","Attaquer le départ de feu avec l'extincteur CO2, adapté aux appareils électriques"],
+ p:[{t:"Vider la carafe d'eau sur la multiprise",w:"De l'eau sur un appareil sous tension : c'est toi qui risques l'électrisation."},
+    {t:"Débrancher la multiprise à la main",w:"Une prise qui brûle peut être fondue et sous tension : on coupe au tableau, jamais à mains nues."},
+    {t:"Ouvrir grand la fenêtre pour faire sortir la fumée",w:"L'air frais apporte de l'oxygène au feu : on ferme fenêtres et portes, pas l'inverse."}],
+ ex:"Alerter, couper le courant, attaquer avec le bon extincteur, et refermer la porte si le feu ne cède pas. La multiprise en cascade de ce matin vient de rappeler pourquoi on ne les tolère pas."},
+{h:"14 h 11",ch:"L'alerte incendie",type:"e",theme:"incendie",titre:"Les papiers à détruire",
+ scene:"Les flammes ont gagné le bac de papiers en attente de destruction. Le courant est coupé. Quel extincteur est le plus efficace sur ce papier ?",
+ b:["L'extincteur à eau pulvérisée : le papier est un feu de classe A"],
+ p:[{t:"Le CO2 : il convient à tous les feux",w:"Le CO2 étouffe un feu électrique, mais sur du papier les braises repartent dès que le gaz se dissipe."},
+    {t:"Aucun : on laisse le papier finir de brûler",w:"Un bac de papier enflammé peut embraser les cartons voisins en moins d'une minute."}],
+ ex:"Papier, carton, bois : feu de classe A, que l'eau pulvérisée refroidit à cœur. Le CO2 reste l'extincteur des appareils électriques. Repère où se trouvent les deux types d'extincteurs à ton étage."},
+{h:"14 h 13",ch:"L'alerte incendie",type:"s",theme:"incendie",titre:"L'alarme retentit",
+ scene:"L'alarme d'évacuation sonne dans tout le cabinet. Il te reste deux écritures pour boucler la liasse d'un client, et un visiteur attend à l'accueil.",
+ b:["Tout arrêter tout de suite, sans finir la saisie","Emmener le visiteur de l'accueil avec toi : il ne connaît pas les lieux","Fermer les portes derrière toi, sans les verrouiller"],
+ p:[{t:"Finir et enregistrer la liasse : deux minutes, pas plus",w:"En deux minutes, la fumée peut avoir envahi le couloir. Le dossier se retrouvera ; toi, peut-être pas."},
+    {t:"Repasser par ton bureau prendre ton sac et ton manteau",w:"Revenir sur ses pas, c'est remonter le flot de l'évacuation et risquer de se retrouver piégé."}],
+ ex:"À l'alarme : on lâche tout, on emmène les visiteurs, on ferme les portes sans les verrouiller pour ralentir la fumée. La liasse attendra : aucun dossier ne vaut une vie."},
+{h:"14 h 14",ch:"L'alerte incendie",type:"s",theme:"incendie",titre:"L'escalier enfumé",
+ scene:"La porte coupe-feu calée ouverte ce matin a laissé passer la fumée : l'escalier principal est enfumé. Que fais-tu avec ton groupe ?",
+ b:["Ne pas s'engager dans la fumée","Rejoindre l'autre escalier par l'issue de secours balisée, dégagée ce matin"],
+ p:[{t:"Traverser vite en retenant sa respiration",w:"Quelques bouffées suffisent à faire perdre connaissance : la fumée tue avant les flammes."},
+    {t:"Prendre l'ascenseur pour éviter l'escalier",w:"En cas d'incendie, l'ascenseur peut s'arrêter entre deux étages ou s'ouvrir sur le feu : jamais d'ascenseur."}],
+ ex:"La fumée tue avant les flammes : on ne la traverse pas. On prend une autre issue. Et s'il n'y en a pas : on reste dans un bureau, porte fermée, bas de porte calfeutré, et on se signale à la fenêtre. Heureusement, les cartons ne bloquent plus l'issue de secours."},
+{h:"14 h 20",ch:"L'alerte incendie",type:"s",theme:"incendie",titre:"Le point de rassemblement",
+ scene:"Tout le monde est dehors, au point de rassemblement. Le responsable de l'évacuation fait l'appel.",
+ b:["Te signaler, et signaler toute personne qui manque","Rester sur place jusqu'à l'autorisation de rentrer"],
+ p:[{t:"Retourner chercher l'ordinateur portable avec le dossier du client",w:"On ne rentre jamais dans un bâtiment évacué avant le feu vert des secours ou du responsable."},
+    {t:"Rentrer chez toi directement, la journée est fichue",w:"Sans toi au point de rassemblement, on te croira encore à l'intérieur : les pompiers entreront te chercher."}],
+ ex:"Le point de rassemblement sert à compter. Une personne qui manque, ce sont des pompiers qui entrent la chercher : chacun se signale. Le serre-file, lui, a fermé la marche en vérifiant les bureaux. 14 h 40 : feu éteint, personne de blessé dans l'incendie."},
+{h:"16 h 45",ch:"La fin de journée",type:"e",theme:"tms",titre:"La nuque qui tire",
+ scene:"De retour au bureau : deux heures de saisie d'affilée pour rattraper le retard, sans lever la tête. La nuque tire et les yeux piquent. Quelle habitude adopter ?",
+ b:["Des pauses courtes et fréquentes, en changeant de tâche ou de position"],
+ p:[{t:"Une seule grande pause en fin de journée, pour ne pas casser le rythme",w:"Une longue pause tardive ne rattrape pas des heures de tension continue : ce sont les coupures régulières qui protègent."},
+    {t:"Pousser la luminosité de l'écran au maximum",w:"Un écran beaucoup plus lumineux que la pièce fatigue encore plus les yeux."}],
+ ex:"Mieux vaut des pauses courtes et fréquentes qu'une longue pause rare : se lever, regarder au loin, alterner saisie, téléphone et classement. Le corps est fait pour bouger, pas pour rester figé."},
+{h:"18 h 00",ch:"Le débrief",type:"s",theme:"bilan",titre:"Le retour du référent",
+ scene:"18 h. Le référent rentre de {AUTRE} : « Alors, cette journée ? » Que lui proposes-tu pour que ça ne se reproduise pas ?",
+ b:["Supprimer les multiprises en cascade et faire réparer le radiateur au câble abîmé","Ne plus jamais caler la porte coupe-feu ni encombrer l'issue de secours","Faire remonter les presque-accidents, même quand personne n'est blessé"],
+ p:[{t:"Rien : tout s'est bien terminé, inutile d'en faire une histoire",w:"Tout s'est bien terminé parce que tu étais là. Sans correction, les mêmes causes referont les mêmes dégâts."},
+    {t:"Attendre le prochain audit pour en parler",w:"Un risque repéré se traite tout de suite : un audit n'a jamais empêché un accident."}],
+ ex:"La multiprise, la porte coupe-feu, l'issue encombrée : tout avait été repéré dès la ronde de 8 h. La prévention, c'est traiter ce qu'on voit avant que ça arrive, et le dire."}
 ];
-var KO=["Aïe, ce n'était pas LE réflexe. −50 s ⏱️","Raté ! Le danger en profite. −50 s","Mauvaise pioche. −50 s","Oups, on apprend mais on perd 50 s 😅"];
-var OKL=["Bien joué ! 🎯","Sang-froid validé ✅","Réflexe de pro 👏","Impeccable."];
+var THEMES=[["secours","Secours"],["incendie","Incendie"],["tms","Gestes et postures"]];
+var OKL=["Bon réflexe !","Sang-froid validé.","Réflexe de pro.","Exactement."];
+var KO_ORDRE="Pas encore : une autre action passe avant celle-ci.";
+var PENAL=30;
 
-var t=480,T0=480,idx=0,faits=0,pts=0,erreurs=0,bonnes=0,et={secours:0,incendie:0,tms:0},timer=null,PR="",NOM="",SV="",SSTU="non",started=false;
-var LSCORE=0,LBADGE="",LFINI=false,recSST=false,recMAC=false,recGP=false,recINC=false,GAMEOPEN=true;
+var t=480,T0=480,idx=0,faits=0,pts=0,erreurs=0,epErr=0,R=[],et={secours:0,incendie:0,tms:0},timer=null,paused=false,started=false,ended=false;
+var PR="",NOM="",SITE="",AUTRE="",SV="",SSTU="non",GAMEOPEN=true;
+var LSCORE=0,LBADGE="",LFINI=false,SANSFAUTE=0,recSST=false,recMAC=false,recGP=false,recINC=false;
 function $(i){return document.getElementById(i)}
 function fmt(s){if(s<0)s=0;var m=Math.floor(s/60),x=s%60;return (m<10?'0':'')+m+':'+(x<10?'0':'')+x}
 function rnd(a){return a[Math.floor(Math.random()*a.length)]}
-function be(s){return String(s==null?'':s).replace(/[&<>]/g,function(c){return c=='&'?'&amp;':c=='<'?'&lt;':'&gt;'})}
+function be(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function fill(s){return String(s).replace(/\{SITE\}/g,SITE).replace(/\{AUTRE\}/g,AUTRE)}
 function hideSplash(){var s=$('splash');if(s){s.classList.add('out');setTimeout(function(){s.style.display='none'},800)}}
 setTimeout(hideSplash,4200);
+function top0(){try{window.scrollTo(0,0)}catch(e){}}
+
 function launch(){
-  if(GAMEOPEN===false){alert("Le jeu est fermé pour le moment. Reviens quand le service RH l'aura ouvert. 🔒");return;}
-  PR=($('prenom').value||'').trim();NOM=($('nom').value||'').trim();
-  if(!PR||!NOM){alert("Entre ton prénom ET ton nom pour démarrer.");$(PR?'nom':'prenom').focus();return;}
-  SV=($('service').value||'').trim();SSTU=$('sst').value;
+  if(GAMEOPEN===false){gameClosed();return;}
+  PR=($('prenom').value||'').trim();NOM=($('nom').value||'').trim();SITE=$('site').value;
+  if(!PR||!NOM){alert("Entre ton prénom et ton nom pour démarrer.");$(PR?'nom':'prenom').focus();return;}
+  if(SITES.indexOf(SITE)<0){alert("Choisis ton site : Strasbourg ou Haguenau.");$('site').focus();return;}
+  AUTRE=(SITE==="Strasbourg"?"Haguenau":"Strasbourg");
+  SV=$('service').value;SSTU=$('sst').value;
   T0=t=parseInt($('duree').value,10)*60;
-  idx=0;faits=0;pts=0;erreurs=0;bonnes=0;et={secours:0,incendie:0,tms:0};started=false;
-  $('intro').classList.add('hide');$('game').classList.remove('hide');$('choix').classList.add('hide');$('fin').classList.add('hide');
-  $('chrono').classList.remove('hide');$('score').classList.remove('hide');$('chrono').textContent=fmt(t);
-  $('tag').textContent='PRÉPAREZ-VOUS';$('tag').className='tag';$('titre').textContent='La mission démarre…';$('acts').innerHTML='';$('fb').classList.add('hide');$('obj').textContent='';
+  idx=0;faits=0;pts=0;erreurs=0;epErr=0;R=[];SANSFAUTE=0;et={secours:0,incendie:0,tms:0};started=false;ended=false;paused=false;
+  $('smsText').innerHTML="Bonjour "+be(PR)+" ! Je suis retenu toute la journée au cabinet de "+AUTRE+". Tu me remplaces comme référent sécurité à "+SITE+" ? Commence par la ronde de 8 h et note tout ce qui cloche. Bonne clôture, et garde ton sang-froid !";
+  $('intro').classList.add('hide');$('brief').classList.remove('hide');top0();
+}
+function countdown(){
+  $('brief').classList.add('hide');$('game').classList.remove('hide');$('choix').classList.add('hide');$('fin').classList.add('hide');
+  $('chrono').classList.remove('hide','warn','pause');$('score').classList.remove('hide');$('chrono').textContent=fmt(t);$('score').textContent='0 pts';$('err').textContent='Erreurs : 0';
+  $('tag').textContent='Préparez-vous';$('tag').className='tag';$('titre').textContent='La journée commence…';$('acts').innerHTML='';$('fb').classList.add('hide');$('lesson').classList.add('hide');$('obj').textContent='';$('prog').style.width='0%';
   var seq=['3','2','1','GO !'],k=0;$('scene').innerHTML='<div class="go">'+seq[0]+'</div>';
   var iv=setInterval(function(){k++;if(k<seq.length){$('scene').innerHTML='<div class="go">'+seq[k]+'</div>';}else{clearInterval(iv);beginGame();}},800);
   setTimeout(function(){try{clearInterval(iv)}catch(e){}if(!started)beginGame();},4500);
+  top0();
 }
 function beginGame(){if(started)return;started=true;timer=setInterval(tick,1000);load();}
-function tick(){t--;$('chrono').textContent=fmt(t);if(t<=60)$('chrono').classList.add('warn');if(t<=0){clearInterval(timer);fin()}}
-function load(){var a=S[idx];faits=0;$('tag').textContent=a.tag+'  ·  '+(idx+1)+'/'+S.length;$('tag').className='tag'+(a.type==='e'?' enig':'');$('titre').textContent=a.titre;$('scene').textContent=a.scene;$('obj').textContent=(a.type==='e'?'Trouve la bonne réponse':'Bonnes actions : 0/'+a.b.length);$('prog').style.width='0%';$('fb').classList.add('hide');
-  var o=a.b.map(function(x){return{t:x,ok:true}}).concat(a.p.map(function(x){return{t:x,ok:false}}));
+function tick(){if(paused||ended)return;t--;$('chrono').textContent=fmt(t);if(t<=60)$('chrono').classList.add('warn');if(t<=0){fin()}}
+function setPause(on){paused=on;$('chrono').classList.toggle('pause',on);if(on)$('chrono').classList.remove('warn');else if(t<=60)$('chrono').classList.add('warn');}
+function objText(a){return a.type==='e'?'Trouve la bonne réponse':(a.type==='o'?'Dans l\'ordre : étape '+Math.min(faits+1,a.b.length)+'/'+a.b.length:'Bons réflexes : '+faits+'/'+a.b.length)}
+function load(){var a=S[idx];faits=0;epErr=0;
+  $('tag').innerHTML='<span class="clock">'+a.h+'</span>'+be(a.ch)+'  ·  '+(idx+1)+'/'+S.length;
+  $('tag').className='tag'+(a.type==='e'?' enig':a.type==='o'?' ordre':a.theme==='bilan'?' bilan':'');
+  $('titre').textContent=a.titre;$('scene').textContent=fill(a.scene);$('obj').textContent=objText(a);$('prog').style.width='0%';
+  $('fb').classList.add('hide');$('lesson').classList.add('hide');
+  var o=a.b.map(function(x,i){return{t:x,ok:true,i:i}}).concat(a.p.map(function(x){return{t:x.t,ok:false,w:x.w}}));
   for(var z=o.length-1;z>0;z--){var w=Math.floor(Math.random()*(z+1)),tt=o[z];o[z]=o[w];o[w]=tt;}
-  var bx=$('acts');bx.innerHTML='';o.forEach(function(it){var b=document.createElement('button');b.className='act';b.textContent=it.t;b.onclick=function(){pick(b,it,a)};bx.appendChild(b)})}
-function pick(btn,it,a){var f=$('fb');f.classList.remove('hide');
-  if(it.ok){btn.disabled=true;faits++;pts+=(a.type==='e'?120:40);$('score').textContent=pts+' pts';f.className='fb ok';f.textContent=rnd(OKL);
-    if(a.type!=='e')$('obj').textContent='Bonnes actions : '+faits+'/'+a.b.length;$('prog').style.width=Math.round(faits/a.b.length*100)+'%';
-    if(faits>=a.b.length){bonnes++;setTimeout(next,520)}}
-  else{btn.disabled=true;erreurs++;if(et[a.theme]!=null)et[a.theme]++;pts=Math.max(0,pts-25);$('score').textContent=pts+' pts';t-=50;$('chrono').textContent=fmt(t);$('err').textContent='Erreurs : '+erreurs;f.className='fb ko';f.textContent=rnd(KO)}}
-function next(){idx++;if(idx>=S.length){clearInterval(timer);fin()}else{load()}}
-function fin(){clearInterval(timer);$('game').classList.add('hide');$('intro').classList.add('hide');var el=$('fin');el.classList.remove('hide');
-  LFINI=idx>=S.length;var bonus=Math.max(0,t);LSCORE=Math.max(0,pts+bonus);
+  var bx=$('acts');bx.innerHTML='';o.forEach(function(it){var b=document.createElement('button');b.className='act';b.textContent=fill(it.t);b.onclick=function(){pick(b,it,a)};bx.appendChild(b)});
+  top0();
+}
+function pick(btn,it,a){
+  if(paused||ended||btn.disabled)return;
+  var f=$('fb');f.classList.remove('hide');
+  if(it.ok&&(a.type!=='o'||it.i===faits)){
+    btn.disabled=true;btn.classList.add('good');
+    if(a.type==='o')btn.insertAdjacentHTML('afterbegin','<span class="ordn">'+(faits+1)+'</span>');
+    faits++;pts+=(a.type==='e'?120:40);$('score').textContent=pts+' pts';
+    f.className='fb ok';f.textContent=rnd(OKL);
+    $('obj').textContent=objText(a);$('prog').style.width=Math.round(faits/a.b.length*100)+'%';
+    if(faits>=a.b.length){R[idx]=epErr;if(!epErr)SANSFAUTE++;
+      Array.prototype.forEach.call($('acts').children,function(x){x.disabled=true});
+      setPause(true);setTimeout(function(){showLesson(a)},450);}
+  }else{
+    if(!it.ok){btn.disabled=true;btn.classList.add('bad');}
+    erreurs++;epErr++;if(et[a.theme]!=null)et[a.theme]++;
+    pts=Math.max(0,pts-25);t-=PENAL;$('score').textContent=pts+' pts';$('chrono').textContent=fmt(t);$('err').textContent='Erreurs : '+erreurs;
+    f.className='fb ko';f.innerHTML='<b>Mauvais réflexe (−'+PENAL+' s).</b> '+be(fill(it.ok?KO_ORDRE:it.w));
+    if(t<=60)$('chrono').classList.add('warn');
+    try{f.scrollIntoView({behavior:'smooth',block:'nearest'})}catch(e){}
+    if(t<=0)fin();
+  }
+}
+function showLesson(a){if(ended)return;$('fb').classList.add('hide');$('lessonTxt').textContent=fill(a.ex);
+  $('lessonBtn').textContent=(idx>=S.length-1?'Voir le bilan de ma journée ▶':'Situation suivante ▶');
+  $('lesson').classList.remove('hide');try{$('lesson').scrollIntoView({behavior:'smooth',block:'nearest'})}catch(e){}}
+function nextEp(){if(ended)return;setPause(false);idx++;if(idx>=S.length){fin()}else{load()}}
+
+function fin(){if(ended)return;ended=true;clearInterval(timer);paused=false;$('chrono').classList.remove('warn','pause');
+  $('game').classList.add('hide');$('intro').classList.add('hide');$('brief').classList.add('hide');var el=$('fin');el.classList.remove('hide');
+  LFINI=idx>=S.length;var bonus=Math.max(0,t);LSCORE=Math.max(0,pts+bonus);$('score').textContent=LSCORE+' pts';
+  var star='<path d="M32 19l3.4 7 7.6 1-5.5 5.4 1.3 7.6-6.8-3.6-6.8 3.6 1.3-7.6-5.5-5.4 7.6-1z" fill="#fff"/>';
+  function disc(c){return '<svg width="64" height="64" viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="22" fill="'+c+'"/><circle cx="32" cy="32" r="22" stroke="#0003" stroke-width="2"/>'+star+'</svg>'}
   var medal,grade,col;
-  if(!LFINI){medal='<svg width="62" height="62" viewBox="0 0 64 64" fill="none"><path d="M26 9h12M32 9v6" stroke="#C01A1A" stroke-width="3.4" stroke-linecap="round"/><circle cx="32" cy="36" r="17" stroke="#C01A1A" stroke-width="3.4"/><path d="M32 36V25M32 36l8 5" stroke="#C01A1A" stroke-width="3.4" stroke-linecap="round"/></svg>';grade='MISSION INTERROMPUE';col='#C01A1A';LBADGE='Interrompu';}
-  else if(erreurs<=2){medal='<svg width="64" height="64" viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="22" fill="#e8b50a"/><circle cx="32" cy="32" r="22" stroke="#0003" stroke-width="2"/><path d="M32 19l3.4 7 7.6 1-5.5 5.4 1.3 7.6-6.8-3.6-6.8 3.6 1.3-7.6-5.5-5.4 7.6-1z" fill="#fff"/></svg>';grade='BADGE OR — SANG-FROID ABSOLU';col='#e8b50a';LBADGE='Or';}
-  else if(erreurs<=5){medal='<svg width="64" height="64" viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="22" fill="#9aa3ad"/><circle cx="32" cy="32" r="22" stroke="#0003" stroke-width="2"/><path d="M32 19l3.4 7 7.6 1-5.5 5.4 1.3 7.6-6.8-3.6-6.8 3.6 1.3-7.6-5.5-5.4 7.6-1z" fill="#fff"/></svg>';grade='BADGE ARGENT — SOLIDE';col='#8a929c';LBADGE='Argent';}
-  else{medal='<svg width="64" height="64" viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="22" fill="#cd7f32"/><circle cx="32" cy="32" r="22" stroke="#0003" stroke-width="2"/><path d="M32 19l3.4 7 7.6 1-5.5 5.4 1.3 7.6-6.8-3.6-6.8 3.6 1.3-7.6-5.5-5.4 7.6-1z" fill="#fff"/></svg>';grade='BADGE BRONZE — À CONSOLIDER';col='#cd7f32';LBADGE='Bronze';}
-  recSST=(et.secours>0&&SSTU==='non');recMAC=(et.secours>0&&SSTU==='oui');recGP=(et.tms>0);recINC=(et.incendie>0);
+  if(!LFINI){medal='<svg width="62" height="62" viewBox="0 0 64 64" fill="none"><path d="M26 9h12M32 9v6" stroke="#C01A1A" stroke-width="3.4" stroke-linecap="round"/><circle cx="32" cy="36" r="17" stroke="#C01A1A" stroke-width="3.4"/><path d="M32 36V25M32 36l8 5" stroke="#C01A1A" stroke-width="3.4" stroke-linecap="round"/></svg>';grade='JOURNÉE INTERROMPUE';col='#e23b3b';LBADGE='Interrompu';}
+  else if(erreurs<=2){medal=disc('#e8b50a');grade='BADGE OR · SANG-FROID ABSOLU';col='#e8b50a';LBADGE='Or';}
+  else if(erreurs<=5){medal=disc('#9aa3ad');grade='BADGE ARGENT · SOLIDE';col='#aab3bd';LBADGE='Argent';}
+  else{medal=disc('#cd7f32');grade='BADGE BRONZE · À CONSOLIDER';col='#cd7f32';LBADGE='Bronze';}
+  var epi=LFINI?("18 h 05. Le client de ce matin a été pris en charge à temps, la gestionnaire de paie a retrouvé son souffle, ta collègue du pôle social s'en tire avec une grosse frayeur, et tout le monde est sorti avant que la fumée n'envahisse l'étage. Les trois liasses partiront ce soir. Le référent, de retour de "+AUTRE+", n'en revient pas : tu as tenu toute la journée.")
+    :("La journée a filé plus vite que toi : le chrono t'a rattrapé à "+(S[Math.min(idx,S.length-1)].h)+". Pas de panique : c'est précisément pour ces moments-là que les formations existent. Voici ce que ta partie révèle.");
+  /* Ta journée en un coup d'œil */
+  var day=S.map(function(a,i){var st=(i<idx||(i===idx&&R[i]!=null))?(R[i]?'d-err':'d-ok'):'d-nj';var ic=st==='d-ok'?'✓':st==='d-err'?'⚠':'·';return "<div class='"+st+"'><i>"+a.h+"</i>"+ic+" "+be(fill(a.titre))+"</div>"}).join("");
+  /* Diagnostic par domaine */
+  var jamais=[],partiel=[];
+  var dom=THEMES.map(function(th){var tot=0,joue=0,ok=0;S.forEach(function(a,i){if(a.theme===th[0]){tot++;if(R[i]!=null){joue++;if(R[i]===0)ok++;}}});
+    var de={secours:"de secours",incendie:"d'incendie",tms:"de gestes et postures"}[th[0]];if(!joue)jamais.push(de);else if(joue<tot)partiel.push(de);
+    var pc=joue?Math.round(ok/joue*100):0;
+    return "<div class='rw'><span>"+th[1]+"</span><div class='g'><i style='width:"+pc+"%'></i></div><b>"+(joue?ok+"/"+joue+" sans faute":"non atteint")+"</b></div>"+(joue&&joue<tot?"<div style='font-size:12px;color:var(--mut);margin:-4px 0 6px;text-align:right'>"+(tot-joue)+" situation"+(tot-joue>1?"s":"")+" non atteinte"+(tot-joue>1?"s":"")+"</div>":"")}).join("");
+  recSST=(SSTU==='non'&&et.secours>0);recMAC=(SSTU==='expire')||(SSTU==='oui'&&et.secours>0);recINC=(et.incendie>0);recGP=(et.tms>0);
   var reco='';
-  if(recMAC)reco+="<div class='reco'><b>Secours :</b> des gestes ont manqué. → <b>MAC SST</b> (recyclage des secouristes, tous les 24 mois).</div>";
-  else if(recSST)reco+="<div class='reco'><b>Secours :</b> des gestes ont manqué. → <b>SST</b> — Sauveteur Secouriste du Travail.</div>";
-  if(recINC)reco+="<div class='reco'><b>Incendie :</b> conduite à tenir à consolider. → <b>Manipulation extincteurs & Exercice d'évacuation</b>.</div>";
-  if(recGP)reco+="<div class='reco'><b>Gestes & postures :</b> prévention des TMS et du travail sur écran. → <b>Gestes & Postures</b>.</div>";
-  if(!reco)reco=(SSTU==='non'?"<div class='reco'>Sans-faute, bravo ! Pour officialiser ces réflexes, le diplôme <b>SST</b> est la suite logique.</div>":"<div class='reco'>Sans-faute ! Pour entretenir ce niveau : <b>MAC SST</b> (recyclage) et exercices réguliers.</div>");
-  var svline=(SV?" · "+be(SV):"");
-  el.innerHTML="<div class='medal'>"+medal+"</div><div class='code' style='color:"+col+"'>"+grade+"</div><h2 style='margin-top:10px'>Score : "+LSCORE+" points</h2><p>Joueur : <b>"+be(PR)+"</b>"+svline+"<br>Bonnes étapes : <b>"+bonnes+"/"+S.length+"</b> · Erreurs : <b>"+erreurs+"</b> · Temps restant : <b>"+fmt(Math.max(t,0))+"</b></p><h2>Ton mini-diagnostic</h2>"+reco+"<div class='cta'>Dernière étape : choisis les formations qui t'intéressent — elles seront transmises au service RH.</div><button class='big' style='margin-top:14px' onclick='showChoix()'>Choisir mes formations →</button>";
+  if(SSTU==='expire')reco+="<div class='reco'><b>Ton certificat SST :</b> au-delà de 2 ans, il doit être renouvelé. → <b>MAC SST</b> (7 h), le recyclage qui le remet à jour.</div>";
+  else if(recMAC)reco+="<div class='reco'><b>Secours :</b> certains gestes t'ont échappé. → <b>MAC SST</b> (7 h) pour les réactiver.</div>";
+  else if(recSST)reco+="<div class='reco'><b>Secours :</b> des gestes t'ont échappé. → <b>SST</b> (14 h) : tu les pratiques jusqu'à ce qu'ils deviennent des réflexes, avec le certificat de sauveteur secouriste du travail.</div>";
+  if(recINC)reco+="<div class='reco'><b>Incendie :</b> le bon extincteur et l'évacuation sont à consolider. → <b>Sécurité incendie</b> (4 h) : manipulation des extincteurs et évacuation.</div>";
+  if(recGP)reco+="<div class='reco'><b>Gestes et postures :</b> poste écran et port de charges à revoir. → <b>Gestes et postures</b> (7 h) : prévention des TMS.</div>";
+  function et_(l){return l.join(", ").replace(/, ([^,]*)$/," et $1")}
+  if(jamais.length||partiel.length)reco+="<div class='reco'><b>Le chrono t'a arrêté avant la fin :</b> "+(jamais.length?"situations "+et_(jamais)+" non jouées":"")+(jamais.length&&partiel.length?" ; ":"")+(partiel.length?"situations "+et_(partiel)+" jouées en partie":"")+". Rejoue en choisissant 10 minutes, ou coche directement les formations qui t'intéressent.</div>";
+  if(!reco)reco=(SSTU==='non'?"<div class='reco'>Aucune erreur sur les gestes de secours, bravo ! Pour transformer ces réflexes en certificat officiel, la formation <b>SST</b> (14 h) est la suite logique.</div>":"<div class='reco'>Sans faute ! Pense à ton recyclage <b>MAC SST</b> avant les 2 ans de ton certificat.</div>");
+  el.innerHTML="<div class='medal'>"+medal+"</div><div class='code' style='color:"+col+"'>"+grade+"</div><h2 style='margin-top:10px'>Score : "+LSCORE+" points</h2>"+(bonus?"<p style='margin:-4px 0 8px;font-size:13px;color:var(--mut)'>dont "+bonus+" points de bonus pour le temps restant</p>":"")+""
+   +"<p>"+be(PR)+" · "+be(SITE)+(SV?" · "+be(SV):"")+"<br>Situations sans erreur : <b>"+SANSFAUTE+"/"+S.length+"</b> · Erreurs : <b>"+erreurs+"</b> · Temps restant : <b>"+fmt(Math.max(t,0))+"</b></p>"
+   +"<div class='epi'><div class='eh'>"+(LFINI?"Fin de journée":"Journée interrompue")+"</div>"+be(epi)+"</div>"
+   +"<div class='sec'><h2>Ta journée en un coup d'œil</h2><div class='day'>"+day+"</div></div>"
+   +"<div class='sec dom'><h2>Ton bilan par domaine</h2>"+dom+"</div>"
+   +"<div class='sec'><h2>Ce que ça t'indique</h2>"+reco+"</div>"
+   +"<div class='cta'>Dernière étape : choisis les formations qui t'intéressent. Tes choix sont transmis au service RH pour organiser les sessions à "+be(SITE)+".</div><button class='big' style='margin-top:14px' onclick='showChoix()'>Choisir mes formations →</button>";
+  top0();
 }
 
 function ckSync(){[['w_sst','ck_sst'],['w_mac','ck_mac'],['w_gp','ck_gp'],['w_inc','ck_inc']].forEach(function(p){var c=$(p[0]),l=$(p[1]);if(c&&l)l.classList.toggle('on',c.checked);});}
 function showChoix(){$('fin').classList.add('hide');$('choix').classList.remove('hide');
-  $('w_sst').checked=recSST;$('w_mac').checked=recMAC;$('w_gp').checked=recGP;$('w_inc').checked=recINC;
+  var dejaSST=(SSTU!=='non');
+  $('ck_sst').classList.toggle('hide',dejaSST);$('ck_mac').classList.toggle('hide',!dejaSST);
+  $('w_sst').checked=!dejaSST&&recSST;$('w_mac').checked=dejaSST&&recMAC;$('w_gp').checked=recGP;$('w_inc').checked=recINC;
   ['w_sst','w_mac','w_gp','w_inc'].forEach(function(id){$(id).onchange=ckSync;});
-  ckSync();try{window.scrollTo(0,0)}catch(e){}}
+  $('noteEnvoi').textContent="Transmis au service RH : "+PR+" "+NOM+", site de "+SITE+(SV?", "+SV:"")+", ton score et tes formations choisies. Le classement n'affiche que ton prénom.";
+  ckSync();top0();}
 function submitChoices(){
-  var btn=$('btnSend');btn.disabled=true;var fb=$('sendfb');fb.classList.remove('hide');fb.className='fb';fb.style.background='#222';fb.style.color='#ddd';fb.textContent='Envoi en cours…';
-  var payload={prenom:PR,nom:NOM,service:SV,sst:SSTU,score:LSCORE,temps_total:T0,temps_restant:Math.max(t,0),erreurs:erreurs,bonnes:bonnes,total:S.length,err_secours:et.secours,err_incendie:et.incendie,err_tms:et.tms,badge:LBADGE,want_sst:$('w_sst').checked,want_mac:$('w_mac').checked,want_gp:$('w_gp').checked,want_incendie:$('w_inc').checked,observation:($('obs').value||'').trim()};
-  function done(ok){$('choix').innerHTML="<h2 style='color:var(--v)'>✅ Merci "+be(PR)+" !</h2><p>"+(ok?"Tes choix de formation ont été transmis au service RH (Hugo). On se retrouve bientôt en formation ! 💪":"Tes choix ont été enregistrés (connexion limitée — ils seront remontés au RH).")+"</p><div class='cta'>« Le jeu ouvre les yeux ; la formation, sur le terrain comme en salle, sauve des vies. »</div><div style='margin-top:14px'><button class='big ghost' onclick='showBoard()'>🏆 Voir le classement</button></div>";}
-  fetch(API,{method:'POST',body:JSON.stringify(payload)}).then(function(r){return r.json()}).then(function(){done(true)}).catch(function(){done(false)});
+  var w={sst:$('w_sst').checked&&SSTU==='non',mac:$('w_mac').checked&&SSTU!=='non',gp:$('w_gp').checked,inc:$('w_inc').checked};
+  var obs=($('obs').value||'').trim();
+  if(!w.sst&&!w.mac&&!w.gp&&!w.inc&&!confirm("Tu n'as coché aucune formation. Transmettre quand même ta participation ?"))return;
+  var btn=$('btnSend');btn.disabled=true;var fb=$('sendfb');fb.classList.remove('hide');fb.className='fb';fb.textContent='Envoi en cours…';
+  var payload={prenom:PR,nom:NOM,site:SITE,service:SV,sst:SSTU,score:LSCORE,temps_total:T0,temps_restant:Math.max(t,0),erreurs:erreurs,bonnes:SANSFAUTE,total:S.length,err_secours:et.secours,err_incendie:et.incendie,err_tms:et.tms,badge:LBADGE,want_sst:w.sst,want_mac:w.mac,want_gp:w.gp,want_incendie:w.inc,observation:obs};
+  function done(etat){
+    var msg=etat==='ok'?"Tes choix sont transmis au service RH. Ils serviront à organiser les sessions de formation à "+be(SITE)+". On se retrouve bientôt, pour de vrai !"
+      :etat==='closed'?"Le service RH a fermé le jeu entre-temps : ta partie n'a pas pu être enregistrée. Signale-le au service RH."
+      :"La connexion a échoué : tes choix n'ont pas pu être transmis. Vérifie ta connexion et réessaie.";
+    if(etat!=='ok'){fb.className='fb ko';fb.innerHTML=msg;btn.disabled=(etat==='closed');return;}
+    $('choix').innerHTML="<h2 style='color:var(--v)'>✅ Merci "+be(PR)+" !</h2><p>"+msg+"</p><div id='duelF'></div><div class='cta'>« Le jeu ouvre les yeux ; la formation, en salle comme sur le terrain, sauve des vies. »</div><div class='row2' style='margin-top:14px'><button class='big ghost' onclick='showBoard(SITE)'>🏆 Classement</button><button class='big ghost' onclick='location.reload()'>↻ Rejouer</button></div>";
+    loadDuel('duelF');top0();
+  }
+  fetch(API,{method:'POST',body:JSON.stringify(payload)}).then(function(r){return r.json()}).then(function(j){done(j&&j.ok?'ok':(j&&j.closed?'closed':'err'))}).catch(function(){done('err')});
 }
-function showBoard(){var ov=$('board');ov.classList.remove('hide');var L=$('boardList');L.innerHTML='Chargement…';
-  fetch(API+"?board=1&z="+Date.now()).then(function(r){return r.json()}).then(function(rows){
-   if(!Array.isArray(rows)||!rows.length){L.innerHTML="<p style='color:#aaa'>Personne n'a encore joué. Sois le premier !</p>";return;}
+function loadDuel(id){var el=$(id);if(!el)return;
+  fetch(API+"?sites=1&z="+Date.now()).then(function(r){return r.json()}).then(function(rows){
+    if(!Array.isArray(rows)){el.innerHTML="";return;}
+    var by={};rows.forEach(function(r){by[r.site]=r});
+    var best=null;SITES.forEach(function(s){var r=by[s];if(r&&r.parties&&(!best||r.moyenne>by[best].moyenne))best=s});
+    var total=SITES.reduce(function(a,s){return a+((by[s]&&by[s].parties)||0)},0);if(!total){el.innerHTML="";return;}
+    el.innerHTML="<h2 style='margin-top:16px'>Le défi des sites</h2><div class='duel'>"+SITES.map(function(s){var r=by[s]||{parties:0,moyenne:0};return "<div"+(s===best?" class='lead'":"")+"><div class='sn'>"+s+(s===best?" 👑":"")+"</div><b>"+(r.parties?r.moyenne:'–')+"</b><span>score moyen · "+r.parties+" partie"+(r.parties>1?"s":"")+"</span></div>"}).join("")+"</div>";
+  }).catch(function(){el.innerHTML=""});}
+function showBoard(site){var ov=$('board');ov.classList.remove('hide');var L=$('boardList');L.innerHTML='Chargement…';
+  Array.prototype.forEach.call($('btabs').children,function(b){b.classList.toggle('on',b.getAttribute('data-s')===(site||''))});
+  loadDuel('duelB');
+  fetch(API+"?board=1"+(site?"&site="+encodeURIComponent(site):"")+"&z="+Date.now()).then(function(r){return r.json()}).then(function(rows){
+   if(!Array.isArray(rows)||!rows.length){L.innerHTML="<p style='color:#aaa'>Personne n'a encore joué"+(site?" à "+be(site):"")+". Sois le premier !</p>";return;}
    var med=["🥇","🥈","🥉"];
-   L.innerHTML=rows.slice(0,15).map(function(r,i){return "<div class='brow'><span class='brank'>"+(i<3?med[i]:(i+1))+"</span><b style='flex:1'>"+be(r.prenom||'(joueur)')+(r.service?" <span style='color:#888;font-weight:400'>· "+be(r.service)+"</span>":"")+"</b><span class='bscore'>"+(r.score||0)+" pts</span></div>"}).join("");
+   L.innerHTML=rows.slice(0,12).map(function(r,i){return "<div class='brow'><span class='brank'>"+(i<3?med[i]:(i+1))+"</span><b style='flex:1'>"+be(r.prenom||'(joueur)')+(!site&&r.site?"<span class='sitetag'>"+be(r.site)+"</span>":"")+"</b><span class='bscore'>"+(r.score||0)+" pts</span></div>"}).join("");
   }).catch(function(){L.innerHTML="<p style='color:#ff9a9a'>Classement indisponible (réseau).</p>"});}
 function closeBoard(){$('board').classList.add('hide');}
-function gameClosed(){var i=$('intro');if(i){i.innerHTML="<img class='brand' src='logo.png' alt='ANDRAGOPS'><span class='tag'>JEU FERMÉ</span><h1>Le jeu n'est pas ouvert pour le moment</h1><p>OPÉRATION SANG-FROID est actuellement fermé par le service RH. Reviens un peu plus tard. 🔒</p>";}}
-fetch(API+"?state=1&z="+Date.now()).then(function(r){return r.json()}).then(function(j){if(j&&j.open===false){GAMEOPEN=false;gameClosed();}}).catch(function(){});
+function gameClosed(){GAMEOPEN=false;var i=$('intro');if(i){i.classList.remove('hide');i.innerHTML="<img class='brand' src='logo.png' alt='ANDRAGOPS'><span class='tag'>Jeu fermé</span><h1>Le jeu n'est pas ouvert pour le moment</h1><p>OPÉRATION SANG-FROID est actuellement fermé par le service RH. Reviens un peu plus tard. 🔒</p>";}}
+fetch(API+"?state=1&z="+Date.now()).then(function(r){return r.json()}).then(function(j){if(j&&j.open===false)gameClosed();}).catch(function(){});
 </script></body></html>

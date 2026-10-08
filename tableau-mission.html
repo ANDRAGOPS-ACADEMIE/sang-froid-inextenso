@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Tableau de mission — Opération Sang-Froid · In Extenso | ANDRAGOPS</title>
+<title>Tableau de mission · Opération Sang-Froid · In Extenso | ANDRAGOPS</title>
 <style>
 :root{--r:#C01A1A;--g:#1f8a4c;--b:#1F4E79;--ink:#1d2330;--mut:#6b7280;--bg:#eef1f5;--card:#fff;--line:#e6e9ef}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -113,12 +113,26 @@ tbody tr:hover td{background:rgba(59,130,246,.08)}
 .reco{background:rgba(226,59,59,.07);border:1px solid rgba(226,59,59,.25);border-left:3px solid var(--r);border-radius:3px;padding:12px 14px;margin-top:9px;font-size:14px;color:#dbe4f2}.reco b{color:#ff9b9b}
 canvas{display:block;margin:14px auto;max-width:100%}
 footer{color:var(--mut);font-size:12px;margin-top:22px;text-align:center}
+
+.sitebar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:5px;padding:12px 16px;margin-bottom:14px}
+#sitebtns{display:flex;gap:6px;flex-wrap:wrap}
+#sitebtns button{background:rgba(255,255,255,.04);border:1px solid var(--line);color:#c4cee0;padding:8px 14px;border-radius:3px;cursor:pointer;font-family:'Rajdhani';font-weight:700;letter-spacing:.6px;text-transform:uppercase;font-size:13px}
+#sitebtns button.on{background:linear-gradient(135deg,var(--rd),var(--r));border-color:transparent;color:#fff}
+.scope{margin-left:auto;color:var(--mut);font-size:13px}
+.kpis .k:nth-child(5)::before{background:#f97316}.kpis .k:nth-child(6)::before{background:#a78bfa}
+.kpis{grid-template-columns:repeat(6,1fr)}@media(max-width:1020px){.kpis{grid-template-columns:repeat(3,1fr)}}@media(max-width:480px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.hint{color:var(--mut);font-size:12px;margin-top:8px}
+.tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tscroll table{min-width:760px}
+td.c{text-align:center;font-family:'Rajdhani';font-size:16px;font-weight:700;color:#fff}
+.pill.dim{background:rgba(240,180,41,.12);color:#f0c45a;border-color:rgba(240,180,41,.35)}
+@media(max-width:560px){body{padding:14px 12px 30px}.top{flex-wrap:wrap}.top .badge{margin-left:0}.scope{margin-left:0;width:100%}.ctrl{flex-wrap:wrap}}
 </style></head><body>
 <div class="top">
 <img src="logo.png" alt="ANDRAGOPS">
 <div>
-<div class="brand">OPÉRATION <span>SANG-FROID</span> — Tableau de mission</div>
-<div class="sub">In Extenso · pilotage du jeu, demandes de formation &amp; lacunes</div>
+<div class="brand">OPÉRATION <span>SANG-FROID</span> · Tableau de mission</div>
+<div class="sub">In Extenso · Strasbourg et Haguenau · pilotage du jeu, demandes de formation et lacunes</div>
 </div>
 <span class="badge">Espace RH · privé</span>
 </div>
@@ -127,126 +141,166 @@ footer{color:var(--mut);font-size:12px;margin-top:22px;text-align:center}
   <div>
     <div class="ctrl-title">Démarrer / Suspendre le jeu</div>
     <div id="stateLabel" class="state-label">Vérification…</div>
-    <div class="ctrl-hint">ON = les salariés peuvent jouer · OFF = jeu suspendu (écran « fermé » côté joueur).</div>
+    <div class="ctrl-hint">ON = les salariés des deux sites peuvent jouer · OFF = jeu suspendu (écran « fermé » côté joueur).</div>
   </div>
   <button id="sw" class="switch" onclick="toggleGame()" title="Démarrer ou suspendre le jeu">
     <span class="onoff on">ON</span><span class="onoff off">OFF</span><span class="knob"></span>
   </button>
 </div>
 
+<div class="sitebar">
+  <span class="ctrl-title">Afficher</span>
+  <div id="sitebtns"><button data-s="" class="on" onclick="setSite('')">Tous les sites</button><button data-s="Strasbourg" onclick="setSite('Strasbourg')">Strasbourg</button><button data-s="Haguenau" onclick="setSite('Haguenau')">Haguenau</button></div>
+  <span id="scopeInfo" class="scope"></span>
+</div>
+
 <div class="toolbar">
   <button class="btn" onclick="charger()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:6px"><path d="M3.5 12a8.5 8.5 0 0 1 14.5-6"/><path d="M18 3v3.5h-3.5"/><path d="M20.5 12a8.5 8.5 0 0 1-14.5 6"/><path d="M6 21v-3.5h3.5"/></svg>Actualiser</button>
   <button class="btn b" onclick="genWord()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:6px"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>Synthèse Word</button>
-  <button class="btn gr" onclick="genExcel()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" style="vertical-align:-3px;margin-right:6px"><rect x="3.5" y="3.5" width="17" height="17" rx="2.2"/><path d="M3.5 9.5h17M3.5 14.5h17M9 9.5v11M15 9.5v11" stroke-width="1.3"/></svg>Export Excel (participants + demandes)</button>
+  <button class="btn gr" onclick="genExcel()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" style="vertical-align:-3px;margin-right:6px"><rect x="3.5" y="3.5" width="17" height="17" rx="2.2"/><path d="M3.5 9.5h17M3.5 14.5h17M9 9.5v11M15 9.5v11" stroke-width="1.3"/></svg>Export Excel</button>
   <button class="btn ghost" style="margin-left:auto" onclick="resetGame()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:6px"><path d="M4 7h16"/><path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/><path d="M6 7l1 13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-13"/><path d="M10 11v6M14 11v6"/></svg>Réinitialiser</button>
 </div>
 
 <div class="tabbar">
-  <button class="tab active" id="tabBtnS" onclick="showTab('S')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:6px"><rect x="6" y="4.5" width="12" height="16" rx="2"/><path d="M9 4.5h6V7a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1z"/><path d="M9 12h6M9 16h4"/></svg>Synthèse &amp; demandes</button>
-  <button class="tab green" id="tabBtnR" onclick="showTab('R')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="vertical-align:-3px;margin-right:6px"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.8"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/></svg>Radar des lacunes</button>
+  <button class="tab active" id="tabBtnS" onclick="showTab('S')">Synthèse &amp; demandes</button>
+  <button class="tab" id="tabBtnC" onclick="showTab('C')">Comparaison des sites</button>
+  <button class="tab green" id="tabBtnR" onclick="showTab('R')">Radar des lacunes</button>
 </div>
 <div class="panewrap">
   <div id="paneS" class="pane show">
     <div id="kpis" class="kpis"></div>
-    <h2><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:7px"><path d="M12 4 2.5 9 12 14l9.5-5z"/><path d="M6 11.2V16c0 1.1 2.7 2.5 6 2.5s6-1.4 6-2.5v-4.8"/><path d="M21.5 9.5v4.5"/></svg>Demandes de formation (volontariat des salariés)</h2>
+    <h2>Demandes de formation (volontariat des salariés)</h2>
     <div id="fdem" class="fdem"></div>
-    <h2><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:7px"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0"/><path d="M15.5 5.2a3.2 3.2 0 0 1 0 5.9"/><path d="M20.5 19a5.5 5.5 0 0 0-3-4.9"/></svg>Participants &amp; choix</h2>
-    <table><thead><tr><th>#</th><th>Prénom</th><th>Nom</th><th>Service</th><th>SST</th><th>Score</th><th>Badge</th><th>Formations demandées</th><th>Observation</th><th>Date</th></tr></thead><tbody id="rows"><tr><td colspan="10" style="padding:16px">Chargement…</td></tr></tbody></table>
-    <h2><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" style="vertical-align:-3px;margin-right:7px"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.3 15.3l4.7 4.7"/></svg>Analyse des lacunes (diagnostic)</h2>
+    <p class="hint">Chaque salarié est compté une fois, sur sa dernière partie. Les certificats SST « à recycler » sont déclarés par les salariés eux-mêmes : à rapprocher de vos registres.</p>
+    <h2>Participants &amp; choix</h2>
+    <div class="tscroll"><table><thead><tr><th>#</th><th>Prénom</th><th>Nom</th><th>Site</th><th>Service</th><th>SST</th><th>Score</th><th>Badge</th><th>Formations demandées</th><th>Observation</th><th>Date</th></tr></thead><tbody id="rows"><tr><td colspan="11" style="padding:16px">Chargement…</td></tr></tbody></table></div>
+    <h2>Analyse des lacunes (diagnostic)</h2>
     <div id="reco"></div>
   </div>
+  <div id="paneC" class="pane">
+    <h2>Strasbourg et Haguenau côte à côte</h2>
+    <div id="cmp"></div>
+    <p class="hint">Comparaison sur tous les participants, quel que soit le filtre choisi en haut de page.</p>
+  </div>
   <div id="paneR" class="pane">
-    <h2 style="color:#1f8a4c"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="vertical-align:-3px;margin-right:7px"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.8"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/></svg>Radar des lacunes (cumul)</h2>
+    <h2 style="color:#6ee7a8">Radar des lacunes (moyenne par participant)</h2>
     <canvas id="radL" width="420" height="420"></canvas>
     <div id="radLegend"></div>
-    <p style="color:#6b7280;font-size:12px">Plus l'aire s'étire sur un axe, plus les erreurs y sont nombreuses : c'est là que le besoin de formation est le plus fort.</p>
+    <p class="hint">Plus l'aire s'étire sur un axe, plus les erreurs y sont nombreuses : c'est là que le besoin de formation est le plus fort.</p>
   </div>
 </div>
-<footer>Page privée ANDRAGOPS — code d'accès requis. Données : prénom, nom, service (facultatif) et formations souhaitées — pour bâtir le plan de formation.</footer>
+<footer>Page privée ANDRAGOPS, code d'accès requis. Données : prénom, nom, site, service (facultatif), résultats et formations souhaitées, pour bâtir le plan de formation.</footer>
 <script>
 var API="https://eumviuptmyzgftrqpape.supabase.co/functions/v1/inextenso";
-var CODE=localStorage.getItem('inext_code')||"";
-var DATA=[];
-var DOM={err_secours:["Secours / gestes qui sauvent","SST (initiale) et MAC SST (recyclage)"],err_incendie:["Incendie / évacuation","Manipulation des extincteurs et Exercice d'évacuation"],err_tms:["Gestes & postures (TMS / écran)","Gestes & Postures"]};
+var SITES=["Strasbourg","Haguenau"];
+var CODE="";try{CODE=localStorage.getItem('inext_code')||""}catch(e){}
+var ALL=[],PERS=[],DATA=[],SITE="";
+var DOM={err_secours:["Secours, gestes qui sauvent","SST (14 h) ou MAC SST (7 h) selon le statut"],err_incendie:["Incendie, évacuation","Sécurité incendie (4 h) : manipulation des extincteurs et évacuation"],err_tms:["Gestes et postures (écran, port de charges)","Gestes et postures, prévention des TMS (7 h)"]};
+var LK=['err_secours','err_incendie','err_tms'];var LL={err_secours:'Secours',err_incendie:'Incendie',err_tms:'Postures'};
 function $(x){return document.getElementById(x)}
-function esc(s){return String(s==null?"":s).replace(/[&<>]/g,function(c){return c=='&'?'&amp;':c=='<'?'&lt;':'&gt;'})}
-function wants(r){var a=[];if(r.want_sst)a.push('SST');if(r.want_mac)a.push('MAC SST');if(r.want_gp)a.push('Gestes & Postures');if(r.want_incendie)a.push('Incendie');return a;}
-function askCode(){if(!CODE){var c=prompt("Code d'accès RH :","");if(!c)return false;CODE=c;localStorage.setItem('inext_code',c)}return true;}
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function norm(s){return String(s||'').trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'')}
+function sstLab(v){return v==='oui'?'À jour':(v==='expire'?'À recycler':'Non')}
+function wants(r){var a=[];if(r.want_sst)a.push('SST');if(r.want_mac)a.push('MAC SST');if(r.want_gp)a.push('Gestes et postures');if(r.want_incendie)a.push('Incendie');return a;}
+function askCode(){if(!CODE){var c=prompt("Code d'accès RH :","");if(!c)return false;CODE=c;try{localStorage.setItem('inext_code',c)}catch(e){}}return true;}
+function forget(){CODE="";try{localStorage.removeItem('inext_code')}catch(e){}}
 
 function setSwitch(open){var sw=$('sw'),lbl=$('stateLabel');if(!sw)return;sw.dataset.open=open?'1':'0';sw.classList.toggle('on',!!open);sw.classList.toggle('off',!open);lbl.textContent=open?'🟢 JEU EN MARCHE':'🔴 JEU SUSPENDU';lbl.className='state-label '+(open?'lon':'loff');}
 function refreshState(){fetch(API+"?state=1&z="+Date.now()).then(function(r){return r.json()}).then(function(j){setSwitch(j&&j.open!==false)}).catch(function(){})}
-function toggleGame(){if(!askCode())return;var sw=$('sw');var open=sw.dataset.open==='1';var set=open?'close':'open';if(!confirm(open?'Suspendre le jeu ? Les salariés ne pourront plus le lancer.':'Démarrer le jeu ? Les salariés pourront jouer.'))return;$('stateLabel').textContent='…';fetch(API+"?set="+set+"&z="+Date.now(),{headers:{'x-admin-key':CODE}}).then(function(r){return r.json()}).then(function(j){if(j&&typeof j.open!=='undefined'){setSwitch(j.open)}else{alert('Action refusée — vérifie le code d’accès.');refreshState()}}).catch(function(){alert('Erreur réseau');refreshState()})}
-function resetGame(){if(!askCode())return;if(!confirm("Vider le tableau ? Les parties sont d'abord ARCHIVÉES (récupérables), puis retirées de l'affichage."))return;fetch(API+"?reset=1&z="+Date.now(),{headers:{'x-admin-key':CODE}}).then(function(r){return r.json()}).then(function(j){if(j&&j.ok){alert("✅ Tableau vidé — "+(j.archived||0)+" partie(s) archivée(s), récupérables.");charger();}else{alert("Échec — vérifie le code d’accès.")}}).catch(function(){alert("Erreur réseau")})}
+function toggleGame(){if(!askCode())return;var sw=$('sw');var open=sw.dataset.open==='1';var set=open?'close':'open';if(!confirm(open?'Suspendre le jeu ? Les salariés des deux sites ne pourront plus le lancer.':'Démarrer le jeu ? Les salariés des deux sites pourront jouer.'))return;$('stateLabel').textContent='…';fetch(API+"?set="+set+"&z="+Date.now(),{headers:{'x-admin-key':CODE}}).then(function(r){return r.json()}).then(function(j){if(j&&typeof j.open!=='undefined'){setSwitch(j.open)}else{alert('Action refusée : vérifiez le code d’accès.');refreshState()}}).catch(function(){alert('Erreur réseau');refreshState()})}
+function resetGame(){if(!askCode())return;if(!confirm("Vider le tableau pour les deux sites ? Les parties sont d'abord ARCHIVÉES (récupérables sur demande), puis retirées de l'affichage."))return;fetch(API+"?reset=1&z="+Date.now(),{headers:{'x-admin-key':CODE}}).then(function(r){return r.json()}).then(function(j){if(j&&j.ok){alert("✅ Tableau vidé : "+(j.archived||0)+" partie(s) archivée(s), récupérables.");charger();}else{alert("Échec : vérifiez le code d’accès.")}}).catch(function(){alert("Erreur réseau")})}
 
-function charger(){if(!askCode()){$('rows').innerHTML="<tr><td colspan=10 style='padding:16px;color:#7a8699'>Accès protégé. Cliquez sur « ACTUALISER » puis saisissez le code d’accès RH (il figure dans le Guide RH).</td></tr>";return}
+/* Un salarié = une ligne : on garde sa dernière partie (les lignes arrivent de la plus récente à la plus ancienne). */
+function dedoublonner(rows){var vu={},out=[];rows.forEach(function(r){var k=norm(r.prenom)+'|'+norm(r.nom)+'|'+(r.site||'');if(vu[k]){vu[k].parties++;return}var c={};for(var x in r)c[x]=r[x];c.parties=1;vu[k]=c;out.push(c)});return out;}
+function filtre(){DATA=SITE?PERS.filter(function(r){return r.site===SITE}):PERS.slice();}
+function setSite(s){SITE=s;Array.prototype.forEach.call($('sitebtns').children,function(b){b.classList.toggle('on',b.getAttribute('data-s')===s)});filtre();rendre();}
+function stats(L){var n=L.length,p=L.reduce(function(a,r){return a+(r.parties||1)},0),moy=n?Math.round(L.reduce(function(s,r){return s+(r.score||0)},0)/n):0;
+  var d={sst:0,mac:0,gp:0,inc:0},sst={oui:0,expire:0,non:0},err={err_secours:0,err_incendie:0,err_tms:0};
+  L.forEach(function(r){if(r.want_sst)d.sst++;if(r.want_mac)d.mac++;if(r.want_gp)d.gp++;if(r.want_incendie)d.inc++;sst[r.sst==='oui'?'oui':r.sst==='expire'?'expire':'non']++;LK.forEach(function(k){err[k]+=(r[k]||0)})});
+  return {n:n,parties:p,moy:moy,dem:d,sst:sst,err:err};}
+function scopeLab(){return SITE?("site de "+SITE):"Strasbourg et Haguenau"}
+
+function charger(){if(!askCode()){$('rows').innerHTML="<tr><td colspan=11 style='padding:16px;color:#7a8699'>Accès protégé. Cliquez sur « ACTUALISER » puis saisissez le code d’accès RH (il figure dans le Guide RH).</td></tr>";return}
 fetch(API+"?z="+Date.now(),{headers:{'x-admin-key':CODE}}).then(function(r){return r.json()}).then(function(rows){
- if(!Array.isArray(rows)){$('rows').innerHTML="<tr><td colspan=10 style='padding:16px;color:#C01A1A'>Code incorrect. <a href='#' onclick='localStorage.removeItem(\"inext_code\");location.reload()'>réessayer</a></td></tr>";return}
- DATA=rows;
- var n=DATA.length;var moy=n?Math.round(DATA.reduce(function(s,r){return s+(r.score||0)},0)/n):0;
- var sstOui=DATA.filter(function(r){return r.sst==='oui'}).length;
- $('kpis').innerHTML="<div class='k'><div class='n'>Parties jouées</div><b>"+n+"</b></div><div class='k'><div class='n'>Score moyen</div><b>"+moy+"</b></div><div class='k'><div class='n'>Déjà SST</div><b>"+sstOui+"</b></div><div class='k'><div class='n'>Non SST</div><b>"+(n-sstOui)+"</b></div>";
- var dem={want_sst:0,want_mac:0,want_gp:0,want_incendie:0};DATA.forEach(function(r){for(var k in dem)if(r[k])dem[k]++});
- $('fdem').innerHTML="<div class='fc'><div class='num'>"+dem.want_sst+"</div><div class='lab'>SST</div><div class='sub'>Sauveteur Secouriste</div></div><div class='fc'><div class='num'>"+dem.want_mac+"</div><div class='lab'>MAC SST</div><div class='sub'>recyclage</div></div><div class='fc'><div class='num'>"+dem.want_gp+"</div><div class='lab'>Gestes & Postures</div><div class='sub'>écran / TMS</div></div><div class='fc'><div class='num'>"+dem.want_incendie+"</div><div class='lab'>Incendie</div><div class='sub'>extincteurs / évac.</div></div>";
- $('rows').innerHTML=n?DATA.map(function(r,i){var w=wants(r);return "<tr><td>"+(i+1)+"</td><td>"+esc(r.prenom)+"</td><td>"+esc(r.nom||'—')+"</td><td>"+esc(r.service||'—')+"</td><td>"+(r.sst==='oui'?'Oui':'Non')+"</td><td>"+(r.score||0)+"</td><td>"+esc(r.badge||'')+"</td><td>"+(w.length?w.map(function(x){return "<span class='pill'>"+x+"</span>"}).join(" "):"<span style='color:#999'>—</span>")+"</td><td>"+esc(r.observation||'')+"</td><td>"+(r.created_at?new Date(r.created_at).toLocaleString('fr-FR'):'')+"</td></tr>"}).join(""):"<tr><td colspan=10 style='padding:16px'>Aucune partie pour le moment.</td></tr>";
- var tot={err_secours:0,err_incendie:0,err_tms:0};DATA.forEach(function(r){for(var k in tot)tot[k]+=(r[k]||0)});
- var ks=Object.keys(tot).sort(function(a,b){return tot[b]-tot[a]});var html="";ks.forEach(function(k){if(tot[k]>0)html+="<div class='reco'><b>"+DOM[k][0]+"</b> — "+tot[k]+" erreur(s) cumulée(s) → formation conseillée : <b>"+DOM[k][1]+"</b></div>"});
- $('reco').innerHTML=n?(html||"<p style='color:#6ee7a8'>Aucune faiblesse marquée — excellent niveau global.</p>"):"<p style='color:#8696ad'>En attente de participations.</p>";
- if($('paneR').className.indexOf('show')>=0)drawLacunes();
-}).catch(function(){$('rows').innerHTML="<tr><td colspan=10 style='padding:16px;color:#C01A1A'>Erreur réseau.</td></tr>"})}
+ if(!Array.isArray(rows)){forget();$('rows').innerHTML="<tr><td colspan=11 style='padding:16px;color:#ff9b9b'>Code incorrect. <a href='#' style='color:#9dc3f5' onclick='charger();return false'>Réessayer</a></td></tr>";return}
+ ALL=rows;PERS=dedoublonner(rows);filtre();rendre();
+}).catch(function(){$('rows').innerHTML="<tr><td colspan=11 style='padding:16px;color:#ff9b9b'>Erreur réseau.</td></tr>"})}
+
+function rendre(){
+ var s=stats(DATA);
+ $('scopeInfo').textContent=s.n+" salarié"+(s.n>1?"s":"")+" · "+s.parties+" partie"+(s.parties>1?"s":"")+" · "+scopeLab();
+ $('kpis').innerHTML=[["Salariés participants",s.n],["Parties jouées",s.parties],["Score moyen",s.moy],["SST à jour",s.sst.oui],["SST à recycler",s.sst.expire],["Non SST",s.sst.non]].map(function(k){return "<div class='k'><div class='n'>"+k[0]+"</div><b>"+k[1]+"</b></div>"}).join("");
+ $('fdem').innerHTML="<div class='fc'><div class='num'>"+s.dem.sst+"</div><div class='lab'>SST</div><div class='sub'>initiale · 14 h</div></div><div class='fc'><div class='num'>"+s.dem.mac+"</div><div class='lab'>MAC SST</div><div class='sub'>recyclage · 7 h</div></div><div class='fc'><div class='num'>"+s.dem.gp+"</div><div class='lab'>Gestes et postures</div><div class='sub'>écran, TMS · 7 h</div></div><div class='fc'><div class='num'>"+s.dem.inc+"</div><div class='lab'>Sécurité incendie</div><div class='sub'>extincteurs, évacuation · 4 h</div></div>";
+ $('rows').innerHTML=s.n?DATA.map(function(r,i){var w=wants(r);return "<tr><td>"+(i+1)+"</td><td>"+esc(r.prenom)+(r.parties>1?" <span class='pill dim' title='Parties jouées'>×"+r.parties+"</span>":"")+"</td><td>"+esc(r.nom||'—')+"</td><td>"+esc(r.site||'—')+"</td><td>"+esc(r.service||'—')+"</td><td>"+sstLab(r.sst)+"</td><td>"+(r.score||0)+"</td><td>"+esc(r.badge||'')+"</td><td>"+(w.length?w.map(function(x){return "<span class='pill'>"+x+"</span>"}).join(" "):"<span style='color:#7a8699'>—</span>")+"</td><td>"+esc(r.observation||'')+"</td><td>"+(r.created_at?new Date(r.created_at).toLocaleString('fr-FR'):'')+"</td></tr>"}).join(""):"<tr><td colspan=11 style='padding:16px'>Aucune partie pour le moment"+(SITE?" à "+esc(SITE):"")+".</td></tr>";
+ var ks=LK.slice().sort(function(a,b){return s.err[b]-s.err[a]});var html="";
+ ks.forEach(function(k){if(s.err[k]>0)html+="<div class='reco'><b>"+DOM[k][0]+"</b> : "+s.err[k]+" erreur(s), soit "+(s.err[k]/s.n).toFixed(1).replace('.',',')+" par participant → formation conseillée : <b>"+DOM[k][1]+"</b></div>"});
+ if(s.sst.expire)html+="<div class='reco'><b>Certificats SST</b> : "+s.sst.expire+" salarié(s) déclarent une formation SST de plus de 2 ans → <b>MAC SST (7 h)</b> pour maintenir leur certificat.</div>";
+ $('reco').innerHTML=s.n?(html||"<p style='color:#6ee7a8'>Aucune faiblesse marquée : excellent niveau global.</p>"):"<p style='color:#8696ad'>En attente de participations.</p>";
+ rendreCmp();if($('paneR').className.indexOf('show')>=0)drawLacunes();
+}
+function rendreCmp(){
+ var cols=SITES.map(function(si){return stats(PERS.filter(function(r){return r.site===si}))});
+ var sans=PERS.filter(function(r){return SITES.indexOf(r.site)<0}).length;
+ function moyErr(st,k){return st.n?(st.err[k]/st.n).toFixed(1).replace('.',','):'–'}
+ var lignes=[["Salariés participants",function(st){return st.n}],["Parties jouées",function(st){return st.parties}],["Score moyen",function(st){return st.n?st.moy:'–'}],["SST à jour",function(st){return st.sst.oui}],["SST à recycler",function(st){return st.sst.expire}],["Non SST",function(st){return st.sst.non}],["Demandes SST",function(st){return st.dem.sst}],["Demandes MAC SST",function(st){return st.dem.mac}],["Demandes gestes et postures",function(st){return st.dem.gp}],["Demandes sécurité incendie",function(st){return st.dem.inc}],["Erreurs secours par participant",function(st){return moyErr(st,'err_secours')}],["Erreurs incendie par participant",function(st){return moyErr(st,'err_incendie')}],["Erreurs postures par participant",function(st){return moyErr(st,'err_tms')}]];
+ $('cmp').innerHTML="<div class='tscroll'><table><thead><tr><th>Indicateur</th>"+SITES.map(function(si){return "<th>"+si+"</th>"}).join("")+"</tr></thead><tbody>"+lignes.map(function(l){return "<tr><td>"+l[0]+"</td>"+cols.map(function(st){return "<td class='c'>"+l[1](st)+"</td>"}).join("")+"</tr>"}).join("")+"</tbody></table></div>"+(sans?"<p class='hint'>"+sans+" participant(s) sans site renseigné (parties jouées avant la version deux sites).</p>":"");
+}
 </script>
 <script>
-function demCounts(){var d={sst:0,mac:0,gp:0,inc:0};DATA.forEach(function(r){if(r.want_sst)d.sst++;if(r.want_mac)d.mac++;if(r.want_gp)d.gp++;if(r.want_incendie)d.inc++});return d;}
 function genWord(){
- if(!DATA.length){alert("Aucune donnée. Clique d'abord sur Actualiser.");return}
- var n=DATA.length;var moy=Math.round(DATA.reduce(function(s,r){return s+(r.score||0)},0)/n);
- var sstOui=DATA.filter(function(r){return r.sst==='oui'}).length;var dem=demCounts();
- var tot={err_secours:0,err_incendie:0,err_tms:0};DATA.forEach(function(r){for(var k in tot)tot[k]+=(r[k]||0)});
- var ks=Object.keys(tot).sort(function(a,b){return tot[b]-tot[a]});
- var d=new Date().toLocaleDateString('fr-FR');
- var rowsTable=DATA.map(function(r,i){return "<tr><td>"+(i+1)+"</td><td>"+esc(r.prenom)+"</td><td>"+esc(r.nom||'')+"</td><td>"+esc(r.service||'')+"</td><td>"+(r.sst==='oui'?'Oui':'Non')+"</td><td>"+(r.score||0)+"</td><td>"+esc(r.badge||'')+"</td><td>"+esc(wants(r).join(', ')||'—')+"</td><td>"+esc(r.observation||'')+"</td></tr>"}).join("");
- var recoList=ks.filter(function(k){return tot[k]>0}).map(function(k){return "<li><b>"+DOM[k][0]+"</b> ("+tot[k]+" erreur(s)) → <b>"+DOM[k][1]+"</b></li>"}).join("")||"<li>Aucune faiblesse marquée — recyclages d'entretien conseillés.</li>";
- var h="<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word'><head><meta charset='utf-8'><style>body{font-family:Calibri,Arial;color:#222}h1{color:#1F4E79}h2{color:#1F4E79;border-bottom:2px solid #1F4E79;padding-bottom:3px}table{border-collapse:collapse;width:100%}td,th{border:1px solid #999;padding:6px;font-size:10.5pt}th{background:#1F4E79;color:#fff}.big{font-size:22pt;font-weight:bold;color:#1F4E79}</style></head><body>";
- h+="<h1>Synthèse — Opération Sang-Froid · In Extenso</h1>";
- h+="<p><b>Date d'édition :</b> "+d+"<br><b>Réalisé par :</b> ANDRAGOPS Académie — Organisme de formation Sécurité &amp; Secours<br>Strasbourg / Alsace · Tél. 07 59 73 82 72 · info@andragops-academie.fr · www.andragops-academie.fr</p>";
- h+="<h2>1. Participation</h2><p>Parties jouées : <b>"+n+"</b> · Score moyen : <b>"+moy+"</b> · Déjà SST : <b>"+sstOui+"</b> · Non SST : <b>"+(n-sstOui)+"</b></p>";
- h+="<h2>2. Demandes de formation (volontariat)</h2><table><tr><th>Formation</th><th>Nombre de volontaires</th></tr><tr><td>SST — Sauveteur Secouriste du Travail</td><td>"+dem.sst+"</td></tr><tr><td>MAC SST (recyclage)</td><td>"+dem.mac+"</td></tr><tr><td>Gestes & Postures (écran / TMS)</td><td>"+dem.gp+"</td></tr><tr><td>Incendie / évacuation</td><td>"+dem.inc+"</td></tr></table>";
- h+="<h2>3. Détail des participants</h2><table><tr><th>#</th><th>Prénom</th><th>Nom</th><th>Service</th><th>SST</th><th>Score</th><th>Badge</th><th>Formations demandées</th><th>Observation</th></tr>"+rowsTable+"</table>";
- h+="<h2>4. Analyse des lacunes (diagnostic)</h2><ul>"+recoList+"</ul>";
- h+="<h2>5. Recommandation ANDRAGOPS</h2><p>Sur la base de ce diagnostic ludique et des volontariats exprimés, nous recommandons un plan de formation présentiel ciblé (80% de pratique). Organisme engagé Qualiopi — prise en charge OPCO possible. Déplacement inclus 50 km autour de Strasbourg.</p>";
- h+="<p style='margin-top:18px;color:#888;font-size:9.5pt'>Document généré à partir des résultats du jeu. Bilan indicatif, non certifiant.</p></body></html>";
- var b=new Blob(['﻿'+h],{type:'application/msword'});var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download="Synthese_Sang-Froid_In-Extenso.doc";document.body.appendChild(a);a.click();document.body.removeChild(a);
+ if(!DATA.length){alert("Aucune donnée pour ce périmètre. Cliquez d'abord sur Actualiser.");return}
+ var s=stats(DATA);var d=new Date().toLocaleDateString('fr-FR');
+ var ks=LK.slice().sort(function(a,b){return s.err[b]-s.err[a]});
+ var rowsTable=DATA.map(function(r,i){return "<tr><td>"+(i+1)+"</td><td>"+esc(r.prenom)+"</td><td>"+esc(r.nom||'')+"</td><td>"+esc(r.site||'')+"</td><td>"+esc(r.service||'')+"</td><td>"+sstLab(r.sst)+"</td><td>"+(r.score||0)+"</td><td>"+esc(r.badge||'')+"</td><td>"+esc(wants(r).join(', ')||'—')+"</td><td>"+esc(r.observation||'')+"</td></tr>"}).join("");
+ var recoList=ks.filter(function(k){return s.err[k]>0}).map(function(k){return "<li><b>"+DOM[k][0]+"</b> ("+s.err[k]+" erreur(s), "+(s.err[k]/s.n).toFixed(1).replace('.',',')+" par participant) → <b>"+DOM[k][1]+"</b></li>"}).join("")||"<li>Aucune faiblesse marquée : recyclages d'entretien conseillés.</li>";
+ if(s.sst.expire)recoList+="<li><b>Certificats SST</b> : "+s.sst.expire+" salarié(s) déclarent une formation de plus de 2 ans → <b>MAC SST (7 h)</b>.</li>";
+ var cmp="";
+ if(!SITE){var cs=SITES.map(function(si){return [si,stats(PERS.filter(function(r){return r.site===si}))]});
+  cmp="<h2>3. Comparaison des sites</h2><table><tr><th>Site</th><th>Participants</th><th>Score moyen</th><th>SST à jour</th><th>SST à recycler</th><th>Dem. SST</th><th>Dem. MAC</th><th>Dem. gestes et postures</th><th>Dem. incendie</th></tr>"+cs.map(function(c){var st=c[1];return "<tr><td>"+c[0]+"</td><td>"+st.n+"</td><td>"+(st.n?st.moy:'–')+"</td><td>"+st.sst.oui+"</td><td>"+st.sst.expire+"</td><td>"+st.dem.sst+"</td><td>"+st.dem.mac+"</td><td>"+st.dem.gp+"</td><td>"+st.dem.inc+"</td></tr>"}).join("")+"</table>";}
+ var n0=SITE?3:4;
+ var h="<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word'><head><meta charset='utf-8'><style>body{font-family:Arial;color:#222}h1{color:#1F4E79}h2{color:#1F4E79;border-bottom:2px solid #1F4E79;padding-bottom:3px}table{border-collapse:collapse;width:100%}td,th{border:1px solid #999;padding:6px;font-size:10pt}th{background:#1F4E79;color:#fff}</style></head><body>";
+ h+="<h1>Synthèse Opération Sang-Froid · In Extenso</h1>";
+ h+="<p><b>Périmètre :</b> "+scopeLab()+"<br><b>Date d'édition :</b> "+d+"<br><b>Réalisé par :</b> ANDRAGOPS Académie, formation sécurité et secours · Strasbourg · 07 59 73 82 72 · info@andragops-academie.fr · www.andragops-academie.fr</p>";
+ h+="<h2>1. Participation</h2><p>Salariés participants : <b>"+s.n+"</b> · Parties jouées : <b>"+s.parties+"</b> · Score moyen : <b>"+s.moy+"</b><br>SST à jour : <b>"+s.sst.oui+"</b> · SST à recycler (déclaré) : <b>"+s.sst.expire+"</b> · Non SST : <b>"+s.sst.non+"</b></p>";
+ h+="<h2>2. Demandes de formation (volontariat)</h2><table><tr><th>Formation</th><th>Durée</th><th>Volontaires</th></tr><tr><td>SST, sauveteur secouriste du travail</td><td>14 h</td><td>"+s.dem.sst+"</td></tr><tr><td>MAC SST, maintien et actualisation des compétences</td><td>7 h</td><td>"+s.dem.mac+"</td></tr><tr><td>Gestes et postures, prévention des TMS</td><td>7 h</td><td>"+s.dem.gp+"</td></tr><tr><td>Sécurité incendie, manipulation des extincteurs et évacuation</td><td>4 h</td><td>"+s.dem.inc+"</td></tr></table><p style='font-size:9.5pt;color:#555'>Chaque salarié est compté une fois, sur sa dernière partie.</p>";
+ h+=cmp;
+ h+="<h2>"+n0+". Détail des participants</h2><table><tr><th>#</th><th>Prénom</th><th>Nom</th><th>Site</th><th>Service</th><th>SST</th><th>Score</th><th>Badge</th><th>Formations demandées</th><th>Observation</th></tr>"+rowsTable+"</table>";
+ h+="<h2>"+(n0+1)+". Analyse des lacunes (diagnostic)</h2><ul>"+recoList+"</ul>";
+ h+="<h2>"+(n0+2)+". Recommandation ANDRAGOPS</h2><p>Sur la base de ce diagnostic ludique et des volontariats exprimés, nous recommandons un plan de formation en présentiel, organisé directement sur chaque site. Activité portée par CRÉACITÉ (CAPE), certificat Qualiopi n° CERT_S0526_0676 : prise en charge par l'OPCO possible. En intra, le déplacement du formateur est inclus dans un rayon de 50 km autour de Strasbourg, ce qui couvre les sites de Strasbourg et de Haguenau.</p>";
+ h+="<p style='margin-top:18px;color:#888;font-size:9pt'>Document généré à partir des résultats du jeu. Bilan indicatif, non certifiant. Statut SST déclaré par les salariés.</p></body></html>";
+ var b=new Blob(['﻿'+h],{type:'application/msword'});var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download="Synthese_Sang-Froid_In-Extenso"+(SITE?"_"+SITE:"")+".doc";document.body.appendChild(a);a.click();document.body.removeChild(a);
 }
 function genExcel(){
- if(!DATA.length){alert("Aucune donnée. Clique d'abord sur Actualiser.");return}
- var d=new Date().toLocaleDateString('fr-FR');var dm=demCounts();
- var head=["#","Prénom","Nom","Service","Déjà SST","Score","Badge","Err. secours","Err. incendie","Err. TMS","Veut SST","Veut MAC SST","Veut G&P","Veut Incendie","Observation","Date"];
- var w=[32,92,92,120,70,54,68,76,76,66,64,64,62,66,240,128];
+ if(!DATA.length){alert("Aucune donnée pour ce périmètre. Cliquez d'abord sur Actualiser.");return}
+ var d=new Date().toLocaleDateString('fr-FR');var dm=stats(DATA).dem;
+ var head=["#","Prénom","Nom","Site","Service","SST","Parties","Score","Badge","Err. secours","Err. incendie","Err. postures","Veut SST","Veut MAC SST","Veut gestes et postures","Veut incendie","Observation","Date"];
+ var w=[32,92,92,84,120,74,52,54,68,70,70,70,62,64,74,66,240,128];
  var cg="";w.forEach(function(px){cg+="<col style='width:"+px+"px'>"});
  var thead="<tr class='hd'>"+head.map(function(x){return "<td>"+esc(x)+"</td>"}).join("")+"</tr>";
  var body="";
  DATA.forEach(function(r,i){
-  var cells=[[(i+1),'num'],[r.prenom,'b'],[r.nom||'',''],[r.service||'',''],[(r.sst==='oui'?'Oui':'Non'),(r.sst==='oui'?'ok':'mut')],[(r.score||0),'num b'],[r.badge||'','num'],[(r.err_secours||0),'num'],[(r.err_incendie||0),'num'],[(r.err_tms||0),'num'],[(r.want_sst?'Oui':''),'ok'],[(r.want_mac?'Oui':''),'ok'],[(r.want_gp?'Oui':''),'ok'],[(r.want_incendie?'Oui':''),'ok'],[r.observation||'',''],[(r.created_at?new Date(r.created_at).toLocaleString('fr-FR'):''),'mut']];
+  var cells=[[(i+1),'num'],[r.prenom,'b'],[r.nom||'',''],[r.site||'',''],[r.service||'',''],[sstLab(r.sst),(r.sst==='oui'?'ok':(r.sst==='expire'?'warn':'mut'))],[(r.parties||1),'num'],[(r.score||0),'num b'],[r.badge||'','num'],[(r.err_secours||0),'num'],[(r.err_incendie||0),'num'],[(r.err_tms||0),'num'],[(r.want_sst?'Oui':''),'ok'],[(r.want_mac?'Oui':''),'ok'],[(r.want_gp?'Oui':''),'ok'],[(r.want_incendie?'Oui':''),'ok'],[r.observation||'',''],[(r.created_at?new Date(r.created_at).toLocaleString('fr-FR'):''),'mut']];
   body+="<tr"+(i%2?" class='z'":"")+">"+cells.map(function(o){return "<td class='"+o[1]+"'>"+esc(o[0]==null?'':o[0])+"</td>"}).join("")+"</tr>";
  });
- var tot="<tr class='tot'><td colspan='10'>TOTAL volontaires</td><td>"+dm.sst+"</td><td>"+dm.mac+"</td><td>"+dm.gp+"</td><td>"+dm.inc+"</td><td></td><td></td></tr>";
- var styles="<style>table{border-collapse:collapse}td{font-family:Calibri,Arial,sans-serif;font-size:10.5pt;border:.5pt solid #C7CFDA;padding:4px 8px;vertical-align:middle}.ttl td{font-size:15pt;font-weight:bold;color:#1F4E79;border:none}.sub td{font-size:9.5pt;color:#6B7280;border:none}.sp td{height:6px;border:none}.hd td{background:#1F4E79;color:#fff;font-weight:bold;text-align:center;border:.5pt solid #16395C}.num{text-align:center}.b{font-weight:bold}.mut{color:#6B7280}.ok{text-align:center;color:#1F8A4C;font-weight:bold;background:#EAF7EF}.z td{background:#F4F7FB}.tot td{background:#FFF3D6;font-weight:bold;color:#7A5B00;text-align:center;border:.5pt solid #E5C76B}.tot td:first-child{text-align:right;color:#1F4E79}</style>";
+ var tot="<tr class='tot'><td colspan='12'>TOTAL volontaires</td><td>"+dm.sst+"</td><td>"+dm.mac+"</td><td>"+dm.gp+"</td><td>"+dm.inc+"</td><td></td><td></td></tr>";
+ var styles="<style>table{border-collapse:collapse}td{font-family:Arial,sans-serif;font-size:10pt;border:.5pt solid #C7CFDA;padding:4px 8px;vertical-align:middle}.ttl td{font-size:15pt;font-weight:bold;color:#1F4E79;border:none}.sub td{font-size:9.5pt;color:#6B7280;border:none}.sp td{height:6px;border:none}.hd td{background:#1F4E79;color:#fff;font-weight:bold;text-align:center;border:.5pt solid #16395C}.num{text-align:center}.b{font-weight:bold}.mut{color:#6B7280}.ok{text-align:center;color:#1F8A4C;font-weight:bold;background:#EAF7EF}.warn{text-align:center;color:#8A5A00;font-weight:bold;background:#FFF3D6}.z td{background:#F4F7FB}.tot td{background:#FFF3D6;font-weight:bold;color:#7A5B00;text-align:center;border:.5pt solid #E5C76B}.tot td:first-child{text-align:right;color:#1F4E79}</style>";
  var xo="<!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>Participants</x:Name><x:WorksheetOptions><x:DoNotDisplayGridlines/><x:FreezePanes/><x:FrozenNoSplit/><x:SplitHorizontal>4</x:SplitHorizontal><x:TopRowBottomPane>4</x:TopRowBottomPane><x:ActivePane>2</x:ActivePane></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->";
- var sheet="<table>"+cg+"<tr class='ttl'><td colspan='16'>OPÉRATION SANG-FROID — In Extenso</td></tr><tr class='sub'><td colspan='16'>Participants &amp; demandes de formation · édité le "+d+" · ANDRAGOPS Académie · info@andragops-academie.fr</td></tr><tr class='sp'><td colspan='16'></td></tr>"+thead+body+tot+"</table>";
+ var sheet="<table>"+cg+"<tr class='ttl'><td colspan='18'>OPÉRATION SANG-FROID · In Extenso · "+esc(scopeLab())+"</td></tr><tr class='sub'><td colspan='18'>Participants et demandes de formation (un salarié par ligne, dernière partie) · édité le "+d+" · ANDRAGOPS Académie · info@andragops-academie.fr</td></tr><tr class='sp'><td colspan='18'></td></tr>"+thead+body+tot+"</table>";
  var h="<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:x='urn:schemas-microsoft-com:office:excel'><head><meta charset='utf-8'>"+xo+styles+"</head><body>"+sheet+"</body></html>";
- var b=new Blob(['﻿'+h],{type:'application/vnd.ms-excel'});var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download="Participants_Sang-Froid_In-Extenso.xls";document.body.appendChild(a);a.click();document.body.removeChild(a);
+ var b=new Blob(['﻿'+h],{type:'application/vnd.ms-excel'});var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download="Participants_Sang-Froid_In-Extenso"+(SITE?"_"+SITE:"")+".xls";document.body.appendChild(a);a.click();document.body.removeChild(a);
 }
-var LK=['err_secours','err_incendie','err_tms'];var LL={err_secours:'Secours',err_incendie:'Incendie',err_tms:'Postures'};
-function drawLacunes(){var v={};LK.forEach(function(k){v[k]=0});DATA.forEach(function(r){LK.forEach(function(k){v[k]+=(r[k]||0)})});
- var max=Math.max(1,Math.max.apply(null,LK.map(function(k){return v[k]})));
+function drawLacunes(){var n=Math.max(1,DATA.length),v={};LK.forEach(function(k){v[k]=0});DATA.forEach(function(r){LK.forEach(function(k){v[k]+=(r[k]||0)})});
+ var m={};LK.forEach(function(k){m[k]=v[k]/n});
+ var max=Math.max(0.0001,Math.max.apply(null,LK.map(function(k){return m[k]})));
  var c=$('radL');if(!c)return;var x=c.getContext('2d'),cx=210,cy=210,R=150,nn=LK.length;x.clearRect(0,0,420,420);
  var ang=[];for(var k=0;k<nn;k++)ang.push(-Math.PI/2+2*Math.PI*k/nn);
- x.strokeStyle='rgba(255,255,255,.10)';for(var g=1;g<=4;g++){x.beginPath();for(var k=0;k<nn;k++){var rr=R*g/4,px=cx+rr*Math.cos(ang[k]),py=cy+rr*Math.sin(ang[k]);k?x.lineTo(px,py):x.moveTo(px,py)}x.closePath();x.stroke()}
+ x.strokeStyle='rgba(255,255,255,.10)';x.lineWidth=1;for(var g=1;g<=4;g++){x.beginPath();for(var k=0;k<nn;k++){var rr=R*g/4,px=cx+rr*Math.cos(ang[k]),py=cy+rr*Math.sin(ang[k]);k?x.lineTo(px,py):x.moveTo(px,py)}x.closePath();x.stroke()}
  x.strokeStyle='rgba(255,255,255,.18)';for(var k=0;k<nn;k++){x.beginPath();x.moveTo(cx,cy);x.lineTo(cx+R*Math.cos(ang[k]),cy+R*Math.sin(ang[k]));x.stroke()}
- x.beginPath();for(var k=0;k<nn;k++){var rr2=R*(v[LK[k]]/max),px2=cx+rr2*Math.cos(ang[k]),py2=cy+rr2*Math.sin(ang[k]);k?x.lineTo(px2,py2):x.moveTo(px2,py2)}x.closePath();x.fillStyle='rgba(47,191,113,.28)';x.fill();x.strokeStyle='#2fbf71';x.lineWidth=2;x.stroke();
- x.fillStyle='#cdd6e4';x.font="13px 'Rajdhani',Arial";x.textAlign='center';for(var k=0;k<nn;k++){var lx=cx+(R+26)*Math.cos(ang[k]),ly=cy+(R+26)*Math.sin(ang[k])+4;x.fillText(LL[LK[k]]+' ('+v[LK[k]]+')',lx,ly)}
+ x.beginPath();for(var k=0;k<nn;k++){var rr2=R*(m[LK[k]]/max),px2=cx+rr2*Math.cos(ang[k]),py2=cy+rr2*Math.sin(ang[k]);k?x.lineTo(px2,py2):x.moveTo(px2,py2)}x.closePath();x.fillStyle='rgba(47,191,113,.28)';x.fill();x.strokeStyle='#2fbf71';x.lineWidth=2;x.stroke();
+ x.fillStyle='#cdd6e4';x.font="13px 'Rajdhani',Arial";x.textAlign='center';for(var k=0;k<nn;k++){var lx=cx+(R+26)*Math.cos(ang[k]),ly=cy+(R+26)*Math.sin(ang[k])+4;x.fillText(LL[LK[k]]+' ('+m[LK[k]].toFixed(1).replace('.',',')+')',lx,ly)}
  var tt=LK.reduce(function(s,k){return s+v[k]},0);var worst=LK.slice().sort(function(a,b){return v[b]-v[a]})[0];
- $('radLegend').innerHTML=tt?("<div class='reco' style='border-left-color:#2fbf71;border-color:rgba(47,191,113,.3);background:rgba(47,191,113,.08)'>Domaine le plus en difficulté : <b style='color:#6ee7a8'>"+LL[worst]+"</b> — "+v[worst]+" erreur(s). Formation prioritaire conseillée.</div>"):"<p style='color:#6ee7a8'>Aucune erreur enregistrée — excellent niveau.</p>";
+ $('radLegend').innerHTML=DATA.length?(tt?("<div class='reco' style='border-left-color:#2fbf71;border-color:rgba(47,191,113,.3);background:rgba(47,191,113,.08)'>Domaine le plus en difficulté ("+esc(scopeLab())+") : <b style='color:#6ee7a8'>"+LL[worst]+"</b>, "+m[worst].toFixed(1).replace('.',',')+" erreur(s) par participant. Formation prioritaire conseillée.</div>"):"<p style='color:#6ee7a8'>Aucune erreur enregistrée : excellent niveau.</p>"):"<p style='color:#8696ad'>En attente de participations.</p>";
 }
-function showTab(tb){var s=(tb==='S');$('paneS').className='pane'+(s?' show':'');$('paneR').className='pane'+(s?'':' show');$('tabBtnS').className='tab'+(s?' active':'');$('tabBtnR').className='tab green'+(s?'':' active');if(!s)drawLacunes();}
+function showTab(tb){['S','C','R'].forEach(function(k){$('pane'+k).className='pane'+(k===tb?' show':'');});$('tabBtnS').className='tab'+(tb==='S'?' active':'');$('tabBtnC').className='tab'+(tb==='C'?' active':'');$('tabBtnR').className='tab green'+(tb==='R'?' active':'');if(tb==='R')drawLacunes();}
 refreshState();setInterval(refreshState,30000);charger();setInterval(function(){if(CODE)charger()},30000);
 </script></body></html>
