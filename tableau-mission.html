@@ -126,6 +126,9 @@ footer{color:var(--mut);font-size:12px;margin-top:22px;text-align:center}
 .tscroll table{min-width:760px}
 td.c{text-align:center;font-family:'Rajdhani';font-size:16px;font-weight:700;color:#fff}
 .pill.dim{background:rgba(240,180,41,.12);color:#f0c45a;border-color:rgba(240,180,41,.35)}
+.hide{display:none!important}
+#login{flex-wrap:wrap}#codeInput{width:100%;max-width:380px;padding:11px 12px;border-radius:3px;border:1px solid var(--line);background:#0a0e15;color:var(--ink);font-size:15px;margin-top:10px}#codeInput:focus{outline:none;border-color:var(--r);box-shadow:0 0 0 3px rgba(226,59,59,.15)}
+#notice{margin:0 0 14px}
 @media(max-width:560px){body{padding:14px 12px 30px}.top{flex-wrap:wrap}.top .badge{margin-left:0}.scope{margin-left:0;width:100%}.ctrl{flex-wrap:wrap}}
 </style></head><body>
 <div class="top">
@@ -147,6 +150,16 @@ td.c{text-align:center;font-family:'Rajdhani';font-size:16px;font-weight:700;col
     <span class="onoff on">ON</span><span class="onoff off">OFF</span><span class="knob"></span>
   </button>
 </div>
+
+<form id="login" class="ctrl hide" onsubmit="validerCode(event)">
+  <div style="flex:1;min-width:240px">
+    <div class="ctrl-title">Accès réservé au service RH</div>
+    <div class="ctrl-hint" id="loginMsg">Saisissez le code d'accès RH (il figure dans le Guide RH). Il sera mémorisé sur ce navigateur.</div>
+    <input id="codeInput" type="password" autocomplete="current-password" placeholder="Code d'accès RH" aria-label="Code d'accès RH">
+  </div>
+  <button class="btn b" type="submit">Ouvrir le tableau</button>
+</form>
+<div id="notice" class="reco hide" role="status"></div>
 
 <div class="sitebar">
   <span class="ctrl-title">Afficher</span>
@@ -202,13 +215,17 @@ function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return
 function norm(s){return String(s||'').trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'')}
 function sstLab(v){return v==='oui'?'À jour':(v==='expire'?'À recycler':'Non')}
 function wants(r){var a=[];if(r.want_sst)a.push('SST');if(r.want_mac)a.push('MAC SST');if(r.want_gp)a.push('Gestes et postures');if(r.want_incendie)a.push('Incendie');return a;}
-function askCode(){if(!CODE){var c=prompt("Code d'accès RH :","");if(!c)return false;CODE=c;try{localStorage.setItem('inext_code',c)}catch(e){}}return true;}
+function askCode(){if(CODE)return true;montrerLogin();return false;}
+function montrerLogin(msg){var l=$('login');l.classList.remove('hide');$('loginMsg').textContent=msg||"Saisissez le code d'accès RH (il figure dans le Guide RH). Il sera mémorisé sur ce navigateur.";$('loginMsg').style.color=msg?'#ff9b9b':'';try{$('codeInput').focus()}catch(e){}}
+function validerCode(e){if(e)e.preventDefault();var c=($('codeInput').value||'').trim();if(!c){montrerLogin("Saisissez le code avant de valider.");return}CODE=c;try{localStorage.setItem('inext_code',c)}catch(x){}$('codeInput').value='';$('login').classList.add('hide');charger();}
+function avertir(m){var n=$('notice');n.textContent=m;n.classList.remove('hide');clearTimeout(avertir.t);avertir.t=setTimeout(function(){n.classList.add('hide')},9000);try{n.scrollIntoView({behavior:'smooth',block:'nearest'})}catch(e){}}
+var ATTENTE=null,ATT_T=0;function confirmer(m){var t=Date.now();if(ATTENTE===m&&t-ATT_T<10000){ATTENTE=null;$('notice').classList.add('hide');return true}ATTENTE=m;ATT_T=t;avertir(m+" Cliquez une seconde fois sur le même bouton dans les 10 secondes pour confirmer.");return false}
 function forget(){CODE="";try{localStorage.removeItem('inext_code')}catch(e){}}
 
 function setSwitch(open){var sw=$('sw'),lbl=$('stateLabel');if(!sw)return;sw.dataset.open=open?'1':'0';sw.classList.toggle('on',!!open);sw.classList.toggle('off',!open);lbl.textContent=open?'🟢 JEU EN MARCHE':'🔴 JEU SUSPENDU';lbl.className='state-label '+(open?'lon':'loff');}
 function refreshState(){fetch(API+"?state=1&z="+Date.now()).then(function(r){return r.json()}).then(function(j){setSwitch(j&&j.open!==false)}).catch(function(){})}
-function toggleGame(){if(!askCode())return;var sw=$('sw');var open=sw.dataset.open==='1';var set=open?'close':'open';if(!confirm(open?'Suspendre le jeu ? Les salariés des deux sites ne pourront plus le lancer.':'Démarrer le jeu ? Les salariés des deux sites pourront jouer.'))return;$('stateLabel').textContent='…';fetch(API+"?set="+set+"&z="+Date.now(),{headers:{'x-admin-key':CODE}}).then(function(r){return r.json()}).then(function(j){if(j&&typeof j.open!=='undefined'){setSwitch(j.open)}else{alert('Action refusée : vérifiez le code d’accès.');refreshState()}}).catch(function(){alert('Erreur réseau');refreshState()})}
-function resetGame(){if(!askCode())return;if(!confirm("Vider le tableau pour les deux sites ? Les parties sont d'abord ARCHIVÉES (récupérables sur demande), puis retirées de l'affichage."))return;fetch(API+"?reset=1&z="+Date.now(),{headers:{'x-admin-key':CODE}}).then(function(r){return r.json()}).then(function(j){if(j&&j.ok){alert("✅ Tableau vidé : "+(j.archived||0)+" partie(s) archivée(s), récupérables.");charger();}else{alert("Échec : vérifiez le code d’accès.")}}).catch(function(){alert("Erreur réseau")})}
+function toggleGame(){if(!askCode())return;var sw=$('sw');var open=sw.dataset.open==='1';var set=open?'close':'open';if(!confirmer(open?'Suspendre le jeu ? Les salariés des deux sites ne pourront plus le lancer.':'Démarrer le jeu ? Les salariés des deux sites pourront jouer.'))return;$('stateLabel').textContent='…';fetch(API+"?set="+set+"&z="+Date.now(),{headers:{'x-admin-key':CODE}}).then(function(r){return r.json()}).then(function(j){if(j&&typeof j.open!=='undefined'){setSwitch(j.open)}else{forget();montrerLogin('Action refusée : code incorrect. Saisissez-le à nouveau.');refreshState()}}).catch(function(){avertir('Erreur réseau');refreshState()})}
+function resetGame(){if(!askCode())return;if(!confirmer("Vider le tableau pour les deux sites ? Les parties sont d'abord ARCHIVÉES (récupérables sur demande), puis retirées de l'affichage."))return;fetch(API+"?reset=1&z="+Date.now(),{headers:{'x-admin-key':CODE}}).then(function(r){return r.json()}).then(function(j){if(j&&j.ok){avertir("✅ Tableau vidé : "+(j.archived||0)+" partie(s) archivée(s), récupérables.");charger();}else{forget();montrerLogin("Échec : code incorrect. Saisissez-le à nouveau.")}}).catch(function(){avertir("Erreur réseau")})}
 
 /* Un salarié = une ligne : on garde sa dernière partie (les lignes arrivent de la plus récente à la plus ancienne). */
 function dedoublonner(rows){var vu={},out=[];rows.forEach(function(r){var k=norm(r.prenom)+'|'+norm(r.nom)+'|'+(r.site||'');if(vu[k]){vu[k].parties++;return}var c={};for(var x in r)c[x]=r[x];c.parties=1;vu[k]=c;out.push(c)});return out;}
@@ -220,9 +237,9 @@ function stats(L){var n=L.length,p=L.reduce(function(a,r){return a+(r.parties||1
   return {n:n,parties:p,moy:moy,dem:d,sst:sst,err:err};}
 function scopeLab(){return SITE?("site de "+SITE):"Strasbourg et Haguenau"}
 
-function charger(){if(!askCode()){$('rows').innerHTML="<tr><td colspan=11 style='padding:16px;color:#7a8699'>Accès protégé. Cliquez sur « ACTUALISER » puis saisissez le code d’accès RH (il figure dans le Guide RH).</td></tr>";return}
+function charger(){if(!askCode()){$('rows').innerHTML="<tr><td colspan=11 style='padding:16px;color:#7a8699'>Accès protégé : saisissez le code d’accès RH dans l’encadré en haut de page.</td></tr>";return}
 fetch(API+"?z="+Date.now(),{headers:{'x-admin-key':CODE}}).then(function(r){return r.json()}).then(function(rows){
- if(!Array.isArray(rows)){forget();$('rows').innerHTML="<tr><td colspan=11 style='padding:16px;color:#ff9b9b'>Code incorrect. <a href='#' style='color:#9dc3f5' onclick='charger();return false'>Réessayer</a></td></tr>";return}
+ if(!Array.isArray(rows)){forget();montrerLogin("Code incorrect. Vérifiez-le dans le Guide RH et saisissez-le à nouveau.");$('rows').innerHTML="<tr><td colspan=11 style='padding:16px;color:#ff9b9b'>Code incorrect.</td></tr>";return}
  ALL=rows;PERS=dedoublonner(rows);filtre();rendre();
 }).catch(function(){$('rows').innerHTML="<tr><td colspan=11 style='padding:16px;color:#ff9b9b'>Erreur réseau.</td></tr>"})}
 
@@ -248,7 +265,7 @@ function rendreCmp(){
 </script>
 <script>
 function genWord(){
- if(!DATA.length){alert("Aucune donnée pour ce périmètre. Cliquez d'abord sur Actualiser.");return}
+ if(!DATA.length){avertir("Aucune donnée pour ce périmètre. Cliquez d'abord sur Actualiser.");return}
  var s=stats(DATA);var d=new Date().toLocaleDateString('fr-FR');
  var ks=LK.slice().sort(function(a,b){return s.err[b]-s.err[a]});
  var rowsTable=DATA.map(function(r,i){return "<tr><td>"+(i+1)+"</td><td>"+esc(r.prenom)+"</td><td>"+esc(r.nom||'')+"</td><td>"+esc(r.site||'')+"</td><td>"+esc(r.service||'')+"</td><td>"+sstLab(r.sst)+"</td><td>"+(r.score||0)+"</td><td>"+esc(r.badge||'')+"</td><td>"+esc(wants(r).join(', ')||'—')+"</td><td>"+esc(r.observation||'')+"</td></tr>"}).join("");
@@ -271,7 +288,7 @@ function genWord(){
  var b=new Blob(['﻿'+h],{type:'application/msword'});var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download="Synthese_Sang-Froid_In-Extenso"+(SITE?"_"+SITE:"")+".doc";document.body.appendChild(a);a.click();document.body.removeChild(a);
 }
 function genExcel(){
- if(!DATA.length){alert("Aucune donnée pour ce périmètre. Cliquez d'abord sur Actualiser.");return}
+ if(!DATA.length){avertir("Aucune donnée pour ce périmètre. Cliquez d'abord sur Actualiser.");return}
  var d=new Date().toLocaleDateString('fr-FR');var dm=stats(DATA).dem;
  var head=["#","Prénom","Nom","Site","Service","SST","Parties","Score","Badge","Err. secours","Err. incendie","Err. postures","Veut SST","Veut MAC SST","Veut gestes et postures","Veut incendie","Observation","Date"];
  var w=[32,92,92,84,120,74,52,54,68,70,70,70,62,64,74,66,240,128];

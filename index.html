@@ -118,7 +118,8 @@ footer{text-align:center;color:#566377;font-size:11px;margin-top:18px;letter-spa
 <div><label for="duree">Durée du chrono</label><select id="duree"><option value="6">6 minutes (express)</option><option value="8" selected>8 minutes (recommandé)</option><option value="10">10 minutes (tranquille)</option></select></div>
 </div>
 <p class="note">Transmis au service RH : prénom, nom, site, service, résultats de la partie et formations choisies, pour organiser les formations. Le classement n'affiche que ton prénom. C'est un jeu, pas un examen.</p>
-<button class="big" onclick="launch()">▶ Commencer ma journée</button>
+<div id="introErr" class="fb ko hide" role="alert"></div>
+<button class="big" onclick="launch()" style="margin-top:10px">▶ Commencer ma journée</button>
 <button class="big ghost" style="margin-top:8px" onclick="showBoard('')">🏆 Classement du cabinet</button></div>
 
 <div id="brief" class="card hide">
@@ -290,11 +291,14 @@ function hideSplash(){var s=$('splash');if(s){s.classList.add('out');setTimeout(
 setTimeout(hideSplash,4200);
 function top0(){try{window.scrollTo(0,0)}catch(e){}}
 
+function introErr(m){var e=$('introErr');e.textContent=m;e.classList.remove('hide');try{e.scrollIntoView({behavior:'smooth',block:'center'})}catch(x){}}
+var VIDE_OK=false;
 function launch(){
   if(GAMEOPEN===false){gameClosed();return;}
   PR=($('prenom').value||'').trim();NOM=($('nom').value||'').trim();SITE=$('site').value;
-  if(!PR||!NOM){alert("Entre ton prénom et ton nom pour démarrer.");$(PR?'nom':'prenom').focus();return;}
-  if(SITES.indexOf(SITE)<0){alert("Choisis ton site : Strasbourg ou Haguenau.");$('site').focus();return;}
+  if(!PR||!NOM){introErr("Entre ton prénom et ton nom pour démarrer.");$(PR?'nom':'prenom').focus({preventScroll:true});return;}
+  if(SITES.indexOf(SITE)<0){introErr("Choisis ton site : Strasbourg ou Haguenau.");$('site').focus({preventScroll:true});return;}
+  $('introErr').classList.add('hide');
   AUTRE=(SITE==="Strasbourg"?"Haguenau":"Strasbourg");
   SV=$('service').value;SSTU=$('sst').value;
   T0=t=parseInt($('duree').value,10)*60;
@@ -392,7 +396,7 @@ function fin(){if(ended)return;ended=true;clearInterval(timer);paused=false;$('c
   top0();
 }
 
-function ckSync(){[['w_sst','ck_sst'],['w_mac','ck_mac'],['w_gp','ck_gp'],['w_inc','ck_inc']].forEach(function(p){var c=$(p[0]),l=$(p[1]);if(c&&l)l.classList.toggle('on',c.checked);});}
+function ckSync(){var un=false;[['w_sst','ck_sst'],['w_mac','ck_mac'],['w_gp','ck_gp'],['w_inc','ck_inc']].forEach(function(p){var c=$(p[0]),l=$(p[1]);if(c&&l){l.classList.toggle('on',c.checked);if(c.checked&&!l.classList.contains('hide'))un=true;}});if(un&&VIDE_OK){VIDE_OK=false;$('btnSend').textContent='✅ Transmettre mes choix au service RH';$('sendfb').classList.add('hide');}}
 function showChoix(){$('fin').classList.add('hide');$('choix').classList.remove('hide');
   var dejaSST=(SSTU!=='non');
   $('ck_sst').classList.toggle('hide',dejaSST);$('ck_mac').classList.toggle('hide',!dejaSST);
@@ -403,7 +407,7 @@ function showChoix(){$('fin').classList.add('hide');$('choix').classList.remove(
 function submitChoices(){
   var w={sst:$('w_sst').checked&&SSTU==='non',mac:$('w_mac').checked&&SSTU!=='non',gp:$('w_gp').checked,inc:$('w_inc').checked};
   var obs=($('obs').value||'').trim();
-  if(!w.sst&&!w.mac&&!w.gp&&!w.inc&&!confirm("Tu n'as coché aucune formation. Transmettre quand même ta participation ?"))return;
+  if(!w.sst&&!w.mac&&!w.gp&&!w.inc&&!VIDE_OK){VIDE_OK=true;var f0=$('sendfb');f0.classList.remove('hide');f0.className='fb ko';f0.textContent="Tu n'as coché aucune formation. Clique à nouveau sur le bouton pour transmettre quand même ta participation.";$('btnSend').textContent='✅ Transmettre quand même';return;}
   var btn=$('btnSend');btn.disabled=true;var fb=$('sendfb');fb.classList.remove('hide');fb.className='fb';fb.textContent='Envoi en cours…';
   var payload={prenom:PR,nom:NOM,site:SITE,service:SV,sst:SSTU,score:LSCORE,temps_total:T0,temps_restant:Math.max(t,0),erreurs:erreurs,bonnes:SANSFAUTE,total:S.length,err_secours:et.secours,err_incendie:et.incendie,err_tms:et.tms,badge:LBADGE,want_sst:w.sst,want_mac:w.mac,want_gp:w.gp,want_incendie:w.inc,observation:obs};
   function done(etat){
