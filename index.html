@@ -117,7 +117,7 @@ footer{text-align:center;color:#566377;font-size:11px;margin-top:18px;letter-spa
 <div><label for="sst">Es-tu sauveteur secouriste du travail (SST) ?</label><select id="sst"><option value="non">Non</option><option value="oui">Oui, formation ou recyclage il y a moins de 2 ans</option><option value="expire">Oui, mais il y a plus de 2 ans (ou je ne sais plus)</option></select></div>
 <div><label for="duree">Durée du chrono</label><select id="duree"><option value="6">6 minutes (express)</option><option value="8" selected>8 minutes (recommandé)</option><option value="10">10 minutes (tranquille)</option></select></div>
 </div>
-<p class="note">Transmis au service RH : prénom, nom, site, service, résultats de la partie et formations choisies, pour organiser les formations. Le classement n'affiche que ton prénom. C'est un jeu, pas un examen.</p>
+<p class="note">Transmis au service RH à la fin de la partie : prénom, nom, site, service, statut SST et résultats de la partie. Le classement n'affiche que ton prénom. C'est un jeu, pas un examen.</p>
 <div id="introErr" class="fb ko hide" role="alert"></div>
 <button class="big" onclick="launch()" style="margin-top:10px">▶ Commencer ma journée</button>
 <button class="big ghost" style="margin-top:8px" onclick="showBoard('')">🏆 Classement du cabinet</button></div>
@@ -134,19 +134,6 @@ footer{text-align:center;color:#566377;font-size:11px;margin-top:18px;letter-spa
 
 <div id="fin" class="card verdict hide"></div>
 
-<div id="choix" class="card hide">
-<h2>Quelles formations veux-tu suivre ?</h2>
-<p>Coche ce qui t'intéresse. Les cases conseillées par ton bilan sont déjà cochées : à toi d'ajuster.</p>
-<label class="ck" id="ck_sst"><input type="checkbox" id="w_sst"><span><b>SST</b> · Sauveteur secouriste du travail<small>2 jours (14 h) · alerter, masser, défibriller, dégager une fausse route : les gestes de la journée, pour de vrai, avec le certificat SST</small></span></label>
-<label class="ck" id="ck_mac"><input type="checkbox" id="w_mac"><span><b>MAC SST</b> · Maintien et actualisation des compétences<small>1 jour (7 h) · le recyclage obligatoire tous les 24 mois pour garder ton certificat SST valable</small></span></label>
-<label class="ck" id="ck_gp"><input type="checkbox" id="w_gp"><span><b>Gestes et postures</b> · Prévention des TMS<small>1 jour (7 h) · réglage du poste écran, double écran, port des cartons d'archives</small></span></label>
-<label class="ck" id="ck_inc"><input type="checkbox" id="w_inc"><span><b>Sécurité incendie</b> · Manipulation des extincteurs et évacuation<small>Une demi-journée (4 h) · quel extincteur sur quel feu, et comment sortir quand l'alarme sonne</small></span></label>
-<label for="obs" style="margin-top:8px">Un mot pour le service RH ? (facultatif)</label>
-<textarea id="obs" rows="3" maxlength="280" placeholder="Disponibilités, périodes à éviter (clôtures, échéances fiscales…), questions"></textarea>
-<p class="note" id="noteEnvoi"></p>
-<button class="big" id="btnSend" onclick="submitChoices()">✅ Transmettre mes choix au service RH</button>
-<div id="sendfb" class="fb hide"></div></div>
-
 <div id="board" class="ov hide"><div class="ov-card">
 <h2 style="color:var(--o)">🏆 Classement</h2>
 <div id="duelB"></div>
@@ -161,7 +148,7 @@ var API="https://eumviuptmyzgftrqpape.supabase.co/functions/v1/inextenso";
 var SITES=["Strasbourg","Haguenau"];
 /* Une journée au cabinet, de 8 h à 18 h. Chaque incident de l'après-midi découle d'un risque repéré lors de la ronde du matin.
    type : s = plusieurs bons réflexes (ordre libre) · e = énigme, une seule bonne réponse · o = actions à cliquer dans l'ordre
-   theme : secours / incendie / tms → diagnostic et formations ; bilan → hors diagnostic */
+   theme : secours / incendie / tms → bilan par domaine ; bilan → hors bilan */
 var S=[
 {h:"08 h 05",ch:"La ronde du matin",type:"s",theme:"incendie",titre:"La ronde du référent",
  scene:"Première consigne du référent : faire le tour de l'étage avant l'arrivée des équipes. Repère les trois situations qui posent problème.",
@@ -281,7 +268,7 @@ var PENAL=30;
 
 var t=480,T0=480,idx=0,faits=0,pts=0,erreurs=0,epErr=0,R=[],et={secours:0,incendie:0,tms:0},timer=null,paused=false,started=false,ended=false;
 var PR="",NOM="",SITE="",AUTRE="",SV="",SSTU="non",GAMEOPEN=true;
-var LSCORE=0,LBADGE="",LFINI=false,SANSFAUTE=0,recSST=false,recMAC=false,recGP=false,recINC=false;
+var LSCORE=0,LBADGE="",LFINI=false,SANSFAUTE=0,ENVOI_OK=false;
 function $(i){return document.getElementById(i)}
 function fmt(s){if(s<0)s=0;var m=Math.floor(s/60),x=s%60;return (m<10?'0':'')+m+':'+(x<10?'0':'')+x}
 function rnd(a){return a[Math.floor(Math.random()*a.length)]}
@@ -292,7 +279,6 @@ setTimeout(hideSplash,4200);
 function top0(){try{window.scrollTo(0,0)}catch(e){}}
 
 function introErr(m){var e=$('introErr');e.textContent=m;e.classList.remove('hide');try{e.scrollIntoView({behavior:'smooth',block:'center'})}catch(x){}}
-var VIDE_OK=false;
 function launch(){
   if(GAMEOPEN===false){gameClosed();return;}
   PR=($('prenom').value||'').trim();NOM=($('nom').value||'').trim();SITE=$('site').value;
@@ -307,7 +293,7 @@ function launch(){
   $('intro').classList.add('hide');$('brief').classList.remove('hide');top0();
 }
 function countdown(){
-  $('brief').classList.add('hide');$('game').classList.remove('hide');$('choix').classList.add('hide');$('fin').classList.add('hide');
+  $('brief').classList.add('hide');$('game').classList.remove('hide');$('fin').classList.add('hide');
   $('chrono').classList.remove('hide','warn','pause');$('score').classList.remove('hide');$('chrono').textContent=fmt(t);$('score').textContent='0 pts';$('err').textContent='Erreurs : 0';
   $('tag').textContent='Préparez-vous';$('tag').className='tag';$('titre').textContent='La journée commence…';$('acts').innerHTML='';$('fb').classList.add('hide');$('lesson').classList.add('hide');$('obj').textContent='';$('prog').style.width='0%';
   var seq=['3','2','1','GO !'],k=0;$('scene').innerHTML='<div class="go">'+seq[0]+'</div>';
@@ -367,7 +353,7 @@ function fin(){if(ended)return;ended=true;clearInterval(timer);paused=false;$('c
   else if(erreurs<=5){medal=disc('#9aa3ad');grade='BADGE ARGENT · SOLIDE';col='#aab3bd';LBADGE='Argent';}
   else{medal=disc('#cd7f32');grade='BADGE BRONZE · À CONSOLIDER';col='#cd7f32';LBADGE='Bronze';}
   var epi=LFINI?("18 h 05. Le client de ce matin a été pris en charge à temps, la gestionnaire de paie a retrouvé son souffle, ta collègue du pôle social s'en tire avec une grosse frayeur, et tout le monde est sorti avant que la fumée n'envahisse l'étage. Les trois liasses partiront ce soir. Le référent, de retour de "+AUTRE+", n'en revient pas : tu as tenu toute la journée.")
-    :("La journée a filé plus vite que toi : le chrono t'a rattrapé à "+(S[Math.min(idx,S.length-1)].h)+". Pas de panique : c'est précisément pour ces moments-là que les formations existent. Voici ce que ta partie révèle.");
+    :("La journée a filé plus vite que toi : le chrono t'a rattrapé à "+(S[Math.min(idx,S.length-1)].h)+". Pas de panique : c'est précisément pour ces moments-là qu'on s'entraîne. Voici ce que ta partie révèle.");
   /* Ta journée en un coup d'œil */
   var day=S.map(function(a,i){var st=(i<idx||(i===idx&&R[i]!=null))?(R[i]?'d-err':'d-ok'):'d-nj';var ic=st==='d-ok'?'✓':st==='d-err'?'⚠':'·';return "<div class='"+st+"'><i>"+a.h+"</i>"+ic+" "+be(fill(a.titre))+"</div>"}).join("");
   /* Diagnostic par domaine */
@@ -376,49 +362,38 @@ function fin(){if(ended)return;ended=true;clearInterval(timer);paused=false;$('c
     var de={secours:"de secours",incendie:"d'incendie",tms:"de gestes et postures"}[th[0]];if(!joue)jamais.push(de);else if(joue<tot)partiel.push(de);
     var pc=joue?Math.round(ok/joue*100):0;
     return "<div class='rw'><span>"+th[1]+"</span><div class='g'><i style='width:"+pc+"%'></i></div><b>"+(joue?ok+"/"+joue+" sans faute":"non atteint")+"</b></div>"+(joue&&joue<tot?"<div style='font-size:12px;color:var(--mut);margin:-4px 0 6px;text-align:right'>"+(tot-joue)+" situation"+(tot-joue>1?"s":"")+" non atteinte"+(tot-joue>1?"s":"")+"</div>":"")}).join("");
-  recSST=(SSTU==='non'&&et.secours>0);recMAC=(SSTU==='expire')||(SSTU==='oui'&&et.secours>0);recINC=(et.incendie>0);recGP=(et.tms>0);
-  var reco='';
-  if(SSTU==='expire')reco+="<div class='reco'><b>Ton certificat SST :</b> au-delà de 2 ans, il doit être renouvelé. → <b>MAC SST</b> (7 h), le recyclage qui le remet à jour.</div>";
-  else if(recMAC)reco+="<div class='reco'><b>Secours :</b> certains gestes t'ont échappé. → <b>MAC SST</b> (7 h) pour les réactiver.</div>";
-  else if(recSST)reco+="<div class='reco'><b>Secours :</b> des gestes t'ont échappé. → <b>SST</b> (14 h) : tu les pratiques jusqu'à ce qu'ils deviennent des réflexes, avec le certificat de sauveteur secouriste du travail.</div>";
-  if(recINC)reco+="<div class='reco'><b>Incendie :</b> le bon extincteur et l'évacuation sont à consolider. → <b>Sécurité incendie</b> (4 h) : manipulation des extincteurs et évacuation.</div>";
-  if(recGP)reco+="<div class='reco'><b>Gestes et postures :</b> poste écran et port de charges à revoir. → <b>Gestes et postures</b> (7 h) : prévention des TMS.</div>";
   function et_(l){return l.join(", ").replace(/, ([^,]*)$/," et $1")}
-  if(jamais.length||partiel.length)reco+="<div class='reco'><b>Le chrono t'a arrêté avant la fin :</b> "+(jamais.length?"situations "+et_(jamais)+" non jouées":"")+(jamais.length&&partiel.length?" ; ":"")+(partiel.length?"situations "+et_(partiel)+" jouées en partie":"")+". Rejoue en choisissant 10 minutes, ou coche directement les formations qui t'intéressent.</div>";
-  if(!reco)reco=(SSTU==='non'?"<div class='reco'>Aucune erreur sur les gestes de secours, bravo ! Pour transformer ces réflexes en certificat officiel, la formation <b>SST</b> (14 h) est la suite logique.</div>":"<div class='reco'>Sans faute ! Pense à ton recyclage <b>MAC SST</b> avant les 2 ans de ton certificat.</div>");
-  el.innerHTML="<div class='medal'>"+medal+"</div><div class='code' style='color:"+col+"'>"+grade+"</div><h2 style='margin-top:10px'>Score : "+LSCORE+" points</h2>"+(bonus?"<p style='margin:-4px 0 8px;font-size:13px;color:var(--mut)'>dont "+bonus+" points de bonus pour le temps restant</p>":"")+""
+  var RAPPEL={secours:"<b>Secours :</b> protéger, examiner, faire alerter, secourir. Face à quelqu'un qui ne répond plus et ne respire plus : faire alerter, masser (100 à 120 compressions par minute), défibriller.",
+    incendie:"<b>Incendie :</b> alerter et couper le courant ; CO2 sur l'électrique, eau pulvérisée sur le papier. À l'alarme, on lâche tout, on emmène les visiteurs, jamais d'ascenseur, jamais à travers la fumée.",
+    tms:"<b>Gestes et postures :</b> écran en face, haut de l'écran à hauteur des yeux, à une longueur de bras ; charge contre soi, genoux fléchis, on pivote avec les pieds ; des pauses courtes et fréquentes."};
+  var reco='';
+  ['secours','incendie','tms'].forEach(function(k){if(et[k]>0)reco+="<div class='reco'>"+RAPPEL[k]+"</div>";});
+  if(jamais.length||partiel.length)reco+="<div class='reco'><b>Le chrono t'a arrêté avant la fin :</b> "+(jamais.length?"situations "+et_(jamais)+" non jouées":"")+(jamais.length&&partiel.length?" ; ":"")+(partiel.length?"situations "+et_(partiel)+" jouées en partie":"")+". Rejoue en choisissant 10 minutes pour vivre toute la journée.</div>";
+  if(SSTU==='expire')reco+="<div class='reco'><b>Ton certificat SST :</b> il se maintient par un recyclage tous les 24 mois. Le tien a plus de 2 ans : pense à vérifier sa date.</div>";
+  if(!reco)reco="<div class='reco'>Sans faute : tes réflexes sont solides. Garde-les à jour, et partage-les autour de toi.</div>";
+  el.innerHTML="<div class='medal'>"+medal+"</div><div class='code' style='color:"+col+"'>"+grade+"</div><h2 style='margin-top:10px'>Score : "+LSCORE+" points</h2>"+(bonus?"<p style='margin:-4px 0 8px;font-size:13px;color:var(--mut)'>dont "+bonus+" points de bonus pour le temps restant</p>":"")
    +"<p>"+be(PR)+" · "+be(SITE)+(SV?" · "+be(SV):"")+"<br>Situations sans erreur : <b>"+SANSFAUTE+"/"+S.length+"</b> · Erreurs : <b>"+erreurs+"</b> · Temps restant : <b>"+fmt(Math.max(t,0))+"</b></p>"
    +"<div class='epi'><div class='eh'>"+(LFINI?"Fin de journée":"Journée interrompue")+"</div>"+be(epi)+"</div>"
    +"<div class='sec'><h2>Ta journée en un coup d'œil</h2><div class='day'>"+day+"</div></div>"
    +"<div class='sec dom'><h2>Ton bilan par domaine</h2>"+dom+"</div>"
-   +"<div class='sec'><h2>Ce que ça t'indique</h2>"+reco+"</div>"
-   +"<div class='cta'>Dernière étape : choisis les formations qui t'intéressent. Tes choix sont transmis au service RH pour organiser les sessions à "+be(SITE)+".</div><button class='big' style='margin-top:14px' onclick='showChoix()'>Choisir mes formations →</button>";
-  top0();
+   +"<div class='sec'><h2>Les réflexes à retenir</h2>"+reco+"</div>"
+   +"<div id='envoiFb' class='fb' role='status'></div>"
+   +"<div id='duelF'></div>"
+   +"<div class='cta'>« Le jeu ouvre les yeux ; la formation, en salle comme sur le terrain, sauve des vies. »</div>"
+   +"<div class='row2' style='margin-top:14px'><button class='big ghost' onclick='showBoard(SITE)'>🏆 Classement</button><button class='big ghost' onclick='location.reload()'>↻ Rejouer</button></div>";
+  top0();ENVOI_OK=false;envoyer();
 }
 
-function ckSync(){var un=false;[['w_sst','ck_sst'],['w_mac','ck_mac'],['w_gp','ck_gp'],['w_inc','ck_inc']].forEach(function(p){var c=$(p[0]),l=$(p[1]);if(c&&l){l.classList.toggle('on',c.checked);if(c.checked&&!l.classList.contains('hide'))un=true;}});if(un&&VIDE_OK){VIDE_OK=false;$('btnSend').textContent='✅ Transmettre mes choix au service RH';$('sendfb').classList.add('hide');}}
-function showChoix(){$('fin').classList.add('hide');$('choix').classList.remove('hide');
-  var dejaSST=(SSTU!=='non');
-  $('ck_sst').classList.toggle('hide',dejaSST);$('ck_mac').classList.toggle('hide',!dejaSST);
-  $('w_sst').checked=!dejaSST&&recSST;$('w_mac').checked=dejaSST&&recMAC;$('w_gp').checked=recGP;$('w_inc').checked=recINC;
-  ['w_sst','w_mac','w_gp','w_inc'].forEach(function(id){$(id).onchange=ckSync;});
-  $('noteEnvoi').textContent="Transmis au service RH : "+PR+" "+NOM+", site de "+SITE+(SV?", "+SV:"")+", ton score et tes formations choisies. Le classement n'affiche que ton prénom.";
-  ckSync();top0();}
-function submitChoices(){
-  var w={sst:$('w_sst').checked&&SSTU==='non',mac:$('w_mac').checked&&SSTU!=='non',gp:$('w_gp').checked,inc:$('w_inc').checked};
-  var obs=($('obs').value||'').trim();
-  if(!w.sst&&!w.mac&&!w.gp&&!w.inc&&!VIDE_OK){VIDE_OK=true;var f0=$('sendfb');f0.classList.remove('hide');f0.className='fb ko';f0.textContent="Tu n'as coché aucune formation. Clique à nouveau sur le bouton pour transmettre quand même ta participation.";$('btnSend').textContent='✅ Transmettre quand même';return;}
-  var btn=$('btnSend');btn.disabled=true;var fb=$('sendfb');fb.classList.remove('hide');fb.className='fb';fb.textContent='Envoi en cours…';
-  var payload={prenom:PR,nom:NOM,site:SITE,service:SV,sst:SSTU,score:LSCORE,temps_total:T0,temps_restant:Math.max(t,0),erreurs:erreurs,bonnes:SANSFAUTE,total:S.length,err_secours:et.secours,err_incendie:et.incendie,err_tms:et.tms,badge:LBADGE,want_sst:w.sst,want_mac:w.mac,want_gp:w.gp,want_incendie:w.inc,observation:obs};
-  function done(etat){
-    var msg=etat==='ok'?"Tes choix sont transmis au service RH. Ils serviront à organiser les sessions de formation à "+be(SITE)+". On se retrouve bientôt, pour de vrai !"
-      :etat==='closed'?"Le service RH a fermé le jeu entre-temps : ta partie n'a pas pu être enregistrée. Signale-le au service RH."
-      :"La connexion a échoué : tes choix n'ont pas pu être transmis. Vérifie ta connexion et réessaie.";
-    if(etat!=='ok'){fb.className='fb ko';fb.innerHTML=msg;btn.disabled=(etat==='closed');return;}
-    $('choix').innerHTML="<h2 style='color:var(--v)'>✅ Merci "+be(PR)+" !</h2><p>"+msg+"</p><div id='duelF'></div><div class='cta'>« Le jeu ouvre les yeux ; la formation, en salle comme sur le terrain, sauve des vies. »</div><div class='row2' style='margin-top:14px'><button class='big ghost' onclick='showBoard(SITE)'>🏆 Classement</button><button class='big ghost' onclick='location.reload()'>↻ Rejouer</button></div>";
-    loadDuel('duelF');top0();
-  }
-  fetch(API,{method:'POST',body:JSON.stringify(payload)}).then(function(r){return r.json()}).then(function(j){done(j&&j.ok?'ok':(j&&j.closed?'closed':'err'))}).catch(function(){done('err')});
+/* Le résultat part automatiquement au service RH en fin de partie (le salarié en est informé dès l'accueil). */
+function envoyer(){
+  var fb=$('envoiFb');if(!fb||ENVOI_OK)return;
+  fb.className='fb';fb.textContent='Transmission de ton résultat au service RH…';
+  var payload={prenom:PR,nom:NOM,site:SITE,service:SV,sst:SSTU,score:LSCORE,temps_total:T0,temps_restant:Math.max(t,0),erreurs:erreurs,bonnes:SANSFAUTE,total:S.length,err_secours:et.secours,err_incendie:et.incendie,err_tms:et.tms,badge:LBADGE};
+  fetch(API,{method:'POST',body:JSON.stringify(payload)}).then(function(r){return r.json()}).then(function(j){
+    if(j&&j.ok){ENVOI_OK=true;fb.className='fb ok';fb.textContent='✅ Merci '+PR+' ! Ton résultat est transmis au service RH.';loadDuel('duelF');return;}
+    if(j&&j.closed){fb.className='fb ko';fb.textContent="Le service RH a fermé le jeu entre-temps : ton résultat n'a pas pu être enregistré.";return;}
+    throw new Error('envoi');
+  }).catch(function(){fb.className='fb ko';fb.innerHTML="La connexion a échoué : ton résultat n'a pas été transmis.<button class='big ghost' style='margin-top:10px' onclick='envoyer()'>↻ Réessayer l'envoi</button>";});
 }
 function loadDuel(id){var el=$(id);if(!el)return;
   fetch(API+"?sites=1&z="+Date.now()).then(function(r){return r.json()}).then(function(rows){

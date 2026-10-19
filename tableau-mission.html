@@ -135,7 +135,7 @@ td.c{text-align:center;font-family:'Rajdhani';font-size:16px;font-weight:700;col
 <img src="logo.png" alt="ANDRAGOPS">
 <div>
 <div class="brand">OPÉRATION <span>SANG-FROID</span> · Tableau de mission</div>
-<div class="sub">In Extenso · Strasbourg et Haguenau · pilotage du jeu, demandes de formation et lacunes</div>
+<div class="sub">In Extenso · Strasbourg et Haguenau · pilotage du jeu, besoins repérés et lacunes</div>
 </div>
 <span class="badge">Espace RH · privé</span>
 </div>
@@ -175,18 +175,18 @@ td.c{text-align:center;font-family:'Rajdhani';font-size:16px;font-weight:700;col
 </div>
 
 <div class="tabbar">
-  <button class="tab active" id="tabBtnS" onclick="showTab('S')">Synthèse &amp; demandes</button>
+  <button class="tab active" id="tabBtnS" onclick="showTab('S')">Synthèse &amp; besoins</button>
   <button class="tab" id="tabBtnC" onclick="showTab('C')">Comparaison des sites</button>
   <button class="tab green" id="tabBtnR" onclick="showTab('R')">Radar des lacunes</button>
 </div>
 <div class="panewrap">
   <div id="paneS" class="pane show">
     <div id="kpis" class="kpis"></div>
-    <h2>Demandes de formation (volontariat des salariés)</h2>
+    <h2>Besoins repérés par le jeu</h2>
     <div id="fdem" class="fdem"></div>
-    <p class="hint">Chaque salarié est compté une fois, sur sa dernière partie. Les certificats SST « à recycler » sont déclarés par les salariés eux-mêmes : à rapprocher de vos registres.</p>
-    <h2>Participants &amp; choix</h2>
-    <div class="tscroll"><table><thead><tr><th>#</th><th>Prénom</th><th>Nom</th><th>Site</th><th>Service</th><th>SST</th><th>Score</th><th>Badge</th><th>Formations demandées</th><th>Observation</th><th>Date</th></tr></thead><tbody id="rows"><tr><td colspan="11" style="padding:16px">Chargement…</td></tr></tbody></table></div>
+    <p class="hint">Nombre de salariés ayant commis au moins une erreur dans le domaine, chacun compté une fois sur sa dernière partie. Les parties interrompues n'ont pas parcouru toutes les situations. Les certificats SST « à recycler » sont déclarés par les salariés : à rapprocher de vos registres. Les salariés ne choisissent aucune formation : c'est la direction qui arbitre le plan.</p>
+    <h2>Participants</h2>
+    <div class="tscroll"><table><thead><tr><th>#</th><th>Prénom</th><th>Nom</th><th>Site</th><th>Service</th><th>SST</th><th>Score</th><th>Badge</th><th>À retravailler</th><th>Date</th></tr></thead><tbody id="rows"><tr><td colspan="10" style="padding:16px">Chargement…</td></tr></tbody></table></div>
     <h2>Analyse des lacunes (diagnostic)</h2>
     <div id="reco"></div>
   </div>
@@ -202,7 +202,7 @@ td.c{text-align:center;font-family:'Rajdhani';font-size:16px;font-weight:700;col
     <p class="hint">Plus l'aire s'étire sur un axe, plus les erreurs y sont nombreuses : c'est là que le besoin de formation est le plus fort.</p>
   </div>
 </div>
-<footer>Page privée ANDRAGOPS, code d'accès requis. Données : prénom, nom, site, service (facultatif), résultats et formations souhaitées, pour bâtir le plan de formation.</footer>
+<footer>Page privée ANDRAGOPS, code d'accès requis. Données : prénom, nom, site, service (facultatif), statut SST déclaré et résultats de la partie.</footer>
 <script>
 var API="https://eumviuptmyzgftrqpape.supabase.co/functions/v1/inextenso";
 var SITES=["Strasbourg","Haguenau"];
@@ -214,7 +214,7 @@ function $(x){return document.getElementById(x)}
 function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function norm(s){return String(s||'').trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'')}
 function sstLab(v){return v==='oui'?'À jour':(v==='expire'?'À recycler':'Non')}
-function wants(r){var a=[];if(r.want_sst)a.push('SST');if(r.want_mac)a.push('MAC SST');if(r.want_gp)a.push('Gestes et postures');if(r.want_incendie)a.push('Incendie');return a;}
+function aRevoir(r){var a=[];if(r.err_secours>0)a.push('Secours');if(r.err_incendie>0)a.push('Incendie');if(r.err_tms>0)a.push('Postures');return a;}
 function askCode(){if(CODE)return true;montrerLogin();return false;}
 function montrerLogin(msg){var l=$('login');l.classList.remove('hide');$('loginMsg').textContent=msg||"Saisissez le code d'accès RH (il figure dans le Guide RH). Il sera mémorisé sur ce navigateur.";$('loginMsg').style.color=msg?'#ff9b9b':'';try{$('codeInput').focus()}catch(e){}}
 function validerCode(e){if(e)e.preventDefault();var c=($('codeInput').value||'').trim();if(!c){montrerLogin("Saisissez le code avant de valider.");return}CODE=c;try{localStorage.setItem('inext_code',c)}catch(x){}$('codeInput').value='';$('login').classList.add('hide');charger();}
@@ -232,23 +232,23 @@ function dedoublonner(rows){var vu={},out=[];rows.forEach(function(r){var k=norm
 function filtre(){DATA=SITE?PERS.filter(function(r){return r.site===SITE}):PERS.slice();}
 function setSite(s){SITE=s;Array.prototype.forEach.call($('sitebtns').children,function(b){b.classList.toggle('on',b.getAttribute('data-s')===s)});filtre();rendre();}
 function stats(L){var n=L.length,p=L.reduce(function(a,r){return a+(r.parties||1)},0),moy=n?Math.round(L.reduce(function(s,r){return s+(r.score||0)},0)/n):0;
-  var d={sst:0,mac:0,gp:0,inc:0},sst={oui:0,expire:0,non:0},err={err_secours:0,err_incendie:0,err_tms:0};
-  L.forEach(function(r){if(r.want_sst)d.sst++;if(r.want_mac)d.mac++;if(r.want_gp)d.gp++;if(r.want_incendie)d.inc++;sst[r.sst==='oui'?'oui':r.sst==='expire'?'expire':'non']++;LK.forEach(function(k){err[k]+=(r[k]||0)})});
-  return {n:n,parties:p,moy:moy,dem:d,sst:sst,err:err};}
+  var b={sec:0,inc:0,tms:0},sst={oui:0,expire:0,non:0},err={err_secours:0,err_incendie:0,err_tms:0};
+  L.forEach(function(r){if(r.err_secours>0)b.sec++;if(r.err_incendie>0)b.inc++;if(r.err_tms>0)b.tms++;sst[r.sst==='oui'?'oui':r.sst==='expire'?'expire':'non']++;LK.forEach(function(k){err[k]+=(r[k]||0)})});
+  return {n:n,parties:p,moy:moy,bes:b,sst:sst,err:err};}
 function scopeLab(){return SITE?("site de "+SITE):"Strasbourg et Haguenau"}
 
-function charger(){if(!askCode()){$('rows').innerHTML="<tr><td colspan=11 style='padding:16px;color:#7a8699'>Accès protégé : saisissez le code d’accès RH dans l’encadré en haut de page.</td></tr>";return}
+function charger(){if(!askCode()){$('rows').innerHTML="<tr><td colspan=10 style='padding:16px;color:#7a8699'>Accès protégé : saisissez le code d’accès RH dans l’encadré en haut de page.</td></tr>";return}
 fetch(API+"?z="+Date.now(),{headers:{'x-admin-key':CODE}}).then(function(r){return r.json()}).then(function(rows){
- if(!Array.isArray(rows)){forget();montrerLogin("Code incorrect. Vérifiez-le dans le Guide RH et saisissez-le à nouveau.");$('rows').innerHTML="<tr><td colspan=11 style='padding:16px;color:#ff9b9b'>Code incorrect.</td></tr>";return}
+ if(!Array.isArray(rows)){forget();montrerLogin("Code incorrect. Vérifiez-le dans le Guide RH et saisissez-le à nouveau.");$('rows').innerHTML="<tr><td colspan=10 style='padding:16px;color:#ff9b9b'>Code incorrect.</td></tr>";return}
  ALL=rows;PERS=dedoublonner(rows);filtre();rendre();
-}).catch(function(){$('rows').innerHTML="<tr><td colspan=11 style='padding:16px;color:#ff9b9b'>Erreur réseau.</td></tr>"})}
+}).catch(function(){$('rows').innerHTML="<tr><td colspan=10 style='padding:16px;color:#ff9b9b'>Erreur réseau.</td></tr>"})}
 
 function rendre(){
  var s=stats(DATA);
  $('scopeInfo').textContent=s.n+" salarié"+(s.n>1?"s":"")+" · "+s.parties+" partie"+(s.parties>1?"s":"")+" · "+scopeLab();
  $('kpis').innerHTML=[["Salariés participants",s.n],["Parties jouées",s.parties],["Score moyen",s.moy],["SST à jour",s.sst.oui],["SST à recycler",s.sst.expire],["Non SST",s.sst.non]].map(function(k){return "<div class='k'><div class='n'>"+k[0]+"</div><b>"+k[1]+"</b></div>"}).join("");
- $('fdem').innerHTML="<div class='fc'><div class='num'>"+s.dem.sst+"</div><div class='lab'>SST</div><div class='sub'>initiale · 14 h</div></div><div class='fc'><div class='num'>"+s.dem.mac+"</div><div class='lab'>MAC SST</div><div class='sub'>recyclage · 7 h</div></div><div class='fc'><div class='num'>"+s.dem.gp+"</div><div class='lab'>Gestes et postures</div><div class='sub'>écran, TMS · 7 h</div></div><div class='fc'><div class='num'>"+s.dem.inc+"</div><div class='lab'>Sécurité incendie</div><div class='sub'>extincteurs, évacuation · 4 h</div></div>";
- $('rows').innerHTML=s.n?DATA.map(function(r,i){var w=wants(r);return "<tr><td>"+(i+1)+"</td><td>"+esc(r.prenom)+(r.parties>1?" <span class='pill dim' title='Parties jouées'>×"+r.parties+"</span>":"")+"</td><td>"+esc(r.nom||'—')+"</td><td>"+esc(r.site||'—')+"</td><td>"+esc(r.service||'—')+"</td><td>"+sstLab(r.sst)+"</td><td>"+(r.score||0)+"</td><td>"+esc(r.badge||'')+"</td><td>"+(w.length?w.map(function(x){return "<span class='pill'>"+x+"</span>"}).join(" "):"<span style='color:#7a8699'>—</span>")+"</td><td>"+esc(r.observation||'')+"</td><td>"+(r.created_at?new Date(r.created_at).toLocaleString('fr-FR'):'')+"</td></tr>"}).join(""):"<tr><td colspan=11 style='padding:16px'>Aucune partie pour le moment"+(SITE?" à "+esc(SITE):"")+".</td></tr>";
+ $('fdem').innerHTML="<div class='fc'><div class='num'>"+s.bes.sec+"</div><div class='lab'>Secours</div><div class='sub'>salariés à retravailler · SST 14 h ou MAC SST 7 h</div></div><div class='fc'><div class='num'>"+s.bes.inc+"</div><div class='lab'>Incendie</div><div class='sub'>salariés à retravailler · sécurité incendie 4 h</div></div><div class='fc'><div class='num'>"+s.bes.tms+"</div><div class='lab'>Gestes et postures</div><div class='sub'>salariés à retravailler · prévention des TMS 7 h</div></div><div class='fc'><div class='num'>"+s.sst.expire+"</div><div class='lab'>Certificats SST</div><div class='sub'>à recycler (déclaré) · MAC SST 7 h</div></div>";
+ $('rows').innerHTML=s.n?DATA.map(function(r,i){var w=aRevoir(r);return "<tr><td>"+(i+1)+"</td><td>"+esc(r.prenom)+(r.parties>1?" <span class='pill dim' title='Parties jouées'>×"+r.parties+"</span>":"")+"</td><td>"+esc(r.nom||'—')+"</td><td>"+esc(r.site||'—')+"</td><td>"+esc(r.service||'—')+"</td><td>"+sstLab(r.sst)+"</td><td>"+(r.score||0)+"</td><td>"+esc(r.badge||'')+"</td><td>"+(w.length?w.map(function(x){return "<span class='pill'>"+x+"</span>"}).join(" "):"<span style='color:#6ee7a8'>rien à signaler</span>")+"</td><td>"+(r.created_at?new Date(r.created_at).toLocaleString('fr-FR'):'')+"</td></tr>"}).join(""):"<tr><td colspan=10 style='padding:16px'>Aucune partie pour le moment"+(SITE?" à "+esc(SITE):"")+".</td></tr>";
  var ks=LK.slice().sort(function(a,b){return s.err[b]-s.err[a]});var html="";
  ks.forEach(function(k){if(s.err[k]>0)html+="<div class='reco'><b>"+DOM[k][0]+"</b> : "+s.err[k]+" erreur(s), soit "+(s.err[k]/s.n).toFixed(1).replace('.',',')+" par participant → formation conseillée : <b>"+DOM[k][1]+"</b></div>"});
  if(s.sst.expire)html+="<div class='reco'><b>Certificats SST</b> : "+s.sst.expire+" salarié(s) déclarent une formation SST de plus de 2 ans → <b>MAC SST (7 h)</b> pour maintenir leur certificat.</div>";
@@ -259,7 +259,7 @@ function rendreCmp(){
  var cols=SITES.map(function(si){return stats(PERS.filter(function(r){return r.site===si}))});
  var sans=PERS.filter(function(r){return SITES.indexOf(r.site)<0}).length;
  function moyErr(st,k){return st.n?(st.err[k]/st.n).toFixed(1).replace('.',','):'–'}
- var lignes=[["Salariés participants",function(st){return st.n}],["Parties jouées",function(st){return st.parties}],["Score moyen",function(st){return st.n?st.moy:'–'}],["SST à jour",function(st){return st.sst.oui}],["SST à recycler",function(st){return st.sst.expire}],["Non SST",function(st){return st.sst.non}],["Demandes SST",function(st){return st.dem.sst}],["Demandes MAC SST",function(st){return st.dem.mac}],["Demandes gestes et postures",function(st){return st.dem.gp}],["Demandes sécurité incendie",function(st){return st.dem.inc}],["Erreurs secours par participant",function(st){return moyErr(st,'err_secours')}],["Erreurs incendie par participant",function(st){return moyErr(st,'err_incendie')}],["Erreurs postures par participant",function(st){return moyErr(st,'err_tms')}]];
+ var lignes=[["Salariés participants",function(st){return st.n}],["Parties jouées",function(st){return st.parties}],["Score moyen",function(st){return st.n?st.moy:'–'}],["SST à jour",function(st){return st.sst.oui}],["SST à recycler",function(st){return st.sst.expire}],["Non SST",function(st){return st.sst.non}],["Salariés à retravailler en secours",function(st){return st.bes.sec}],["Salariés à retravailler en incendie",function(st){return st.bes.inc}],["Salariés à retravailler en gestes et postures",function(st){return st.bes.tms}],["Erreurs secours par participant",function(st){return moyErr(st,'err_secours')}],["Erreurs incendie par participant",function(st){return moyErr(st,'err_incendie')}],["Erreurs postures par participant",function(st){return moyErr(st,'err_tms')}]];
  $('cmp').innerHTML="<div class='tscroll'><table><thead><tr><th>Indicateur</th>"+SITES.map(function(si){return "<th>"+si+"</th>"}).join("")+"</tr></thead><tbody>"+lignes.map(function(l){return "<tr><td>"+l[0]+"</td>"+cols.map(function(st){return "<td class='c'>"+l[1](st)+"</td>"}).join("")+"</tr>"}).join("")+"</tbody></table></div>"+(sans?"<p class='hint'>"+sans+" participant(s) sans site renseigné (parties jouées avant la version deux sites).</p>":"");
 }
 </script>
@@ -268,41 +268,41 @@ function genWord(){
  if(!DATA.length){avertir("Aucune donnée pour ce périmètre. Cliquez d'abord sur Actualiser.");return}
  var s=stats(DATA);var d=new Date().toLocaleDateString('fr-FR');
  var ks=LK.slice().sort(function(a,b){return s.err[b]-s.err[a]});
- var rowsTable=DATA.map(function(r,i){return "<tr><td>"+(i+1)+"</td><td>"+esc(r.prenom)+"</td><td>"+esc(r.nom||'')+"</td><td>"+esc(r.site||'')+"</td><td>"+esc(r.service||'')+"</td><td>"+sstLab(r.sst)+"</td><td>"+(r.score||0)+"</td><td>"+esc(r.badge||'')+"</td><td>"+esc(wants(r).join(', ')||'—')+"</td><td>"+esc(r.observation||'')+"</td></tr>"}).join("");
+ var rowsTable=DATA.map(function(r,i){return "<tr><td>"+(i+1)+"</td><td>"+esc(r.prenom)+"</td><td>"+esc(r.nom||'')+"</td><td>"+esc(r.site||'')+"</td><td>"+esc(r.service||'')+"</td><td>"+sstLab(r.sst)+"</td><td>"+(r.score||0)+"</td><td>"+esc(r.badge||'')+"</td><td>"+esc(aRevoir(r).join(', ')||'rien à signaler')+"</td></tr>"}).join("");
  var recoList=ks.filter(function(k){return s.err[k]>0}).map(function(k){return "<li><b>"+DOM[k][0]+"</b> ("+s.err[k]+" erreur(s), "+(s.err[k]/s.n).toFixed(1).replace('.',',')+" par participant) → <b>"+DOM[k][1]+"</b></li>"}).join("")||"<li>Aucune faiblesse marquée : recyclages d'entretien conseillés.</li>";
  if(s.sst.expire)recoList+="<li><b>Certificats SST</b> : "+s.sst.expire+" salarié(s) déclarent une formation de plus de 2 ans → <b>MAC SST (7 h)</b>.</li>";
  var cmp="";
  if(!SITE){var cs=SITES.map(function(si){return [si,stats(PERS.filter(function(r){return r.site===si}))]});
-  cmp="<h2>3. Comparaison des sites</h2><table><tr><th>Site</th><th>Participants</th><th>Score moyen</th><th>SST à jour</th><th>SST à recycler</th><th>Dem. SST</th><th>Dem. MAC</th><th>Dem. gestes et postures</th><th>Dem. incendie</th></tr>"+cs.map(function(c){var st=c[1];return "<tr><td>"+c[0]+"</td><td>"+st.n+"</td><td>"+(st.n?st.moy:'–')+"</td><td>"+st.sst.oui+"</td><td>"+st.sst.expire+"</td><td>"+st.dem.sst+"</td><td>"+st.dem.mac+"</td><td>"+st.dem.gp+"</td><td>"+st.dem.inc+"</td></tr>"}).join("")+"</table>";}
+  cmp="<h2>3. Comparaison des sites</h2><table><tr><th>Site</th><th>Participants</th><th>Score moyen</th><th>SST à jour</th><th>SST à recycler</th><th>À retravailler : secours</th><th>À retravailler : incendie</th><th>À retravailler : gestes et postures</th></tr>"+cs.map(function(c){var st=c[1];return "<tr><td>"+c[0]+"</td><td>"+st.n+"</td><td>"+(st.n?st.moy:'–')+"</td><td>"+st.sst.oui+"</td><td>"+st.sst.expire+"</td><td>"+st.bes.sec+"</td><td>"+st.bes.inc+"</td><td>"+st.bes.tms+"</td></tr>"}).join("")+"</table>";}
  var n0=SITE?3:4;
  var h="<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word'><head><meta charset='utf-8'><style>body{font-family:Arial;color:#222}h1{color:#1F4E79}h2{color:#1F4E79;border-bottom:2px solid #1F4E79;padding-bottom:3px}table{border-collapse:collapse;width:100%}td,th{border:1px solid #999;padding:6px;font-size:10pt}th{background:#1F4E79;color:#fff}</style></head><body>";
  h+="<h1>Synthèse Opération Sang-Froid · In Extenso</h1>";
  h+="<p><b>Périmètre :</b> "+scopeLab()+"<br><b>Date d'édition :</b> "+d+"<br><b>Réalisé par :</b> ANDRAGOPS Académie, formation sécurité et secours · Strasbourg · 07 59 73 82 72 · info@andragops-academie.fr · www.andragops-academie.fr</p>";
  h+="<h2>1. Participation</h2><p>Salariés participants : <b>"+s.n+"</b> · Parties jouées : <b>"+s.parties+"</b> · Score moyen : <b>"+s.moy+"</b><br>SST à jour : <b>"+s.sst.oui+"</b> · SST à recycler (déclaré) : <b>"+s.sst.expire+"</b> · Non SST : <b>"+s.sst.non+"</b></p>";
- h+="<h2>2. Demandes de formation (volontariat)</h2><table><tr><th>Formation</th><th>Durée</th><th>Volontaires</th></tr><tr><td>SST, sauveteur secouriste du travail</td><td>14 h</td><td>"+s.dem.sst+"</td></tr><tr><td>MAC SST, maintien et actualisation des compétences</td><td>7 h</td><td>"+s.dem.mac+"</td></tr><tr><td>Gestes et postures, prévention des TMS</td><td>7 h</td><td>"+s.dem.gp+"</td></tr><tr><td>Sécurité incendie, manipulation des extincteurs et évacuation</td><td>4 h</td><td>"+s.dem.inc+"</td></tr></table><p style='font-size:9.5pt;color:#555'>Chaque salarié est compté une fois, sur sa dernière partie.</p>";
+ h+="<h2>2. Besoins repérés par le jeu</h2><table><tr><th>Domaine</th><th>Salariés à retravailler</th><th>Formation correspondante (catalogue ANDRAGOPS)</th></tr><tr><td>Secours</td><td>"+s.bes.sec+"</td><td>SST, sauveteur secouriste du travail (14 h), ou MAC SST (7 h) pour les secouristes déjà formés</td></tr><tr><td>Incendie, évacuation</td><td>"+s.bes.inc+"</td><td>Sécurité incendie : manipulation des extincteurs et évacuation (4 h)</td></tr><tr><td>Gestes et postures</td><td>"+s.bes.tms+"</td><td>Gestes et postures : prévention des TMS (7 h)</td></tr><tr><td>Certificats SST à recycler (déclaré)</td><td>"+s.sst.expire+"</td><td>MAC SST (7 h)</td></tr></table><p style='font-size:9.5pt;color:#555'>Salariés ayant commis au moins une erreur dans le domaine, chacun compté une fois sur sa dernière partie. Les salariés ne choisissent aucune formation : la direction arbitre le plan.</p>";
  h+=cmp;
- h+="<h2>"+n0+". Détail des participants</h2><table><tr><th>#</th><th>Prénom</th><th>Nom</th><th>Site</th><th>Service</th><th>SST</th><th>Score</th><th>Badge</th><th>Formations demandées</th><th>Observation</th></tr>"+rowsTable+"</table>";
+ h+="<h2>"+n0+". Détail des participants</h2><table><tr><th>#</th><th>Prénom</th><th>Nom</th><th>Site</th><th>Service</th><th>SST</th><th>Score</th><th>Badge</th><th>À retravailler</th></tr>"+rowsTable+"</table>";
  h+="<h2>"+(n0+1)+". Analyse des lacunes (diagnostic)</h2><ul>"+recoList+"</ul>";
- h+="<h2>"+(n0+2)+". Recommandation ANDRAGOPS</h2><p>Sur la base de ce diagnostic ludique et des volontariats exprimés, nous recommandons un plan de formation en présentiel, organisé directement sur chaque site. Activité portée par CRÉACITÉ (CAPE), certificat Qualiopi n° CERT_S0526_0676 : prise en charge par l'OPCO possible. En intra, le déplacement du formateur est inclus dans un rayon de 50 km autour de Strasbourg, ce qui couvre les sites de Strasbourg et de Haguenau.</p>";
+ h+="<h2>"+(n0+2)+". Recommandation ANDRAGOPS</h2><p>À partir de ces besoins, la direction arbitre le plan de formation : quels domaines, pour qui, sur quel site et dans quel ordre. ANDRAGOPS organise ensuite les sessions en présentiel, directement sur chaque site. Activité portée par CRÉACITÉ (CAPE), certificat Qualiopi n° CERT_S0526_0676 : prise en charge par l'OPCO possible. En intra, le déplacement du formateur est inclus dans un rayon de 50 km autour de Strasbourg, ce qui couvre les sites de Strasbourg et de Haguenau.</p>";
  h+="<p style='margin-top:18px;color:#888;font-size:9pt'>Document généré à partir des résultats du jeu. Bilan indicatif, non certifiant. Statut SST déclaré par les salariés.</p></body></html>";
  var b=new Blob(['﻿'+h],{type:'application/msword'});var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download="Synthese_Sang-Froid_In-Extenso"+(SITE?"_"+SITE:"")+".doc";document.body.appendChild(a);a.click();document.body.removeChild(a);
 }
 function genExcel(){
  if(!DATA.length){avertir("Aucune donnée pour ce périmètre. Cliquez d'abord sur Actualiser.");return}
- var d=new Date().toLocaleDateString('fr-FR');var dm=stats(DATA).dem;
- var head=["#","Prénom","Nom","Site","Service","SST","Parties","Score","Badge","Err. secours","Err. incendie","Err. postures","Veut SST","Veut MAC SST","Veut gestes et postures","Veut incendie","Observation","Date"];
- var w=[32,92,92,84,120,74,52,54,68,70,70,70,62,64,74,66,240,128];
+ var d=new Date().toLocaleDateString('fr-FR');var bs=stats(DATA).bes;
+ var head=["#","Prénom","Nom","Site","Service","SST","Parties","Score","Badge","Err. secours","Err. incendie","Err. postures","À retravailler","Date"];
+ var w=[32,92,92,84,120,74,52,54,68,70,70,70,190,128];
  var cg="";w.forEach(function(px){cg+="<col style='width:"+px+"px'>"});
  var thead="<tr class='hd'>"+head.map(function(x){return "<td>"+esc(x)+"</td>"}).join("")+"</tr>";
  var body="";
  DATA.forEach(function(r,i){
-  var cells=[[(i+1),'num'],[r.prenom,'b'],[r.nom||'',''],[r.site||'',''],[r.service||'',''],[sstLab(r.sst),(r.sst==='oui'?'ok':(r.sst==='expire'?'warn':'mut'))],[(r.parties||1),'num'],[(r.score||0),'num b'],[r.badge||'','num'],[(r.err_secours||0),'num'],[(r.err_incendie||0),'num'],[(r.err_tms||0),'num'],[(r.want_sst?'Oui':''),'ok'],[(r.want_mac?'Oui':''),'ok'],[(r.want_gp?'Oui':''),'ok'],[(r.want_incendie?'Oui':''),'ok'],[r.observation||'',''],[(r.created_at?new Date(r.created_at).toLocaleString('fr-FR'):''),'mut']];
+  var cells=[[(i+1),'num'],[r.prenom,'b'],[r.nom||'',''],[r.site||'',''],[r.service||'',''],[sstLab(r.sst),(r.sst==='oui'?'ok':(r.sst==='expire'?'warn':'mut'))],[(r.parties||1),'num'],[(r.score||0),'num b'],[r.badge||'','num'],[(r.err_secours||0),'num'],[(r.err_incendie||0),'num'],[(r.err_tms||0),'num'],[(aRevoir(r).join(', ')||'rien à signaler'),''],[(r.created_at?new Date(r.created_at).toLocaleString('fr-FR'):''),'mut']];
   body+="<tr"+(i%2?" class='z'":"")+">"+cells.map(function(o){return "<td class='"+o[1]+"'>"+esc(o[0]==null?'':o[0])+"</td>"}).join("")+"</tr>";
  });
- var tot="<tr class='tot'><td colspan='12'>TOTAL volontaires</td><td>"+dm.sst+"</td><td>"+dm.mac+"</td><td>"+dm.gp+"</td><td>"+dm.inc+"</td><td></td><td></td></tr>";
+ var tot="<tr class='tot'><td colspan='9'>Salariés à retravailler</td><td>"+bs.sec+"</td><td>"+bs.inc+"</td><td>"+bs.tms+"</td><td></td><td></td></tr>";
  var styles="<style>table{border-collapse:collapse}td{font-family:Arial,sans-serif;font-size:10pt;border:.5pt solid #C7CFDA;padding:4px 8px;vertical-align:middle}.ttl td{font-size:15pt;font-weight:bold;color:#1F4E79;border:none}.sub td{font-size:9.5pt;color:#6B7280;border:none}.sp td{height:6px;border:none}.hd td{background:#1F4E79;color:#fff;font-weight:bold;text-align:center;border:.5pt solid #16395C}.num{text-align:center}.b{font-weight:bold}.mut{color:#6B7280}.ok{text-align:center;color:#1F8A4C;font-weight:bold;background:#EAF7EF}.warn{text-align:center;color:#8A5A00;font-weight:bold;background:#FFF3D6}.z td{background:#F4F7FB}.tot td{background:#FFF3D6;font-weight:bold;color:#7A5B00;text-align:center;border:.5pt solid #E5C76B}.tot td:first-child{text-align:right;color:#1F4E79}</style>";
  var xo="<!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>Participants</x:Name><x:WorksheetOptions><x:DoNotDisplayGridlines/><x:FreezePanes/><x:FrozenNoSplit/><x:SplitHorizontal>4</x:SplitHorizontal><x:TopRowBottomPane>4</x:TopRowBottomPane><x:ActivePane>2</x:ActivePane></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->";
- var sheet="<table>"+cg+"<tr class='ttl'><td colspan='18'>OPÉRATION SANG-FROID · In Extenso · "+esc(scopeLab())+"</td></tr><tr class='sub'><td colspan='18'>Participants et demandes de formation (un salarié par ligne, dernière partie) · édité le "+d+" · ANDRAGOPS Académie · info@andragops-academie.fr</td></tr><tr class='sp'><td colspan='18'></td></tr>"+thead+body+tot+"</table>";
+ var sheet="<table>"+cg+"<tr class='ttl'><td colspan='14'>OPÉRATION SANG-FROID · In Extenso · "+esc(scopeLab())+"</td></tr><tr class='sub'><td colspan='14'>Participants et domaines à retravailler (un salarié par ligne, dernière partie) · édité le "+d+" · ANDRAGOPS Académie · info@andragops-academie.fr</td></tr><tr class='sp'><td colspan='14'></td></tr>"+thead+body+tot+"</table>";
  var h="<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:x='urn:schemas-microsoft-com:office:excel'><head><meta charset='utf-8'>"+xo+styles+"</head><body>"+sheet+"</body></html>";
  var b=new Blob(['﻿'+h],{type:'application/vnd.ms-excel'});var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download="Participants_Sang-Froid_In-Extenso"+(SITE?"_"+SITE:"")+".xls";document.body.appendChild(a);a.click();document.body.removeChild(a);
 }
