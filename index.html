@@ -115,7 +115,7 @@ footer{text-align:center;color:#566377;font-size:11px;margin-top:18px;letter-spa
 </div>
 <div class="row2">
 <div><label for="sst">Es-tu sauveteur secouriste du travail (SST) ?</label><select id="sst"><option value="non">Non</option><option value="oui">Oui, formation ou recyclage il y a moins de 2 ans</option><option value="expire">Oui, mais il y a plus de 2 ans (ou je ne sais plus)</option></select></div>
-<div><label for="duree">Durée du chrono</label><select id="duree"><option value="6">6 minutes (express)</option><option value="8" selected>8 minutes (recommandé)</option><option value="10">10 minutes (tranquille)</option></select></div>
+<div><label for="duree">Durée du chrono</label><select id="duree"><option value="7">7 minutes (express)</option><option value="9" selected>9 minutes (recommandé)</option><option value="11">11 minutes (tranquille)</option></select></div>
 </div>
 <p class="note">Transmis au service RH à la fin de la partie : prénom, nom, site, service, statut SST et résultats de la partie. Le classement n'affiche que ton prénom. C'est un jeu, pas un examen.</p>
 <div id="introErr" class="fb ko hide" role="alert"></div>
@@ -266,7 +266,7 @@ var OKL=["Bon réflexe !","Sang-froid validé.","Réflexe de pro.","Exactement."
 var KO_ORDRE="Pas encore : une autre action passe avant celle-ci.";
 var PENAL=30;
 
-var t=480,T0=480,idx=0,faits=0,pts=0,erreurs=0,epErr=0,R=[],et={secours:0,incendie:0,tms:0},timer=null,paused=false,started=false,ended=false;
+var t=540,T0=540,idx=0,faits=0,pts=0,erreurs=0,epErr=0,R=[],et={secours:0,incendie:0,tms:0},timer=null,paused=false,started=false,ended=false;
 var PR="",NOM="",SITE="",AUTRE="",SV="",SSTU="non",GAMEOPEN=true;
 var LSCORE=0,LBADGE="",LFINI=false,SANSFAUTE=0,ENVOI_OK=false;
 function $(i){return document.getElementById(i)}
@@ -368,7 +368,7 @@ function fin(){if(ended)return;ended=true;clearInterval(timer);paused=false;$('c
     tms:"<b>Gestes et postures :</b> écran en face, haut de l'écran à hauteur des yeux, à une longueur de bras ; charge contre soi, genoux fléchis, on pivote avec les pieds ; des pauses courtes et fréquentes."};
   var reco='';
   ['secours','incendie','tms'].forEach(function(k){if(et[k]>0)reco+="<div class='reco'>"+RAPPEL[k]+"</div>";});
-  if(jamais.length||partiel.length)reco+="<div class='reco'><b>Le chrono t'a arrêté avant la fin :</b> "+(jamais.length?"situations "+et_(jamais)+" non jouées":"")+(jamais.length&&partiel.length?" ; ":"")+(partiel.length?"situations "+et_(partiel)+" jouées en partie":"")+". Rejoue en choisissant 10 minutes pour vivre toute la journée.</div>";
+  if(jamais.length||partiel.length)reco+="<div class='reco'><b>Le chrono t'a arrêté avant la fin :</b> "+(jamais.length?"situations "+et_(jamais)+" non jouées":"")+(jamais.length&&partiel.length?" ; ":"")+(partiel.length?"situations "+et_(partiel)+" jouées en partie":"")+". Rejoue en choisissant 11 minutes pour vivre toute la journée.</div>";
   if(SSTU==='expire')reco+="<div class='reco'><b>Ton certificat SST :</b> il se maintient par un recyclage tous les 24 mois. Le tien a plus de 2 ans : pense à vérifier sa date.</div>";
   if(!reco)reco="<div class='reco'>Sans faute : tes réflexes sont solides. Garde-les à jour, et partage-les autour de toi.</div>";
   el.innerHTML="<div class='medal'>"+medal+"</div><div class='code' style='color:"+col+"'>"+grade+"</div><h2 style='margin-top:10px'>Score : "+LSCORE+" points</h2>"+(bonus?"<p style='margin:-4px 0 8px;font-size:13px;color:var(--mut)'>dont "+bonus+" points de bonus pour le temps restant</p>":"")
