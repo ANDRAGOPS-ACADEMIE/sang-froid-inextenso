@@ -70,16 +70,6 @@ label.ck{font-family:'Inter',system-ui,Arial,sans-serif;text-transform:none;lett
 @media(max-width:560px){.dom .rw>span{min-width:110px}.dom .rw b{min-width:70px}}
 .reco{background:rgba(226,59,59,.06);border:1px solid rgba(226,59,59,.25);border-left:3px solid var(--r);border-radius:3px;padding:13px;margin-top:10px;text-align:left;color:#dbe4f2;line-height:1.5}.reco b{color:var(--o)}.hide{display:none}
 .cta{background:linear-gradient(135deg,rgba(59,130,246,.14),rgba(59,130,246,.04));border:1px solid rgba(59,130,246,.35);border-radius:3px;padding:15px;margin-top:14px;text-align:left;font-weight:500;color:#dbeafe;line-height:1.5}
-.duel{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
-.duel div{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:3px;padding:12px;text-align:center}
-.duel .lead{border-color:var(--o);box-shadow:inset 0 0 0 1px rgba(240,180,41,.35)}
-.duel .sn{font-family:'Rajdhani';font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#dbe4f2}
-.duel b{display:block;font-family:'Rajdhani';font-size:30px;color:#fff;line-height:1.1}
-.duel span{font-size:12px;color:var(--mut)}
-.btabs{display:flex;gap:6px;margin:6px 0 10px;flex-wrap:wrap}
-.btabs button{background:rgba(255,255,255,.04);border:1px solid var(--line);color:#c4cee0;padding:8px 13px;border-radius:3px;cursor:pointer;font-family:'Rajdhani';font-weight:700;letter-spacing:.5px;text-transform:uppercase;font-size:13px}
-.btabs button.on{background:var(--r);border-color:var(--r);color:#fff}
-.sitetag{font-size:11px;color:var(--mut);font-weight:500;margin-left:6px}
 footer{text-align:center;color:#566377;font-size:11px;margin-top:18px;letter-spacing:.3px}
 @media(max-width:560px){body{padding:12px}.card{padding:18px 16px}.logo{font-size:13px;letter-spacing:1.5px}.chrono{font-size:24px;padding:2px 10px}.score{font-size:14px;white-space:nowrap}h1{font-size:25px}.scene{font-size:16px}}
 #splash{position:fixed;inset:0;background:radial-gradient(circle at 50% 35%,#13202f,#05080d 65%);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;text-align:center;transition:opacity .8s;padding:20px}
@@ -120,7 +110,7 @@ footer{text-align:center;color:#566377;font-size:11px;margin-top:18px;letter-spa
 <p class="note">Transmis au service RH à la fin de la partie : prénom, nom, site, service, statut SST et résultats de la partie. Le classement n'affiche que ton prénom. C'est un jeu, pas un examen.</p>
 <div id="introErr" class="fb ko hide" role="alert"></div>
 <button class="big" onclick="launch()" style="margin-top:10px">▶ Commencer ma journée</button>
-<button class="big ghost" style="margin-top:8px" onclick="showBoard('')">🏆 Classement du cabinet</button></div>
+<button class="big ghost" style="margin-top:8px" onclick="showBoard()">🏆 Classement du cabinet</button></div>
 
 <div id="brief" class="card hide">
 <span class="tag">07 h 52 · Message reçu</span>
@@ -135,9 +125,8 @@ footer{text-align:center;color:#566377;font-size:11px;margin-top:18px;letter-spa
 <div id="fin" class="card verdict hide"></div>
 
 <div id="board" class="ov hide"><div class="ov-card">
-<h2 style="color:var(--o)">🏆 Classement</h2>
-<div id="duelB"></div>
-<div class="btabs" id="btabs"><button data-s="" onclick="showBoard('')">Tout le cabinet</button><button data-s="Strasbourg" onclick="showBoard('Strasbourg')">Strasbourg</button><button data-s="Haguenau" onclick="showBoard('Haguenau')">Haguenau</button></div>
+<h2 style="color:var(--o)">🏆 Classement du cabinet</h2>
+<p style="color:var(--mut);font-size:13px;margin-bottom:8px">Les meilleurs scores, prénom seulement.</p>
 <div id="boardList">Chargement…</div>
 <button class="big" style="margin-top:14px" onclick="closeBoard()">← Retour</button>
 </div></div>
@@ -378,9 +367,8 @@ function fin(){if(ended)return;ended=true;clearInterval(timer);paused=false;$('c
    +"<div class='sec dom'><h2>Ton bilan par domaine</h2>"+dom+"</div>"
    +"<div class='sec'><h2>Les réflexes à retenir</h2>"+reco+"</div>"
    +"<div id='envoiFb' class='fb' role='status'></div>"
-   +"<div id='duelF'></div>"
    +"<div class='cta'>« Le jeu ouvre les yeux ; la formation, en salle comme sur le terrain, sauve des vies. »</div>"
-   +"<div class='row2' style='margin-top:14px'><button class='big ghost' onclick='showBoard(SITE)'>🏆 Classement</button><button class='big ghost' onclick='location.reload()'>↻ Rejouer</button></div>";
+   +"<div class='row2' style='margin-top:14px'><button class='big ghost' onclick='showBoard()'>🏆 Classement</button><button class='big ghost' onclick='location.reload()'>↻ Rejouer</button></div>";
   top0();ENVOI_OK=false;envoyer();
 }
 
@@ -390,26 +378,16 @@ function envoyer(){
   fb.className='fb';fb.textContent='Transmission de ton résultat au service RH…';
   var payload={prenom:PR,nom:NOM,site:SITE,service:SV,sst:SSTU,score:LSCORE,temps_total:T0,temps_restant:Math.max(t,0),erreurs:erreurs,bonnes:SANSFAUTE,total:S.length,err_secours:et.secours,err_incendie:et.incendie,err_tms:et.tms,badge:LBADGE};
   fetch(API,{method:'POST',body:JSON.stringify(payload)}).then(function(r){return r.json()}).then(function(j){
-    if(j&&j.ok){ENVOI_OK=true;fb.className='fb ok';fb.textContent='✅ Merci '+PR+' ! Ton résultat est transmis au service RH.';loadDuel('duelF');return;}
+    if(j&&j.ok){ENVOI_OK=true;fb.className='fb ok';fb.textContent='✅ Merci '+PR+' ! Ton résultat est transmis au service RH.';return;}
     if(j&&j.closed){fb.className='fb ko';fb.textContent="Le service RH a fermé le jeu entre-temps : ton résultat n'a pas pu être enregistré.";return;}
     throw new Error('envoi');
   }).catch(function(){fb.className='fb ko';fb.innerHTML="La connexion a échoué : ton résultat n'a pas été transmis.<button class='big ghost' style='margin-top:10px' onclick='envoyer()'>↻ Réessayer l'envoi</button>";});
 }
-function loadDuel(id){var el=$(id);if(!el)return;
-  fetch(API+"?sites=1&z="+Date.now()).then(function(r){return r.json()}).then(function(rows){
-    if(!Array.isArray(rows)){el.innerHTML="";return;}
-    var by={};rows.forEach(function(r){by[r.site]=r});
-    var best=null;SITES.forEach(function(s){var r=by[s];if(r&&r.parties&&(!best||r.moyenne>by[best].moyenne))best=s});
-    var total=SITES.reduce(function(a,s){return a+((by[s]&&by[s].parties)||0)},0);if(!total){el.innerHTML="";return;}
-    el.innerHTML="<h2 style='margin-top:16px'>Le défi des sites</h2><div class='duel'>"+SITES.map(function(s){var r=by[s]||{parties:0,moyenne:0};return "<div"+(s===best?" class='lead'":"")+"><div class='sn'>"+s+(s===best?" 👑":"")+"</div><b>"+(r.parties?r.moyenne:'–')+"</b><span>score moyen · "+r.parties+" partie"+(r.parties>1?"s":"")+"</span></div>"}).join("")+"</div>";
-  }).catch(function(){el.innerHTML=""});}
-function showBoard(site){var ov=$('board');ov.classList.remove('hide');var L=$('boardList');L.innerHTML='Chargement…';
-  Array.prototype.forEach.call($('btabs').children,function(b){b.classList.toggle('on',b.getAttribute('data-s')===(site||''))});
-  loadDuel('duelB');
-  fetch(API+"?board=1"+(site?"&site="+encodeURIComponent(site):"")+"&z="+Date.now()).then(function(r){return r.json()}).then(function(rows){
-   if(!Array.isArray(rows)||!rows.length){L.innerHTML="<p style='color:#aaa'>Personne n'a encore joué"+(site?" à "+be(site):"")+". Sois le premier !</p>";return;}
+function showBoard(){var ov=$('board');ov.classList.remove('hide');var L=$('boardList');L.innerHTML='Chargement…';
+  fetch(API+"?board=1&z="+Date.now()).then(function(r){return r.json()}).then(function(rows){
+   if(!Array.isArray(rows)||!rows.length){L.innerHTML="<p style='color:#aaa'>Personne n'a encore joué. Sois le premier !</p>";return;}
    var med=["🥇","🥈","🥉"];
-   L.innerHTML=rows.slice(0,12).map(function(r,i){return "<div class='brow'><span class='brank'>"+(i<3?med[i]:(i+1))+"</span><b style='flex:1'>"+be(r.prenom||'(joueur)')+(!site&&r.site?"<span class='sitetag'>"+be(r.site)+"</span>":"")+"</b><span class='bscore'>"+(r.score||0)+" pts</span></div>"}).join("");
+   L.innerHTML=rows.slice(0,12).map(function(r,i){return "<div class='brow'><span class='brank'>"+(i<3?med[i]:(i+1))+"</span><b style='flex:1'>"+be(r.prenom||'(joueur)')+"</b><span class='bscore'>"+(r.score||0)+" pts</span></div>"}).join("");
   }).catch(function(){L.innerHTML="<p style='color:#ff9a9a'>Classement indisponible (réseau).</p>"});}
 function closeBoard(){$('board').classList.add('hide');}
 function gameClosed(){GAMEOPEN=false;var i=$('intro');if(i){i.classList.remove('hide');i.innerHTML="<img class='brand' src='logo.png' alt='ANDRAGOPS'><span class='tag'>Jeu fermé</span><h1>Le jeu n'est pas ouvert pour le moment</h1><p>OPÉRATION SANG-FROID est actuellement fermé par le service RH. Reviens un peu plus tard. 🔒</p>";}}
